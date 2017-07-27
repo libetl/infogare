@@ -1,0 +1,26 @@
+{
+  "short_name": "Infogare",
+  "name": "SNCF infogare",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },{
+      "src": "logo.png",
+      "sizes": "144x144 192x192 512x512 1024x1024",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/infogare/",
+  "display": "standalone",
+  "theme_color": "#ddc15d",
+  "background_color": "#0d5da6",
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=org.toilelibre.libe.trains",
+      "id": "org.toilelibre.libe.trains"
+    }
+  ]
+}
