@@ -54,7 +54,8 @@ const vehicleJourney = (departure, from, token = defaultToken) => request({
         'Authorization': token,
     },
 }).then((result) => {
-    const allStops = result.data.vehicle_journeys[0].stop_times.map(stop_time => stop_time.stop_point.name.replace('-', '\u00a0'))
+    const allStops = result.data.vehicle_journeys[0].stop_times.map(
+        stop_time => stop_time.stop_point.name.replace(/ /g, '\u00a0').replace(/-/g, '\u2011'))
     const indexOfStop = allStops.indexOf(from) === -1 ? allStops.indexOf(`${from}-Ville`) : allStops.indexOf(from)
     const stops = allStops.slice(indexOfStop + 1)
     return Promise.resolve({...departure, stops})

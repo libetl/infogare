@@ -25,16 +25,14 @@ export class Departure extends React.Component {
           <Text style={styles.number}>{departure.name}{departure.number}</Text>
           <Text style={styles.time}>{departure.time}  </Text>
           <Text style={styles.direction}>{departure.direction}</Text>
-          <Text style={departure.platform && departure.platform.length > 0 ? 
+          <Text style={departure.platform && departure.platform.length > 0 ?
             styles.platform : styles.noPlatformYet}>{departure.platform}</Text>
         </View>
         {this.props.detailed &&
-          <View style={styles.split}>
-            <View style={styles.stops}><Text>{!departure.stops ? '' :
-              departure.stops.map(stop =>(
-                <Text key={stop}><Text style={styles.oneStop}> {stop} </Text>
-                <Text style={styles.yellowBullet}>•</Text></Text>))}</Text></View>
-          </View>}
+          <View style={styles.stops}><Text>{!departure.stops ? '' :
+            departure.stops.map(stop => (
+              <Text key={stop}><Text style={styles.oneStop}> {stop} </Text>
+                <Text style={styles.yellowBullet}>•</Text></Text>))}</Text></View>}
       </View>
     )
   }
@@ -77,27 +75,31 @@ const styles = StyleSheet.create({
     height:'20%',
     width: '100%',
     backgroundColor:'#0d5da6',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    flexWrap: 'wrap'
   },
   bigeven: {
     height:'20%',
     width: '100%',
     backgroundColor:'#04396d',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    flexWrap: 'wrap'
   },
   odd: {
     height:'10%',
     width: '100%',
     backgroundColor:'#0d5da6',
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
+    flexWrap: 'wrap'
   },
   even: {
     height:'10%',
     width: '100%',
     backgroundColor:'#04396d',
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
+    flexWrap: 'wrap'
   },
   mode: {
     color:'#fff',
@@ -139,7 +141,7 @@ const styles = StyleSheet.create({
     textAlign:'center'
   },
   split: {
-    height:'50%',
+    flexGrow: 1,
     width:'100%',
     flexDirection: 'row'
   },
@@ -150,7 +152,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   stops: {
-    height:'100%',
+    height:28,
     width:'100%',
     flexDirection: 'row',
     overflow: 'hidden'
