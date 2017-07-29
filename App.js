@@ -38,6 +38,18 @@ export class Departure extends React.Component {
   }
 }
 
+export class Footer extends React.Component {
+  constructor(props) {
+        super(props)
+  }
+  render() {
+    return (
+      <View style={styles.footer}>
+      </View>
+    )
+  }
+}
+
 export default class App extends React.Component {
     constructor(props) {
         super(props)
@@ -50,6 +62,7 @@ export default class App extends React.Component {
     const timetable = this.state.timetable
     return (
       <View style={styles.container}>
+          <View style={styles.statusbar}/>
           <Departure detailed={true} odd={true} departure={timetable[0]}/>
           <Departure detailed={true} odd={false} departure={timetable[1]}/>
           <Departure detailed={false} odd={true} departure={timetable[2]}/>
@@ -57,6 +70,7 @@ export default class App extends React.Component {
           <Departure detailed={false} odd={true} departure={timetable[4]}/>
           <Departure detailed={false} odd={false} departure={timetable[5]}/>
           <Departure detailed={false} odd={true} departure={timetable[6]}/>
+          <Footer/>
       </View>
     )
   }
@@ -163,5 +177,13 @@ const styles = StyleSheet.create({
   },
   yellowBullet: {
     color:'#dfc81f'
+  },
+  footer: {
+    backgroundColor:'#2c0A3B',
+    width: '100%',
+    height: '10%'
+  },
+  statusbar: {
+    height:45
   }
 })
