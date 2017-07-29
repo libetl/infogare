@@ -79,14 +79,15 @@ const nextDepartures = ({lat, long}, token = defaultToken) => {
             .then((station) => departures(station.id, 0, token))
             .then((departuresData) => getGaresSncfDepartures(iataCode, departuresData))
             .then((departuresData) => Promise.all(departuresData.map(row => vehicleJourney(row, stationName, token))))
-            .then((departuresData) => Promise.resolve(departuresData.map(e => {return {
-                mode: e.display_informations.commercial_mode,
-                name: e.display_informations.code,
-                number: e.display_informations.headsign,
-                time: moment(e.stop_date_time.departure_date_time, dateTimeFormat).format('HH:mm'),
-                direction: e.route.direction.stop_area.name,
-                platform: e.gareSncf ? e.gareSncf.voie : '',
-                stops: e.stops}})))
+            .then((departuresData) => Promise.resolve({station: stationName,
+                departures:departuresData.map(e => {return {
+                    mode: e.display_informations.commercial_mode,
+                    name: e.display_informations.code,
+                    number: e.display_informations.headsign,
+                    time: moment(e.stop_date_time.departure_date_time, dateTimeFormat).format('HH:mm'),
+                    direction: e.route.direction.stop_area.name,
+                    platform: e.gareSncf ? e.gareSncf.voie : '',
+                    stops: e.stops}})}))
 }
 
 export default {nextDepartures}

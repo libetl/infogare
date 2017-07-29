@@ -45,6 +45,7 @@ export class Footer extends React.Component {
   render() {
     return (
       <View style={styles.footer}>
+        <Text style={styles.footerFont}>Gare trouvée : {this.props.station}</Text>
       </View>
     )
   }
@@ -53,7 +54,7 @@ export class Footer extends React.Component {
 export default class App extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {...props, timetable:[]}
+        this.state = {...props, timetable:{departures:[{},{},{},{},{},{},{}], station: 'inconnue'}}
     }
     componentDidMount() {
         webservice.nextDepartures(somePlaces.nice).then((timetable) => this.setState({...this.state, timetable}))
@@ -63,14 +64,14 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
           <View style={styles.statusbar}/>
-          <Departure detailed={true} odd={true} departure={timetable[0]}/>
-          <Departure detailed={true} odd={false} departure={timetable[1]}/>
-          <Departure detailed={false} odd={true} departure={timetable[2]}/>
-          <Departure detailed={false} odd={false}  departure={timetable[3]}/>
-          <Departure detailed={false} odd={true} departure={timetable[4]}/>
-          <Departure detailed={false} odd={false} departure={timetable[5]}/>
-          <Departure detailed={false} odd={true} departure={timetable[6]}/>
-          <Footer/>
+          <Departure detailed={true} odd={true} departure={timetable.departures[0]}/>
+          <Departure detailed={true} odd={false} departure={timetable.departures[1]}/>
+          <Departure detailed={false} odd={true} departure={timetable.departures[2]}/>
+          <Departure detailed={false} odd={false}  departure={timetable.departures[3]}/>
+          <Departure detailed={false} odd={true} departure={timetable.departures[4]}/>
+          <Departure detailed={false} odd={false} departure={timetable.departures[5]}/>
+          <Departure detailed={false} odd={true} departure={timetable.departures[6]}/>
+          <Footer station={timetable.station}/>
       </View>
     )
   }
@@ -182,6 +183,10 @@ const styles = StyleSheet.create({
     backgroundColor:'#2c0A3B',
     width: '100%',
     height: '10%'
+  },
+  footerFont: {
+    color:'#fff',
+    width: '100%'
   },
   statusbar: {
     height:45
