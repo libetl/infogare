@@ -1,16 +1,17 @@
 import request from 'axios'
 import moment from 'moment'
-import {records as stations} from './stations'
+import stations from './stations'
 
 const defaultToken = '?-?-?-?-?'
-
-const dateTimeFormat = 'YYYYMMDDThhmmss'
-const urlPrefix = 'https://api.sncf.com/v1/coverage/sncf/'
-const stationUrlPrefix = `${urlPrefix}stop_areas/`
+const dateTimeFormat = 'YYYYMMDDTHHmmss'
+const sncfApiPrefix = 'https://api.sncf.com/v1/coverage/sncf/'
+const openDataStations = 'https://ressources.data.sncf.com/explore/dataset/referentiel-gares-voyageurs/download/?format=json&timezone=Europe/Berlin'
+const stationUrlPrefix = `${sncfApiPrefix}stop_areas/`
+const garesSncfDeparturesUrl = (tvs) => `https://www.gares-sncf.com/fr/train-times/${tvs.toUpperCase()}/departure`
 const stationUrl = (stationId, dateTime, startPage) =>
-    `${stationUrlPrefix}${stationId}/departures?start_page=${startPage}&datetime=${dateTime.format(dateTimeFormat)}`
-const placeUrl = (place) => `${urlPrefix}places?q=${place}`
-const routeUrl = (routeId) => `${urlPrefix}routes/${routeId}/stop_schedules`
+    `${stationUrlPrefix}${stationId}/departures?start_page=${startPage}&from_datetime=${dateTime.format(dateTimeFormat)}`
+const placeUrl = (place) => `${sncfApiPrefix}places?q=${place}`
+const vehicleJourneyUrl = (vehicleJourney) => `${sncfApiPrefix}vehicle_journeys/${vehicleJourney}`
 
 const departures = (stationId = 'stop_area:OCE:SA:87391003', page = 0, token = defaultToken) => request({
     method: 'get',
@@ -30,43 +31,61 @@ const place = (label, token = defaultToken) => request({
 
 const getStations = () => request({
     method: 'get',
-    url: 'https://ressources.data.sncf.com/api/records/1.0/search/?dataset=liste-des-gares&facet=fret&facet=voyageurs&facet=code_ligne&facet=departement&rows=5032'
+    url: openDataStations
 }).then((result) => Promise.resolve([...result.data.records]))
 
-const route = (departure, from, token = defaultToken) => request({
+const getGaresSncfDepartures = (tvs, departuresData = []) => request({
     method: 'get',
-    url: routeUrl(departure.routeId),
+    url: garesSncfDeparturesUrl(tvs)
+}).then((result) => {
+    if (!Array.isArray(result.data.trains)) {
+        return Promise.resolve(departuresData)
+    }
+    return Promise.resolve(departuresData.map(
+        departure => {return {
+            gareSncf: result.data.trains.find(gare => gare.num == departure.display_informations.headsign),
+            ...departure}}))
+})
+
+const vehicleJourney = (departure, from, token = defaultToken) => request({
+    method: 'get',
+    url: vehicleJourneyUrl(departure.links.find(link => link.type === 'vehicle_journey').id),
     headers: {
         'Authorization': token,
     },
 }).then((result) => {
-    const allStops = result.data.stop_schedules.map(stop => stop.stop_point.name)
-    const stops = allStops.slice(allStops.indexOf(from))
+    const allStops = result.data.vehicle_journeys[0].stop_times.map(stop_time => stop_time.stop_point.name.replace('-', '\u00a0'))
+    const indexOfStop = allStops.indexOf(from) === -1 ? allStops.indexOf(`${from}-Ville`) : allStops.indexOf(from)
+    const stops = allStops.slice(indexOfStop + 1)
     return Promise.resolve({...departure, stops})
 })
 
-
 const distance = ([lat1, long1], [lat2, long2]) => Math.sqrt(Math.pow(lat2 - lat1, 2) + Math.pow(long2 - long1, 2))
 const distanceBetweenStations= (station1, station2) =>
-    distance([station1.fields.coordonnees_geographiques[0], station1.fields.coordonnees_geographiques[1]],
-        station2.fields.coordonnees_geographiques ? [station2.fields.coordonnees_geographiques[0], station2.fields.coordonnees_geographiques[1]] :
-            [-station1.fields.coordonnees_geographiques[0], -station1.fields.coordonnees_geographiques[1]])
+    distance([station1.geometry.coordinates[1], station1.geometry.coordinates[0]],
+        station2.geometry ? [station2.geometry.coordinates[1], station2.geometry.coordinates[0]] :
+            [-station1.geometry.coordinates[1], -station1.geometry.coordinates[0]])
 
 const closestStation = (stations, {lat, long}) => stations.reduce((a, b) =>
-    distanceBetweenStations({fields:{coordonnees_geographiques:[lat, long]}}, a) < distanceBetweenStations({fields:{coordonnees_geographiques:[lat, long]}}, b) ?
+    distanceBetweenStations({geometry:{coordinates:[lat, long]}}, a) < distanceBetweenStations({geometry:{coordinates:[lat, long]}}, b) ?
         a : b, stations[0])
 
-const nextDepartures = ({lat, long}) => {
-    const stationName = closestStation(stations, {lat, long}).fields.libelle_gare
-    return place(stationName).then((station) => departures(station.id))
-                             .then((departures) => Promise.resolve(departures.map(e => {return {
-                                routeId: e.route.id,
-                                mode: e.display_informations.commercial_mode,
-                                name: e.display_informations.code,
-                                number: e.display_informations.headsign,
-                                time: moment(e.stop_date_time.departure_date_time, dateTimeFormat).format('hh:mm'),
-                                direction: e.route.direction.name.substring(0, e.route.direction.name.indexOf('('))}})))
-                             .then((timetable) => Promise.all(timetable.map(row => route(row, stationName))))
+const nextDepartures = ({lat, long}, token = defaultToken) => {
+    const station = closestStation(stations, {lat, long})
+    const stationName = station.fields.intitule_gare
+    const iataCode = station.fields.tvs
+    return place(stationName, token)
+            .then((station) => departures(station.id, 0, token))
+            .then((departuresData) => getGaresSncfDepartures(iataCode, departuresData))
+            .then((departuresData) => Promise.all(departuresData.map(row => vehicleJourney(row, stationName, token))))
+            .then((departuresData) => Promise.resolve(departuresData.map(e => {return {
+                mode: e.display_informations.commercial_mode,
+                name: e.display_informations.code,
+                number: e.display_informations.headsign,
+                time: moment(e.stop_date_time.departure_date_time, dateTimeFormat).format('HH:mm'),
+                direction: e.route.direction.stop_area.name,
+                platform: e.gareSncf ? e.gareSncf.voie : '',
+                stops: e.stops}})))
 }
 
 export default {nextDepartures}
