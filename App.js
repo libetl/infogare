@@ -1,23 +1,24 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, ScrollView, View } from 'react-native'
 import webservice from './src/core/webservice'
 
 const somePlaces = {
-    nice: {long:43.7245297, lat:7.2535399},
-    dijon: {long:47.3221546, lat:5.0279934},
-    perpignan: {long:42.7027824, lat:2.8837703},
-    digoin: {long:46.4845325, lat:3.9851439},
-    auber: {long:48.8729105, lat:2.3259732},
-    champagneSurSeine: {long:48.409371, lat:2.7915463}
+  nice: { long: 43.7245297, lat: 7.2535399 },
+  dijon: { long: 47.3221546, lat: 5.0279934 },
+  perpignan: { long: 42.7027824, lat: 2.8837703 },
+  digoin: { long: 46.4845325, lat: 3.9851439 },
+  auber: { long: 48.8729105, lat: 2.3259732 },
+  champagneSurSeine: { long: 48.409371, lat: 2.7915463 }
 }
 
 export class Departure extends React.Component {
   constructor(props) {
-        super(props)
+    super(props)
   }
   render() {
     const departure = this.props.departure || {}
-    const style = styles[`${this.props.detailed ? 'big' : ''}${this.props.odd ? 'odd' : 'even'}`]; 
+    const style = styles[`${this.props.detailed ? 'big' : ''}${this.props.odd ? 'odd' : 'even'}`]
+
     return (
       <View style={style}>
         <View style={this.props.detailed ? styles.split : styles.dontsplit}>
@@ -29,10 +30,12 @@ export class Departure extends React.Component {
             styles.platform : styles.noPlatformYet}>{departure.platform}</Text>
         </View>
         {this.props.detailed &&
-          <View style={styles.stops}><Text>{!departure.stops ? '' :
-            departure.stops.map(stop => (
-              <Text key={stop}><Text style={styles.oneStop}> {stop} </Text>
-                <Text style={styles.yellowBullet}>•</Text></Text>))}</Text></View>}
+          <ScrollView ref={(thisRef) => this.props.parent[`detailsOfRow${this.props.detailsRow}`] = thisRef}
+            contentContainerStyle={styles.stops} style={styles.scroll}>
+            <Text onLayout={(event) => this.props.parent.measureView(event, `detailsOfRow${this.props.detailsRow}`)}>{!departure.stops ? '' :
+              departure.stops.map(stop => (
+                <Text key={stop}><Text style={styles.oneStop}> {stop} </Text>
+                  <Text style={styles.yellowBullet}>•</Text></Text>))}</Text></ScrollView>}
       </View>
     )
   }
@@ -40,7 +43,7 @@ export class Departure extends React.Component {
 
 export class Footer extends React.Component {
   constructor(props) {
-        super(props)
+    super(props)
   }
   render() {
     return (
@@ -52,26 +55,56 @@ export class Footer extends React.Component {
 }
 
 export default class App extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {...props, timetable:{departures:[{},{},{},{},{},{},{}], station: 'inconnue'}}
+  constructor(props) {
+    super(props)
+    this.state = {
+      ...props,
+      timetable: {
+        departures: [{}, {}, {}, {}, {}, {}, {}], station: 'inconnue',
+        firstScrollY: 2, secondScrollY: 2, detailsOfRow1Height: 0, detailsOfRow2Height: 0
+      }
     }
-    componentDidMount() {
-        webservice.nextDepartures(somePlaces.nice).then((timetable) => this.setState({...this.state, timetable}))
-    }
+    this.autoScroll = this.autoScroll.bind(this)
+  }
+  componentDidMount() {
+    webservice.nextDepartures(somePlaces.nice)
+      .then((timetable) => this.setState({
+        ...this.state, timetable,
+        firstScrollY: 2, secondScrollY: 2,
+        detailsOfRow1Height: 0, detailsOfRow2Height: 0
+      }))
+      .then(() => setInterval(this.autoScroll, 3000))
+  }
+  autoScroll() {
+    this.setState({
+      ...this.state,
+      firstScrollY: this.state.detailsOfRow1Height < this.state.firstScrollY + 33 ? 2 : this.state.firstScrollY + 23.5,
+      secondScrollY: this.state.detailsOfRow2Height < this.state.secondScrollY + 33 ? 2 : this.state.secondScrollY + 23.5
+    })
+  }
+  componentDidUpdate() {
+    this.detailsOfRow1.scrollTo({ x: 0, y: this.state.firstScrollY, animated: true })
+    this.detailsOfRow2.scrollTo({ x: 0, y: this.state.secondScrollY, animated: true })
+  }
+  measureView(event, rowName) {
+    this.setState({
+      ...this.state,
+      [`${rowName}Height`]: event.nativeEvent.layout.height
+    })
+  }
   render() {
     const timetable = this.state.timetable
     return (
       <View style={styles.container}>
-          <View style={styles.statusbar}/>
-          <Departure detailed={true} odd={true} departure={timetable.departures[0]}/>
-          <Departure detailed={true} odd={false} departure={timetable.departures[1]}/>
-          <Departure detailed={false} odd={true} departure={timetable.departures[2]}/>
-          <Departure detailed={false} odd={false}  departure={timetable.departures[3]}/>
-          <Departure detailed={false} odd={true} departure={timetable.departures[4]}/>
-          <Departure detailed={false} odd={false} departure={timetable.departures[5]}/>
-          <Departure detailed={false} odd={true} departure={timetable.departures[6]}/>
-          <Footer station={timetable.station}/>
+        <View style={styles.statusbar} />
+        <Departure detailed={true} odd={true} departure={timetable.departures[0]} detailsRow={1} parent={this} />
+        <Departure detailed={true} odd={false} departure={timetable.departures[1]} detailsRow={2} parent={this} />
+        <Departure detailed={false} odd={true} departure={timetable.departures[2]} parent={this} />
+        <Departure detailed={false} odd={false} departure={timetable.departures[3]} parent={this} />
+        <Departure detailed={false} odd={true} departure={timetable.departures[4]} parent={this} />
+        <Departure detailed={false} odd={false} departure={timetable.departures[5]} parent={this} />
+        <Departure detailed={false} odd={true} departure={timetable.departures[6]} parent={this} />
+        <Footer station={timetable.station} />
       </View>
     )
   }
@@ -83,112 +116,117 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
     alignItems: 'center',
     justifyContent: 'center',
-    height:'100%',
-    width:'100%'
+    height: '100%',
+    width: '100%'
   },
   bigodd: {
-    height:'20%',
+    height: '20%',
     width: '100%',
-    backgroundColor:'#0d5da6',
+    backgroundColor: '#0d5da6',
     flexDirection: 'column',
     flexWrap: 'wrap'
   },
   bigeven: {
-    height:'20%',
+    height: '20%',
     width: '100%',
-    backgroundColor:'#04396d',
+    backgroundColor: '#04396d',
     flexDirection: 'column',
     flexWrap: 'wrap'
   },
   odd: {
-    height:'10%',
+    height: '10%',
     width: '100%',
-    backgroundColor:'#0d5da6',
+    backgroundColor: '#0d5da6',
     flexDirection: 'column',
     alignItems: 'center',
     flexWrap: 'wrap'
   },
   even: {
-    height:'10%',
+    height: '10%',
     width: '100%',
-    backgroundColor:'#04396d',
+    backgroundColor: '#04396d',
     flexDirection: 'column',
     alignItems: 'center',
     flexWrap: 'wrap'
   },
   mode: {
-    color:'#fff',
+    color: '#fff',
     fontSize: 15,
-    width:'10%'
+    width: '10%'
   },
   number: {
-    color:'#fff',
+    color: '#fff',
     fontSize: 15,
-    width:'20%'
+    width: '20%'
   },
   time: {
-    color:'#dfc81f',
+    color: '#dfc81f',
     fontSize: 15,
     fontWeight: 'bold',
-    width:'15%'
+    width: '15%'
   },
   direction: {
-    color:'#fff',
+    color: '#fff',
     fontSize: 15,
-    overflow:'hidden',
-    width:'45%'
+    overflow: 'hidden',
+    width: '45%'
   },
   platform: {
-    color:'#fff',
-    borderStyle:'solid',
-    borderWidth:1,
-    borderColor:'#fff',
-    borderRadius:6,
-    width:'10%',
-    height:25,
-    textAlign:'center'
+    color: '#fff',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: '#fff',
+    borderRadius: 6,
+    width: '10%',
+    height: 25,
+    textAlign: 'center'
   },
   noPlatformYet: {
-    color:'#fff',
-    borderRadius:6,
-    width:'10%',
-    height:25,
-    textAlign:'center'
+    color: '#fff',
+    borderRadius: 6,
+    width: '10%',
+    height: 25,
+    textAlign: 'center'
   },
   split: {
-    flexGrow: 1,
-    width:'100%',
+    marginBottom: -25,
+    height: '100%',
+    width: '100%',
     flexDirection: 'row'
   },
   dontsplit: {
-    height:'100%',
-    width:'100%',
+    height: '100%',
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center'
   },
+  scroll: {
+    height: 20
+  },
   stops: {
-    height:28,
-    width:'100%',
+    paddingTop: 0,
+    paddingBottom: 0,
+    width: '100%',
     flexDirection: 'row',
     overflow: 'hidden'
   },
   oneStop: {
-    color:'#fff',
+    color: '#fff',
     fontSize: 20
   },
   yellowBullet: {
-    color:'#dfc81f'
+    color: '#dfc81f'
   },
   footer: {
-    backgroundColor:'#2c0A3B',
+    backgroundColor: '#2c0A3B',
     width: '100%',
     height: '10%'
   },
   footerFont: {
-    color:'#fff',
+    color: '#fff',
     width: '100%'
   },
   statusbar: {
-    height:45
+    height: 48
   }
 })
