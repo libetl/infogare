@@ -115,18 +115,17 @@ export default class App extends React.Component {
     })
   }
   render() {
-    const timetable = this.state.timetable
     return (
       <View style={styles.container}>
         <View style={styles.statusbar} />
-        <Departure detailed={true} odd={true} departure={timetable.departures[0]} detailsRow={1} parent={this} />
-        <Departure detailed={true} odd={false} departure={timetable.departures[1]} detailsRow={2} parent={this} />
-        <Departure detailed={false} odd={true} departure={timetable.departures[2]} parent={this} />
-        <Departure detailed={false} odd={false} departure={timetable.departures[3]} parent={this} />
-        <Departure detailed={false} odd={true} departure={timetable.departures[4]} parent={this} />
-        <Departure detailed={false} odd={false} departure={timetable.departures[5]} parent={this} />
-        <Departure detailed={false} odd={true} departure={timetable.departures[6]} parent={this} />
-        <Footer station={timetable.station} displayNowColon={this.state.displayNowColon}/>
+        <Departure detailed={true} odd={true} departure={this.state.timetable.departures[0]} detailsRow={1} parent={this} />
+        <Departure detailed={true} odd={false} departure={this.state.timetable.departures[1]} detailsRow={2} parent={this} />
+        <Departure detailed={false} odd={true} departure={this.state.timetable.departures[2]} parent={this} />
+        <Departure detailed={false} odd={false} departure={this.state.timetable.departures[3]} parent={this} />
+        <Departure detailed={false} odd={true} departure={this.state.timetable.departures[4]} parent={this} />
+        <Departure detailed={false} odd={false} departure={this.state.timetable.departures[5]} parent={this} />
+        <Departure detailed={false} odd={true} departure={this.state.timetable.departures[6]} parent={this} />
+        <Footer station={this.state.timetable.station} displayNowColon={this.state.displayNowColon}/>
       </View>
     )
   }
