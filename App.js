@@ -80,15 +80,28 @@ export default class App extends React.Component {
   }
   componentDidMount() {
     navigator.geolocation.getCurrentPosition((position) => {
-        this.setState({...this.state, geo:position})
+      console.log(position)
+        this.setState({...this.state, 
+          geo:{lat: position.coords.longitude, long: position.coords.latitude}})
         webservice.nextDepartures(this.state.geo)
         .then((timetable) => this.setState({...this.state, timetable,
             firstScrollY: 3, secondScrollY: 3,
             detailsOfRow1Height: 0, detailsOfRow2Height: 0,
             displayNowColon:true}))
         .then(() => setInterval(this.autoScroll, 3000))
-        .then(() => setInterval(this.updateTimetable, 54000))})
+        .then(() => setInterval(this.updateTimetable, 54000))},
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
+    
+      /*
+    this.watchID = navigator.geolocation.watchPosition((position) => { 
+      this.setState({...this.state, 
+          geo:{lat:position.coords.latitude, long: position.coords.longitude}})
+      this.updateTimetable(geo)
+    })*/
     setInterval(this.updateNowTime, 500)
+  }
+  componentWillUnmount() { 
+    navigator.geolocation.clearWatch(this.watchID)
   }
   autoScroll() {
     this.setState({
@@ -102,11 +115,9 @@ export default class App extends React.Component {
       ...this.state,
       displayNowColon: !this.state.displayNowColon})
   }
-  updateTimetable() {
-    navigator.geolocation.getCurrentPosition((position) => {
-        this.setState({...this.state, geo:position})
-        webservice.nextDepartures(this.state.geo).then((timetable) => 
-          this.setState({...this.state, timetable}))})
+  updateTimetable(geo) {
+    webservice.nextDepartures(geo || this.state.geo).then((timetable) => 
+          this.setState({...this.state, timetable}))
   }
   componentDidUpdate() {
     this.detailsOfRow1.scrollTo({ x: 0, y: this.state.firstScrollY, animated: true })
