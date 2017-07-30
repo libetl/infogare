@@ -102,7 +102,7 @@ export default class App extends React.Component {
   }
   updateTimetable() {
     webservice.nextDepartures(this.state.geo)
-      .then((timetable) => this.setState({...this.state, departures}))
+      .then((timetable) => this.setState({...this.state, timetable}))
   }
   componentDidUpdate() {
     this.detailsOfRow1.scrollTo({ x: 0, y: this.state.firstScrollY, animated: true })
