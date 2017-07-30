@@ -1,6 +1,7 @@
 import React from 'react'
 import { Dimensions, StyleSheet, Text, ScrollView, View } from 'react-native'
 import webservice from './src/core/webservice'
+import moment from 'moment'
 
 const somePlaces = {
   nice: { long: 43.7245297, lat: 7.2535399 },
@@ -49,6 +50,11 @@ export class Footer extends React.Component {
     return (
       <View style={styles.footer}>
         <Text style={styles.footerFont}>Gare trouvée : {this.props.station}</Text>
+        <Text style={styles.now}>
+          <Text style={styles.hoursMinutes}>{
+            this.props.displayNowColon ? moment().format('HH:mm') : moment().format('HH mm') } </Text>
+          <Text style={styles.seconds}>{moment().format('ss')}</Text>
+        </Text>
       </View>
     )
   }
@@ -59,28 +65,44 @@ export default class App extends React.Component {
     super(props)
     this.state = {
       ...props,
+      geo: somePlaces.nice,
       timetable: {
         departures: [{}, {}, {}, {}, {}, {}, {}], station: 'inconnue',
-        firstScrollY: 2, secondScrollY: 2, detailsOfRow1Height: 0, detailsOfRow2Height: 0
+        firstScrollY: 3, secondScrollY: 3, detailsOfRow1Height: 0, detailsOfRow2Height: 0,
+        displayNowColon:true
       }
     }
     this.autoScroll = this.autoScroll.bind(this)
+    this.updateNowTime = this.updateNowTime.bind(this)
+    this.updateTimetable = this.updateTimetable.bind(this)
   }
   componentDidMount() {
-    webservice.nextDepartures(somePlaces.nice)
+    webservice.nextDepartures(this.state.geo)
       .then((timetable) => this.setState({
         ...this.state, timetable,
-        firstScrollY: 2, secondScrollY: 2,
-        detailsOfRow1Height: 0, detailsOfRow2Height: 0
+        firstScrollY: 3, secondScrollY: 3,
+        detailsOfRow1Height: 0, detailsOfRow2Height: 0,
+        displayNowColon:true
       }))
       .then(() => setInterval(this.autoScroll, 3000))
+      .then(() => setInterval(this.updateTimetable, 60000))
+      setInterval(this.updateNowTime, 500)
   }
   autoScroll() {
     this.setState({
       ...this.state,
-      firstScrollY: this.state.detailsOfRow1Height < this.state.firstScrollY + 33 ? 2 : this.state.firstScrollY + 23.5,
-      secondScrollY: this.state.detailsOfRow2Height < this.state.secondScrollY + 33 ? 2 : this.state.secondScrollY + 23.5
+      firstScrollY: this.state.detailsOfRow1Height < this.state.firstScrollY + 33 ? 3 : this.state.firstScrollY + 23.5,
+      secondScrollY: this.state.detailsOfRow2Height < this.state.secondScrollY + 33 ? 3 : this.state.secondScrollY + 23.5
     })
+  }
+  updateNowTime() {
+    this.setState({
+      ...this.state,
+      displayNowColon: !this.state.displayNowColon})
+  }
+  updateTimetable() {
+    webservice.nextDepartures(this.state.geo)
+      .then((timetable) => this.setState({...this.state, timetable}))
   }
   componentDidUpdate() {
     this.detailsOfRow1.scrollTo({ x: 0, y: this.state.firstScrollY, animated: true })
@@ -104,7 +126,7 @@ export default class App extends React.Component {
         <Departure detailed={false} odd={true} departure={timetable.departures[4]} parent={this} />
         <Departure detailed={false} odd={false} departure={timetable.departures[5]} parent={this} />
         <Departure detailed={false} odd={true} departure={timetable.departures[6]} parent={this} />
-        <Footer station={timetable.station} />
+        <Footer station={timetable.station} displayNowColon={this.state.displayNowColon}/>
       </View>
     )
   }
@@ -220,11 +242,31 @@ const styles = StyleSheet.create({
   footer: {
     backgroundColor: '#2c0A3B',
     width: '100%',
-    height: '10%'
+    height: '10%',
+    flexDirection: 'row'
   },
   footerFont: {
     color: '#fff',
-    width: '100%'
+    flexGrow: 1
+  },
+  now: {
+    backgroundColor: '#04396d',
+    width:72,
+    height:30,
+    marginTop:8,
+    paddingLeft:10,
+    paddingTop: 5,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: '#fff',
+    borderRadius: 6
+  },
+  hoursMinutes: {
+    color: '#fff'
+  },
+  seconds: {
+    color: '#dfc81f',
+    fontSize:10
   },
   statusbar: {
     height: 48
