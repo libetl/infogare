@@ -80,7 +80,6 @@ export default class App extends React.Component {
   }
   componentDidMount() {
     navigator.geolocation.getCurrentPosition((position) => {
-      console.log(position)
         this.setState({...this.state, 
           geo:{long: position.coords.longitude, lat: position.coords.latitude}})
         webservice.nextDepartures(this.state.geo)
