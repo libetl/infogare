@@ -4,13 +4,13 @@ import webservice from './src/core/webservice'
 import moment from 'moment'
 
 const somePlaces = {
-  nice: { long: 43.7245297, lat: 7.2535399 },
-  dijon: { long: 47.3221546, lat: 5.0279934 },
-  perpignan: { long: 42.7027824, lat: 2.8837703 },
-  digoin: { long: 46.4845325, lat: 3.9851439 },
-  auber: { long: 48.8729105, lat: 2.3259732 },
-  champagneSurSeine: { long: 48.409371, lat: 2.7915463 },
-  parisGareDeLyon: {long: 48.8443038, lat: 2.3743773}
+  nice: { lat: 43.7245297, long: 7.2535399 },
+  dijon: { lat: 47.3221546, long: 5.0279934 },
+  perpignan: { lat: 42.7027824, long: 2.8837703 },
+  digoin: { lat: 46.4845325, long: 3.9851439 },
+  auber: { lat: 48.8729105, long: 2.3259732 },
+  champagneSurSeine: { lat: 48.409371, long: 2.7915463 },
+  parisGareDeLyon: {lat: 48.8443038, long: 2.3743773}
 }
 
 export class Departure extends React.Component {
@@ -82,7 +82,7 @@ export default class App extends React.Component {
     navigator.geolocation.getCurrentPosition((position) => {
       console.log(position)
         this.setState({...this.state, 
-          geo:{lat: position.coords.longitude, long: position.coords.latitude}})
+          geo:{long: position.coords.longitude, lat: position.coords.latitude}})
         webservice.nextDepartures(this.state.geo)
         .then((timetable) => this.setState({...this.state, timetable,
             firstScrollY: 3, secondScrollY: 3,
@@ -91,13 +91,7 @@ export default class App extends React.Component {
         .then(() => setInterval(this.autoScroll, 3000))
         .then(() => setInterval(this.updateTimetable, 54000))},
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
-    
-      /*
-    this.watchID = navigator.geolocation.watchPosition((position) => { 
-      this.setState({...this.state, 
-          geo:{lat:position.coords.latitude, long: position.coords.longitude}})
-      this.updateTimetable(geo)
-    })*/
+
     setInterval(this.updateNowTime, 500)
   }
   componentWillUnmount() { 
