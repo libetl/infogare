@@ -9,7 +9,8 @@ const somePlaces = {
   perpignan: { long: 42.7027824, lat: 2.8837703 },
   digoin: { long: 46.4845325, lat: 3.9851439 },
   auber: { long: 48.8729105, lat: 2.3259732 },
-  champagneSurSeine: { long: 48.409371, lat: 2.7915463 }
+  champagneSurSeine: { long: 48.409371, lat: 2.7915463 },
+  parisGareDeLyon: {long: 48.8443038, lat: 2.3743773}
 }
 
 export class Departure extends React.Component {
@@ -26,7 +27,8 @@ export class Departure extends React.Component {
           <Text style={styles.mode}>{departure.mode}</Text>
           <Text style={styles.number}>{departure.name}{departure.number}</Text>
           <Text style={styles.time}>{departure.time}  </Text>
-          <Text style={styles.direction}>{departure.direction}</Text>
+          <Text style={styles.direction}>{!departure.stops ? departure.direction : 
+            departure.stops[departure.stops.length - 1]}</Text>
           <Text style={departure.platform && departure.platform.length > 0 ?
             styles.platform : styles.noPlatformYet}>{departure.platform}</Text>
         </View>
@@ -65,7 +67,7 @@ export default class App extends React.Component {
     super(props)
     this.state = {
       ...props,
-      geo: somePlaces.nice,
+      geo: somePlaces.parisGareDeLyon,
       timetable: {
         departures: [{}, {}, {}, {}, {}, {}, {}], station: 'inconnue',
         firstScrollY: 3, secondScrollY: 3, detailsOfRow1Height: 0, detailsOfRow2Height: 0,
@@ -77,16 +79,16 @@ export default class App extends React.Component {
     this.updateTimetable = this.updateTimetable.bind(this)
   }
   componentDidMount() {
-    webservice.nextDepartures(this.state.geo)
-      .then((timetable) => this.setState({
-        ...this.state, timetable,
-        firstScrollY: 3, secondScrollY: 3,
-        detailsOfRow1Height: 0, detailsOfRow2Height: 0,
-        displayNowColon:true
-      }))
-      .then(() => setInterval(this.autoScroll, 3000))
-      .then(() => setInterval(this.updateTimetable, 54000))
-      setInterval(this.updateNowTime, 500)
+    navigator.geolocation.getCurrentPosition((position) => {
+        this.setState({...this.state, geo:position})
+        webservice.nextDepartures(this.state.geo)
+        .then((timetable) => this.setState({...this.state, timetable,
+            firstScrollY: 3, secondScrollY: 3,
+            detailsOfRow1Height: 0, detailsOfRow2Height: 0,
+            displayNowColon:true}))
+        .then(() => setInterval(this.autoScroll, 3000))
+        .then(() => setInterval(this.updateTimetable, 54000))})
+    setInterval(this.updateNowTime, 500)
   }
   autoScroll() {
     this.setState({
@@ -101,8 +103,10 @@ export default class App extends React.Component {
       displayNowColon: !this.state.displayNowColon})
   }
   updateTimetable() {
-    webservice.nextDepartures(this.state.geo)
-      .then((timetable) => this.setState({...this.state, timetable}))
+    navigator.geolocation.getCurrentPosition((position) => {
+        this.setState({...this.state, geo:position})
+        webservice.nextDepartures(this.state.geo).then((timetable) => 
+          this.setState({...this.state, timetable}))})
   }
   componentDidUpdate() {
     this.detailsOfRow1.scrollTo({ x: 0, y: this.state.firstScrollY, animated: true })
