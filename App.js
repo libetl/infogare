@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dimensions, StyleSheet, Text, ScrollView, View } from 'react-native'
+import { Button, Dimensions, StyleSheet, Text, ScrollView, View } from 'react-native'
 import webservice from './src/core/webservice'
 import moment from 'moment'
 
@@ -51,6 +51,8 @@ export class Footer extends React.Component {
   render() {
     return (
       <View style={styles.footer}>
+        <Button onPress={this.props.parent.updateLocation} title='↻' color='#841584'
+        accessibilityLabel='Update location'/>
         <Text style={styles.footerFont}>Gare trouvée : {this.props.station}</Text>
         <Text style={styles.now}>
           <Text style={styles.hoursMinutes}>{
@@ -77,6 +79,7 @@ export default class App extends React.Component {
     this.autoScroll = this.autoScroll.bind(this)
     this.updateNowTime = this.updateNowTime.bind(this)
     this.updateTimetable = this.updateTimetable.bind(this)
+    this.updateLocation = this.updateLocation.bind(this)
   }
   componentDidMount() {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -112,6 +115,13 @@ export default class App extends React.Component {
     webservice.nextDepartures(geo || this.state.geo).then((timetable) => 
           this.setState({...this.state, timetable}))
   }
+  updateLocation() {
+    navigator.geolocation.getCurrentPosition((position) => {
+        this.setState({...this.state, 
+          geo:{long: position.coords.longitude, lat: position.coords.latitude}})
+        webservice.nextDepartures(this.state.geo)
+        .then((timetable) => this.setState({...this.state, timetable}))})
+  }
   componentDidUpdate() {
     this.detailsOfRow1.scrollTo({ x: 0, y: this.state.firstScrollY, animated: true })
     this.detailsOfRow2.scrollTo({ x: 0, y: this.state.secondScrollY, animated: true })
@@ -133,7 +143,7 @@ export default class App extends React.Component {
         <Departure detailed={false} odd={true} departure={this.state.timetable.departures[4]} parent={this} />
         <Departure detailed={false} odd={false} departure={this.state.timetable.departures[5]} parent={this} />
         <Departure detailed={false} odd={true} departure={this.state.timetable.departures[6]} parent={this} />
-        <Footer station={this.state.timetable.station} displayNowColon={this.state.displayNowColon}/>
+        <Footer station={this.state.timetable.station} displayNowColon={this.state.displayNowColon} parent={this} />
       </View>
     )
   }
