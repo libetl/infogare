@@ -63,18 +63,18 @@ const vehicleJourney = (departure, from, token = defaultToken) => request({
     return Promise.resolve({...departure, stops})
 })
 
-const distance = ([lat1, long1], [lat2, long2]) => Math.sqrt(Math.pow(lat2 - lat1, 2) + Math.pow(long2 - long1, 2))
+const distance = ([long1, lat1], [long2, lat2]) => Math.sqrt(Math.pow(long2 - long1, 2) + Math.pow(lat2 - lat1, 2))
 const distanceBetweenStations= (station1, station2) =>
     distance([station1.geometry.coordinates[1], station1.geometry.coordinates[0]],
         station2.geometry ? [station2.geometry.coordinates[1], station2.geometry.coordinates[0]] :
             [-station1.geometry.coordinates[1], -station1.geometry.coordinates[0]])
 
-const closestStation = (stations, {lat, long}) => stations.reduce((a, b) =>
-    distanceBetweenStations({geometry:{coordinates:[lat, long]}}, a) < distanceBetweenStations({geometry:{coordinates:[lat, long]}}, b) ?
+const closestStation = (stations, {long, lat}) => stations.reduce((a, b) =>
+    distanceBetweenStations({geometry:{coordinates:[long, lat]}}, a) < distanceBetweenStations({geometry:{coordinates:[long, lat]}}, b) ?
         a : b, stations[0])
 
-const nextDepartures = ({lat, long}, token = defaultToken) => {
-    const station = closestStation(stations, {lat, long})
+const nextDepartures = ({long, lat}, token = defaultToken) => {
+    const station = closestStation(stations, {long, lat})
     const stationName = station.fields.intitule_gare
     const iataCode = station.fields.tvs
     return place(stationName, token)
