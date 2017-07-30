@@ -85,7 +85,7 @@ export default class App extends React.Component {
         displayNowColon:true
       }))
       .then(() => setInterval(this.autoScroll, 3000))
-      .then(() => setInterval(this.updateTimetable, 60000))
+      .then(() => setInterval(this.updateTimetable, 54000))
       setInterval(this.updateNowTime, 500)
   }
   autoScroll() {
@@ -102,7 +102,7 @@ export default class App extends React.Component {
   }
   updateTimetable() {
     webservice.nextDepartures(this.state.geo)
-      .then((timetable) => this.setState({...this.state, timetable}))
+      .then((timetable) => this.setState({...this.state, departures}))
   }
   componentDidUpdate() {
     this.detailsOfRow1.scrollTo({ x: 0, y: this.state.firstScrollY, animated: true })
