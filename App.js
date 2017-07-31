@@ -102,8 +102,8 @@ export default class App extends React.Component {
   autoScroll() {
     this.setState({
       ...this.state,
-      firstScrollY: this.state.detailsOfRow1Height < this.state.firstScrollY + 33 ? 3 : this.state.firstScrollY + 23.5,
-      secondScrollY: this.state.detailsOfRow2Height < this.state.secondScrollY + 33 ? 3 : this.state.secondScrollY + 23.5
+      firstScrollY: this.state.detailsOfRow1Height < this.state.firstScrollY + 38 ? 3 : this.state.firstScrollY + 26.75,
+      secondScrollY: this.state.detailsOfRow2Height < this.state.secondScrollY + 38 ? 3 : this.state.secondScrollY + 26.75
     })
   }
   updateNowTime() {
@@ -251,7 +251,8 @@ const styles = StyleSheet.create({
   },
   oneStop: {
     color: '#fff',
-    fontSize: 20
+    fontSize: 20,
+    lineHeight: 35
   },
   yellowBullet: {
     color: '#dfc81f'
