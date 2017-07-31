@@ -2,7 +2,6 @@ import request from 'axios'
 import moment from 'moment'
 import stations from './stations'
 
-const defaultToken = '?-?-?-?-?'
 const dateTimeFormat = 'YYYYMMDDTHHmmss'
 const sncfApiPrefix = 'https://api.sncf.com/v1/coverage/sncf/'
 const openDataStations = 'https://ressources.data.sncf.com/explore/dataset/referentiel-gares-voyageurs/download/?format=json&timezone=Europe/Berlin'
@@ -13,7 +12,7 @@ const stationUrl = (stationId, dateTime, startPage) =>
 const placeUrl = (place) => `${sncfApiPrefix}places?q=${place}`
 const vehicleJourneyUrl = (vehicleJourney) => `${sncfApiPrefix}vehicle_journeys/${vehicleJourney}`
 
-const departures = (stationId = 'stop_area:OCE:SA:87391003', page = 0, token = defaultToken) => request({
+const departures = (stationId = 'stop_area:OCE:SA:87391003', page = 0, token) => request({
     method: 'get',
     url: stationUrl(stationId, moment(), page),
     headers: {
@@ -21,13 +20,21 @@ const departures = (stationId = 'stop_area:OCE:SA:87391003', page = 0, token = d
     },
 }).then((result) => Promise.resolve([...result.data.departures])).catch((error) => Promise.resolve([]))
 
-const place = (label, token = defaultToken) => request({
+const place = (label, token) => request({
     method: 'get',
     url: placeUrl(label),
     headers: {
         'Authorization': token,
     },
 }).then((result) => Promise.resolve(result.data.places.filter(place => place.embedded_type === 'stop_area')[0])).catch((error) => Promise.resolve({id:'?'}))
+
+const test = (token) => request({
+    method: 'get',
+    url: sncfApiPrefix,
+    headers: {
+        'Authorization': token,
+    },
+})
 
 const getStations = () => request({
     method: 'get',
@@ -47,7 +54,7 @@ const getGaresSncfDepartures = (tvs, departuresData = []) => request({
             ...departure}}))
 })
 
-const vehicleJourney = (departure, fromStation, token = defaultToken) => request({
+const vehicleJourney = (departure, fromStation, token) => request({
     method: 'get',
     url: vehicleJourneyUrl(departure.links.find(link => link.type === 'vehicle_journey').id),
     headers: {
@@ -75,7 +82,7 @@ const closestStation = (stations, {long, lat}) => stations.reduce((a, b) =>
     distanceBetweenStations({geometry:{coordinates:[long, lat]}}, a) < distanceBetweenStations({geometry:{coordinates:[long, lat]}}, b) ?
         a : b, stations[0])
 
-const nextDepartures = ({long, lat}, token = defaultToken) => {
+const nextDepartures = ({long, lat}, token) => {
     const station = closestStation(stations, {long, lat})
     const stationName = station.fields.intitule_gare
     const iataCode = station.fields.tvs
@@ -94,4 +101,4 @@ const nextDepartures = ({long, lat}, token = defaultToken) => {
                     stops: e.stops}})}))
 }
 
-export default {nextDepartures}
+export default {nextDepartures, test}
