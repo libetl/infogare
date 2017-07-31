@@ -43,22 +43,24 @@ const getGaresSncfDepartures = (tvs, departuresData = []) => request({
     }
     return Promise.resolve(departuresData.map(
         departure => {return {
-            gareSncf: result.data.trains.find(gare => gare.num == departure.display_informations.headsign),
+            gareSncf: result.data.trains.find(gare => gare.num === departure.display_informations.headsign),
             ...departure}}))
 })
 
-const vehicleJourney = (departure, from, token = defaultToken) => request({
+const vehicleJourney = (departure, fromStation, token = defaultToken) => request({
     method: 'get',
     url: vehicleJourneyUrl(departure.links.find(link => link.type === 'vehicle_journey').id),
     headers: {
         'Authorization': token,
     },
 }).then((result) => {
-    const formattedFrom = from.replace(/ /g, '\u00a0').replace(/-/g, '\u2011').replace(/\//g, '\u00a0\u00a0\u00a0\u0338')
     const allStops = result.data.vehicle_journeys[0].stop_times.map(
         stop_time => stop_time.stop_point.name.replace(/ /g, '\u00a0').replace(/-/g, '\u2011').replace(/\//g, '\u00a0\u00a0\u00a0\u0338'))
-    const indexOfStop = allStops.indexOf(formattedFrom) === -1 ? 
-            allStops.indexOf(`${formattedFrom}\u2011Ville`) : allStops.indexOf(formattedFrom)
+    const allStopsCoords = result.data.vehicle_journeys[0].stop_times.map(stop_time => { return {
+        name:stop_time.stop_point.name.replace(/ /g, '\u00a0').replace(/-/g, '\u2011').replace(/\//g, '\u00a0\u00a0\u00a0\u0338'),
+        geometry:{coordinates:[parseFloat(stop_time.stop_point.coord.lon), parseFloat(stop_time.stop_point.coord.lat)]}}})
+    const foundStationInJourney = closestStation(allStopsCoords, {lat: fromStation.geometry.coordinates[1], long: fromStation.geometry.coordinates[0]}).name
+    const indexOfStop = allStops.indexOf(foundStationInJourney)
     const stops = allStops.slice(indexOfStop + 1)
     return Promise.resolve({...departure, stops})
 })
@@ -80,7 +82,7 @@ const nextDepartures = ({long, lat}, token = defaultToken) => {
     return place(stationName, token)
             .then((station) => departures(station.id, 0, token))
             .then((departuresData) => getGaresSncfDepartures(iataCode, departuresData))
-            .then((departuresData) => Promise.all(departuresData.map(row => vehicleJourney(row, stationName, token))))
+            .then((departuresData) => Promise.all(departuresData.map(row => vehicleJourney(row, station, token))))
             .then((departuresData) => Promise.resolve({station: stationName,
                 departures:departuresData.map(e => {return {
                     mode: e.display_informations.commercial_mode,
