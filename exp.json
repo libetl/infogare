@@ -2,13 +2,13 @@
   "name": "Sncf le panneau",
   "description": "Sncf le panneau",
   "slug": "sncf-le-panneau",
-  "icon": "logo.svg",
+  "icon": "logo.png",
   "version": "1.0.0",
   "sdkVersion": "18.0.0",
   "primaryColor": "#0d5da6",
   "nodeModulesPath": ".",
   "loading": {
-    "icon": "logo.svg",
+    "icon": "logo.png",
     "hideExponentText": false
   },
   "ios": {
