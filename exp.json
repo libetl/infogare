@@ -1,14 +1,21 @@
 {
   "name": "Sncf le panneau",
+  "description": "Sncf le panneau",
+  "slug": "sncf-le-panneau",
   "icon": "logo.svg",
-  "version": "2.0.0",
-  "slug": "rnplay",
-  "sdkVersion": "8.0.0",
+  "version": "1.0.0",
+  "sdkVersion": "18.0.0",
+  "primaryColor": "#0d5da6",
+  "nodeModulesPath": ".",
+  "loading": {
+    "icon": "logo.svg",
+    "hideExponentText": false
+  },
   "ios": {
     "bundleIdentifier": "org.toilelibre.libe.trains"
   },
   "android": {
     "package": "org.toilelibre.libe.trains"
-  }
+  },
+  "scheme": "exp"
 }
-
