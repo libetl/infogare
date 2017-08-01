@@ -1,69 +1,9 @@
 import React from 'react'
-import {AsyncStorage, Button, Modal, ScrollView, Text, TextInput, View} from 'react-native'
+import {AsyncStorage} from 'react-native'
 import webservice from './src/core/webservice'
-import moment from 'moment'
-import styles from './src/css/app.css'
-
-const somePlaces = {
-    nice: { lat: 43.7245297, long: 7.2535399 },
-    dijon: { lat: 47.3221546, long: 5.0279934 },
-    perpignan: { lat: 42.7027824, long: 2.8837703 },
-    digoin: { lat: 46.4845325, long: 3.9851439 },
-    auber: { lat: 48.8729105, long: 2.3259732 },
-    champagneSurSeine: { lat: 48.409371, long: 2.7915463 },
-    parisGareDeLyon: {lat: 48.8443038, long: 2.3743773}
-}
-
-export class Departure extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-    render() {
-        const departure = this.props.departure || {}
-        const style = styles[`${this.props.detailed ? 'big' : ''}${this.props.odd ? 'odd' : 'even'}`]
-
-        return (
-            <View style={style}>
-                <View style={this.props.detailed ? styles.split : styles.dontsplit}>
-                    <Text style={styles.mode}>{departure.mode}</Text>
-                    <Text style={styles.number}>{departure.name}{departure.number}</Text>
-                    <Text style={styles.time}>{departure.time}  </Text>
-                    <Text style={styles.direction}>{!departure.stops ? departure.direction :
-                        departure.stops[departure.stops.length - 1]}</Text>
-                    <Text style={departure.platform && departure.platform.length > 0 ?
-                        styles.platform : styles.noPlatformYet}>{departure.platform}</Text>
-                </View>
-                {this.props.detailed &&
-                <ScrollView ref={(thisRef) => this.props.parent[`detailsOfRow${this.props.detailsRow}`] = thisRef}
-                            contentContainerStyle={styles.stops} style={styles.scroll}>
-                    <Text onLayout={(event) => this.props.parent.measureView(event, `detailsOfRow${this.props.detailsRow}`)}>{!departure.stops ? '' :
-                        departure.stops.map(stop => (
-                            <Text key={stop}><Text style={styles.oneStop}> {stop} </Text>
-                                <Text style={styles.yellowBullet}>•</Text></Text>))}</Text></ScrollView>}
-            </View>
-        )
-    }
-}
-
-export class Footer extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-    render() {
-        return (
-            <View style={styles.footer}>
-                <Button onPress={this.props.parent.updateLocation} title='↻' color='#841584'
-                        accessibilityLabel='Mise à jour localisation'/>
-                <Text style={styles.footerFont}>Gare trouvée : {this.props.station}</Text>
-                <Text style={styles.now}>
-                    <Text style={styles.hoursMinutes}>{
-                        this.props.displayNowColon ? moment().format('HH:mm') : moment().format('HH mm') } </Text>
-                    <Text style={styles.seconds}>{moment().format('ss')}</Text>
-                </Text>
-            </View>
-        )
-    }
-}
+import somePlaces from './src/core/somePlaces'
+import SignUp from './src/components/signup'
+import Timetable from './src/components/timetable'
 
 export default class App extends React.Component {
     constructor(props) {
@@ -77,6 +17,8 @@ export default class App extends React.Component {
                 displayNowColon:true, apiToken: undefined
             }
         }
+        this.detailsOfRow1 = {}
+        this.detailsOfRow2 = {}
         this.autoScroll = this.autoScroll.bind(this)
         this.updateNowTime = this.updateNowTime.bind(this)
         this.updateTimetable = this.updateTimetable.bind(this)
@@ -137,49 +79,21 @@ export default class App extends React.Component {
         })
     }
     componentDidUpdate() {
-        if (this.detailsOfRow1) {
+        if (this.detailsOfRow1.scrollTo) {
             this.detailsOfRow1.scrollTo({x: 0, y: this.state.firstScrollY, animated: true})
             this.detailsOfRow2.scrollTo({x: 0, y: this.state.secondScrollY, animated: true})
         }
     }
-    validateToken() {
-        webservice.test(this.state.savedToken)
-            .then(() => AsyncStorage.setItem('@store:apiToken', this.state.savedToken))
-            .then(() => this.initNow(this.state.savedToken))
-            .catch((e) => {})
+    validateToken(newValue) {
+        webservice.test(newValue)
+            .then(() => AsyncStorage.setItem('@store:apiToken', newValue))
+            .then(() => this.initNow(newValue))
+            .catch((e) => this.setState({...this.state, loginError:e.message}))
     }
     render() {
         if (this.state.apiToken === null) {
-            return (
-                <Modal animationType='slide' isOpen={true} visible={true} onRequestClose={() => {}} contentLabel='Salut'>
-                    <View>
-                        <Text>Vous n'êtes pas encore connecté à l'api SNCF</Text>
-                        <Text> </Text>
-                        <Text>C'est gratuit !</Text>
-                        <Text>Rendez vous sur http://data.sncf.com/api</Text>
-                        <Text>Puis revenez ici avec votre token</Text>
-                        <Text>Remplissez la valeur ci-dessous</Text>
-                        <Text> </Text>
-                        <View><Text>Token :</Text><TextInput onChangeText={(text) => this.setState({...this.state, savedToken: text})}
-                                                             id='apiToken' label='token sncf' style={styles.signIn}/></View>
-                        <Text> </Text>
-                        <Text> </Text>
-                    </View>
-                    <Button title='ok' onPress={this.validateToken} />
-                </Modal>)
+            return (<SignUp validateToken={this.validateToken} loginError={this.state.loginError}/>)
         }
-        return (
-            <View style={styles.container}>
-                <View style={styles.statusbar} />
-                <Departure detailed={true} odd={true} departure={this.state.timetable.departures[0]} detailsRow={1} parent={this} />
-                <Departure detailed={true} odd={false} departure={this.state.timetable.departures[1]} detailsRow={2} parent={this} />
-                <Departure detailed={false} odd={true} departure={this.state.timetable.departures[2]} parent={this} />
-                <Departure detailed={false} odd={false} departure={this.state.timetable.departures[3]} parent={this} />
-                <Departure detailed={false} odd={true} departure={this.state.timetable.departures[4]} parent={this} />
-                <Departure detailed={false} odd={false} departure={this.state.timetable.departures[5]} parent={this} />
-                <Departure detailed={false} odd={true} departure={this.state.timetable.departures[6]} parent={this} />
-                <Footer station={this.state.timetable.station} displayNowColon={this.state.displayNowColon} parent={this} />
-            </View>
-        )
+        return (<Timetable timetable={this.state.timetable} parent={this} displayNowColon={this.state.displayNowColon}/>)
     }
 }
