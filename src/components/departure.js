@@ -24,9 +24,8 @@ export default class Departure extends React.Component {
                 <View style={this.props.detailed ? styles.split : styles.dontsplit}>
                     {mode === 'transilien' ? <Image style={styles.modeIcon} source={require('../images/transilien.png')} /> :
                         <Text style={styles.mode}>{mode}</Text>}
-                    {departure.name &&
-                        <Text style={lineColorStyle}>
-                            {departure.name}</Text>}
+                    {departure.name ?
+                        <Text style={lineColorStyle}> {departure.name}</Text> : <Text>{departure.name}</Text>}
                     <Text style={styles.number}>{departure.number}</Text>
                     <Text style={styles.time}>{departure.time}  </Text>
                     <Text style={styles.direction}>{!departure.stops ? departure.direction :
