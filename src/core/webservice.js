@@ -94,6 +94,7 @@ const nextDepartures = ({long, lat}, token) => {
                 departures:departuresData.map(e => {return {
                     mode: e.display_informations.commercial_mode,
                     name: e.display_informations.code,
+                    color: e.display_informations.color,
                     number: e.display_informations.headsign,
                     time: moment(e.stop_date_time.departure_date_time, dateTimeFormat).format('HH:mm'),
                     direction: e.route.direction.stop_area.name,
@@ -102,3 +103,4 @@ const nextDepartures = ({long, lat}, token) => {
 }
 
 export default {nextDepartures, test}
+

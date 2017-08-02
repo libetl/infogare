@@ -1,5 +1,5 @@
 import React from 'react'
-import {ScrollView, Text, View} from 'react-native'
+import {Image, ScrollView, Text, View} from 'react-native'
 import styles from '../css/app.css'
 import PropTypes from 'prop-types'
 
@@ -10,11 +10,24 @@ export default class Departure extends React.Component {
     render() {
         const departure = this.props.departure || {}
         const style = styles[`${this.props.detailed ? 'big' : ''}${this.props.odd ? 'odd' : 'even'}`]
+        const mode = (departure.mode || '').toLowerCase()
+        const lineColorStyle = {width:30,
+            height: 30,
+            padding: 5,
+            paddingLeft: 10,
+            fontWeight: 'bold',
+            borderStyle: 'solid',
+            borderWidth: 3,
+            borderRadius: 3, borderColor: `#${departure.color}`, color:`#${departure.color}`}
         return (
             <View style={style}>
                 <View style={this.props.detailed ? styles.split : styles.dontsplit}>
-                    <Text style={styles.mode}>{departure.mode}</Text>
-                    <Text style={styles.number}>{departure.name}{departure.number}</Text>
+                    {mode === 'transilien' ? <Image style={styles.modeIcon} source={require('../images/transilien.png')} /> :
+                        <Text style={styles.mode}>{mode}</Text>}
+                    {departure.name &&
+                        <Text style={lineColorStyle}>
+                            {departure.name}</Text>}
+                    <Text style={styles.number}>{departure.number}</Text>
                     <Text style={styles.time}>{departure.time}  </Text>
                     <Text style={styles.direction}>{!departure.stops ? departure.direction :
                         departure.stops[departure.stops.length - 1]}</Text>

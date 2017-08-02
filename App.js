@@ -79,7 +79,7 @@ export default class App extends React.Component {
         })
     }
     componentDidUpdate() {
-        if (this.detailsOfRow1.scrollTo) {
+        if (this.detailsOfRow1 && this.detailsOfRow1.scrollTo) {
             this.detailsOfRow1.scrollTo({x: 0, y: this.state.firstScrollY, animated: true})
             this.detailsOfRow2.scrollTo({x: 0, y: this.state.secondScrollY, animated: true})
         }

@@ -44,6 +44,10 @@ export default styles = StyleSheet.create({
         fontSize: 15,
         width: '10%'
     },
+    modeIcon: {
+        width: 30,
+        height: 30
+    },
     number: {
         color: '#fff',
         fontSize: 15,
@@ -62,6 +66,8 @@ export default styles = StyleSheet.create({
         width: '45%'
     },
     platform: {
+        position: 'absolute',
+        right: 5,
         color: '#fff',
         borderStyle: 'solid',
         borderWidth: 1,
@@ -128,7 +134,9 @@ export default styles = StyleSheet.create({
         borderStyle: 'solid',
         borderWidth: 1,
         borderColor: '#fff',
-        borderRadius: 6
+        borderRadius: 6,
+        position: 'absolute',
+        right: 5
     },
     hoursMinutes: {
         color: '#fff'
