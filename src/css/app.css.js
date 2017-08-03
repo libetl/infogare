@@ -87,9 +87,8 @@ export default styles = StyleSheet.create({
     },
     noPlatformYet: {
         color: '#fff',
-        borderRadius: 6,
-        width: '10%',
-        height: 25,
+        width: 0,
+        height: 0,
         textAlign: 'center'
     },
     split: {
