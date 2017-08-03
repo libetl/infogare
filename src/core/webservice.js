@@ -11,6 +11,7 @@ const stationUrl = (stationId, dateTime, startPage) =>
     `${stationUrlPrefix}${stationId}/departures?start_page=${startPage}&from_datetime=${dateTime.format(dateTimeFormat)}`
 const placeUrl = (place) => `${sncfApiPrefix}places?q=${place}`
 const vehicleJourneyUrl = (vehicleJourney) => `${sncfApiPrefix}vehicle_journeys/${vehicleJourney}`
+const registeredStations = stations.filter (e => e.fields.tvs)
 
 const departures = (stationId = 'stop_area:OCE:SA:87391003', page = 0, token) => request({
     method: 'get',
@@ -78,12 +79,12 @@ const distanceBetweenStations= (station1, station2) =>
         station2.geometry ? [station2.geometry.coordinates[1], station2.geometry.coordinates[0]] :
             [-station1.geometry.coordinates[1], -station1.geometry.coordinates[0]])
 
-const closestStation = (stations, {long, lat}) => stations.reduce((a, b) =>
+const closestStation = (theStations, {long, lat}) => theStations.reduce((a, b) =>
     distanceBetweenStations({geometry:{coordinates:[long, lat]}}, a) < distanceBetweenStations({geometry:{coordinates:[long, lat]}}, b) ?
-        a : b, stations[0])
+        a : b, theStations[0])
 
 const nextDepartures = ({long, lat}, token) => {
-    const station = closestStation(stations, {long, lat})
+    const station = closestStation(registeredStations, {long, lat})
     const stationName = station.fields.intitule_gare
     const iataCode = station.fields.tvs
     return place(stationName, token)
@@ -103,4 +104,3 @@ const nextDepartures = ({long, lat}, token) => {
 }
 
 export default {nextDepartures, test}
-
