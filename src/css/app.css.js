@@ -121,8 +121,15 @@ export default styles = StyleSheet.create({
     yellowBullet: {
         color: '#dfc81f'
     },
+    bottomPaddingAfterScrolldown: {
+        width: '100%',
+        backgroundColor:'#000000',
+        height: 48
+    },
     footer: {
-        backgroundColor: '#2c0A3B',
+        bottom: 0,
+        position: 'absolute',
+        backgroundColor: '#2c0A3BC0',
         width: '100%',
         height: 48,
         flexDirection: 'row'
