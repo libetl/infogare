@@ -28,7 +28,7 @@ const place = (label, token) => request({
     headers: {
         'Authorization': token,
     },
-}).then((result) => Promise.resolve(result.data.places.sort((a, b) => b.quality > a.quality).filter(place => place.embedded_type === 'stop_area')[0]))
+}).then((result) => Promise.resolve(result.data.places.filter(place => place.embedded_type === 'stop_area').sort((a, b) => b.quality - a.quality)[0]))
     .catch((error) => {console.log(error);Promise.resolve({id:'?'})})
 
 const test = (token) => request({
