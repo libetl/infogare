@@ -11,15 +11,16 @@ export default class Departure extends React.Component {
         const departure = this.props.departure || {}
         const style = styles[`${this.props.detailed ? 'big' : ''}${this.props.odd ? 'odd' : 'even'}`]
         const mode = (departure.mode || '').toLowerCase()
-        const lineColorStyle = {width:30, height: 30,  padding: 5, paddingLeft: 9, fontWeight: 'bold', borderStyle: 'solid', borderWidth: 3, borderRadius: 3,
+        const lineColorStyle = {width:30, height: 30,  padding: 5, paddingLeft: 7, fontWeight: 'bold',
+            borderStyle: 'solid', borderWidth: 3, borderRadius: mode === 'rer' ? 12 : 3,
             borderColor: `#${departure.color}`, color:`#${departure.color}`}
         return (
             <View style={style}>
                 <View style={this.props.detailed ? styles.split : styles.dontsplit}>
                     {mode === 'transilien' ? <Image style={styles.modeIcon} source={require('../images/transilien.png')} /> :
+                        mode === 'rer' ? <Image style={styles.modeIcon} source={require('../images/rer.png')} /> :
                         <Text style={styles.mode}>{mode}</Text>}
-                    {departure.name ?
-                        <Text style={lineColorStyle}> {departure.name}</Text> : <Text>{departure.name}</Text>}
+                    {departure.name && <Text style={lineColorStyle}> {departure.name}</Text>}
                     <Text style={styles.number}>{departure.number}</Text>
                     <Text style={styles.time}>{departure.time}  </Text>
                     <Text style={styles.direction}>{!departure.stops ? departure.direction :

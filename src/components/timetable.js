@@ -15,9 +15,9 @@ export default class Timetable extends React.Component {
             <View style={styles.container}>
                 <View style={styles.statusbar}/>
                 <ScrollView style={styles.scrollView} contentContainerStyle={styles.rowsContainer}>
-                {[...new Array(15)].map((item, i) =>
+                {[...new Array(10)].map((item, i) =>
                     <Departure key={`departure${i}`} detailed={i <= 1} odd={i % 2 === 0} departure={this.props.timetable.departures[i]} detailsRow={i <= 1 ? i + 1 : undefined} parent={this.props.parent}/>)}
-                    <Text style={styles.bottomPaddingAfterScrolldown}>.</Text>
+                    <View style={styles.bottomPaddingAfterScrolldown}/>
                 </ScrollView>
                 <Footer station={this.props.timetable.station} displayNowColon={this.props.displayNowColon}
                         updateLocation={this.props.parent.updateLocation}/>

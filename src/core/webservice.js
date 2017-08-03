@@ -19,7 +19,8 @@ const departures = (stationId = 'stop_area:OCE:SA:87391003', page = 0, token) =>
     headers: {
         'Authorization': token,
     },
-}).then((result) => Promise.resolve([...result.data.departures])).catch((error) => Promise.resolve([]))
+}).then((result) => Promise.resolve([...result.data.departures]))
+    .catch((error) => {console.log(error);Promise.resolve([])})
 
 const place = (label, token) => request({
     method: 'get',
@@ -27,7 +28,8 @@ const place = (label, token) => request({
     headers: {
         'Authorization': token,
     },
-}).then((result) => Promise.resolve(result.data.places.filter(place => place.embedded_type === 'stop_area')[0])).catch((error) => Promise.resolve({id:'?'}))
+}).then((result) => Promise.resolve(result.data.places.filter(place => place.embedded_type === 'stop_area')[0]))
+    .catch((error) => {console.log(error);Promise.resolve({id:'?'})})
 
 const test = (token) => request({
     method: 'get',

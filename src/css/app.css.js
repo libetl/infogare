@@ -17,21 +17,21 @@ export default styles = StyleSheet.create({
         height: '150%'
     },
     bigodd: {
-        height: '20%',
+        height: '15.4%',
         width: '100%',
         backgroundColor: '#0d5da6',
         flexDirection: 'column',
         flexWrap: 'wrap'
     },
     bigeven: {
-        height: '20%',
+        height: '15.4%',
         width: '100%',
         backgroundColor: '#04396d',
         flexDirection: 'column',
         flexWrap: 'wrap'
     },
     odd: {
-        height: '10%',
+        height: '7.7%',
         width: '100%',
         backgroundColor: '#0d5da6',
         flexDirection: 'column',
@@ -39,9 +39,17 @@ export default styles = StyleSheet.create({
         flexWrap: 'wrap'
     },
     even: {
-        height: '10%',
+        height: '7.7%',
         width: '100%',
         backgroundColor: '#04396d',
+        flexDirection: 'column',
+        alignItems: 'center',
+        flexWrap: 'wrap'
+    },
+    bottomPaddingAfterScrolldown: {
+        height: '7.7%',
+        width: '100%',
+        backgroundColor: '#000000',
         flexDirection: 'column',
         alignItems: 'center',
         flexWrap: 'wrap'
@@ -120,11 +128,6 @@ export default styles = StyleSheet.create({
     },
     yellowBullet: {
         color: '#dfc81f'
-    },
-    bottomPaddingAfterScrolldown: {
-        width: '100%',
-        backgroundColor:'#000000',
-        height: 48
     },
     footer: {
         bottom: 0,
