@@ -11,14 +11,8 @@ export default class Departure extends React.Component {
         const departure = this.props.departure || {}
         const style = styles[`${this.props.detailed ? 'big' : ''}${this.props.odd ? 'odd' : 'even'}`]
         const mode = (departure.mode || '').toLowerCase()
-        const lineColorStyle = {width:30,
-            height: 30,
-            padding: 5,
-            paddingLeft: 10,
-            fontWeight: 'bold',
-            borderStyle: 'solid',
-            borderWidth: 3,
-            borderRadius: 3, borderColor: `#${departure.color}`, color:`#${departure.color}`}
+        const lineColorStyle = {width:30, height: 30,  padding: 5, paddingLeft: 9, fontWeight: 'bold', borderStyle: 'solid', borderWidth: 3, borderRadius: 3,
+            borderColor: `#${departure.color}`, color:`#${departure.color}`}
         return (
             <View style={style}>
                 <View style={this.props.detailed ? styles.split : styles.dontsplit}>

@@ -2,7 +2,7 @@ import styles from '../css/app.css'
 import Departure from '../components/departure'
 import Footer from '../components/footer'
 import React from 'react'
-import {View} from 'react-native'
+import {ScrollView, View} from 'react-native'
 import PropTypes from 'prop-types'
 
 export default class Timetable extends React.Component {
@@ -14,13 +14,10 @@ export default class Timetable extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={styles.statusbar}/>
-                <Departure detailed={true} odd={true} departure={this.props.timetable.departures[0]} detailsRow={1} parent={this.props.parent}/>
-                <Departure detailed={true} odd={false} departure={this.props.timetable.departures[1]} detailsRow={2} parent={this.props.parent}/>
-                <Departure detailed={false} odd={true} departure={this.props.timetable.departures[2]} parent={this.props.parent}/>
-                <Departure detailed={false} odd={false} departure={this.props.timetable.departures[3]} parent={this.props.parent}/>
-                <Departure detailed={false} odd={true} departure={this.props.timetable.departures[4]} parent={this.props.parent}/>
-                <Departure detailed={false} odd={false} departure={this.props.timetable.departures[5]} parent={this.props.parent}/>
-                <Departure detailed={false} odd={true} departure={this.props.timetable.departures[6]} parent={this.props.parent}/>
+                <ScrollView style={styles.scrollView} contentContainerStyle={styles.rowsContainer}>
+                {[...new Array(15)].map((item, i) =>
+                    <Departure key={`departure${i}`} detailed={i <= 1} odd={i % 2 === 0} departure={this.props.timetable.departures[i]} detailsRow={i <= 1 ? i + 1 : undefined} parent={this.props.parent}/>)}
+                </ScrollView>
                 <Footer station={this.props.timetable.station} displayNowColon={this.props.displayNowColon}
                         updateLocation={this.props.parent.updateLocation}/>
             </View>

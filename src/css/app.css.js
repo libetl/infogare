@@ -9,6 +9,13 @@ export default styles = StyleSheet.create({
         height: '100%',
         width: '100%'
     },
+    scrollView: {
+        flexGrow: 1,
+        width: '100%'
+    },
+    rowsContainer: {
+        height: '150%'
+    },
     bigodd: {
         height: '20%',
         width: '100%',
@@ -42,40 +49,41 @@ export default styles = StyleSheet.create({
     mode: {
         color: '#fff',
         fontSize: 15,
-        width: '10%'
+        flexShrink: 1
     },
     modeIcon: {
         width: 30,
-        height: 30
+        height: 30,
+        flexShrink: 1
     },
     number: {
         color: '#fff',
         fontSize: 15,
-        width: '20%'
+        width: '20%',
+        flexShrink: 1
     },
     time: {
         color: '#dfc81f',
         fontSize: 15,
         fontWeight: 'bold',
-        width: '15%'
+        flexShrink: 1
     },
     direction: {
         color: '#fff',
         fontSize: 15,
         overflow: 'hidden',
-        width: '45%'
+        width:'45%'
     },
     platform: {
-        position: 'absolute',
-        right: 5,
         color: '#fff',
         borderStyle: 'solid',
         borderWidth: 1,
         borderColor: '#fff',
         borderRadius: 6,
-        width: '10%',
-        height: 25,
-        textAlign: 'center'
+        width: 30,
+        height: 30,
+        textAlign: 'center',
+        flexShrink: 1
     },
     noPlatformYet: {
         color: '#fff',
@@ -117,7 +125,7 @@ export default styles = StyleSheet.create({
     footer: {
         backgroundColor: '#2c0A3B',
         width: '100%',
-        height: '10%',
+        height: 48,
         flexDirection: 'row'
     },
     footerFont: {
@@ -127,8 +135,8 @@ export default styles = StyleSheet.create({
     now: {
         backgroundColor: '#04396d',
         width:72,
-        height:30,
-        marginTop:8,
+        height:50,
+        marginTop:20,
         paddingLeft:10,
         paddingTop: 5,
         borderStyle: 'solid',
@@ -146,7 +154,7 @@ export default styles = StyleSheet.create({
         fontSize:10
     },
     statusbar: {
-        height: 48
+        height: 23
     },
     signIn: {
         backgroundColor: '#ededed',
