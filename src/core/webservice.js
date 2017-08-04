@@ -9,7 +9,7 @@ const stationUrlPrefix = `${sncfApiPrefix}stop_areas/`
 const garesSncfDeparturesUrl = (tvs) => `https://www.gares-sncf.com/fr/train-times/${tvs.toUpperCase()}/departure`
 const stationUrl = (stationId, dateTime, startPage) =>
     `${stationUrlPrefix}${stationId}/departures?start_page=${startPage}&from_datetime=${dateTime.format(dateTimeFormat)}`
-const placeUrl = (place) => `${sncfApiPrefix}places?q=${place}`
+const inverseGeocodingUrl = ({long, lat}) => `${sncfApiPrefix}coords/${long};${lat}/stop_areas`
 const vehicleJourneyUrl = (vehicleJourney) => `${sncfApiPrefix}vehicle_journeys/${vehicleJourney}`
 const registeredStations = stations.filter (e => e.fields.tvs)
 
@@ -22,14 +22,14 @@ const departures = (stationId = 'stop_area:OCE:SA:87391003', page = 0, token) =>
 }).then((result) => Promise.resolve([...result.data.departures]))
     .catch((error) => {console.log(error);Promise.resolve([])})
 
-const place = (label, token) => request({
+const inverseGeocoding = (coords, token) => request({
     method: 'get',
-    url: placeUrl(label),
+    url: inverseGeocodingUrl(coords),
     headers: {
         'Authorization': token,
     },
-}).then((result) => Promise.resolve(result.data.places.filter(place => place.embedded_type === 'stop_area').sort((a, b) => b.quality - a.quality)[0]))
-    .catch((error) => {console.log(error);Promise.resolve({id:'?'})})
+}).then((result) => Promise.resolve(result.data.stop_areas[0]))
+  .catch((error) => {console.log(error);Promise.resolve({id:'?'})})
 
 const test = (token) => request({
     method: 'get',
@@ -89,7 +89,7 @@ const nextDepartures = ({long, lat}, token) => {
     const station = closestStation(registeredStations, {long, lat})
     const stationName = station.fields.intitule_gare
     const iataCode = station.fields.tvs
-    return place(stationName, token)
+    return inverseGeocoding({long, lat}, token)
             .then((station) => departures(station.id, 0, token))
             .then((departuresData) => getGaresSncfDepartures(iataCode, departuresData))
             .then((departuresData) => Promise.all(departuresData.map(row => vehicleJourney(row, station, token))))
