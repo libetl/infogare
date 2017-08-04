@@ -28,7 +28,7 @@ const inverseGeocoding = (coords, token) => request({
     headers: {
         'Authorization': token,
     },
-}).then((result) => Promise.resolve(result.data.stop_areas[0]))
+}).then((result) => Promise.resolve(result.data.places_nearby[0]))
   .catch((error) => {console.log(error);Promise.resolve({id:'?'})})
 
 const test = (token) => request({
