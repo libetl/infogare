@@ -100,7 +100,8 @@ const nextDepartures = ({long, lat}, token) => {
     const station = closestStation(registeredStations, {long, lat})
     const stationName = station.fields.intitule_gare
     const iataCode = station.fields.tvs
-    return inverseGeocoding({long, lat}, token).catch(e => place(stationName, token))
+    const stationCoords = {long:station.geometry.coordinates[0], lat:station.geometry.coordinates[1]}
+    return inverseGeocoding(stationCoords, token).catch(e => place(stationName, token))
             .then((station) => departures(station.id, 0, token))
             .then((departuresData) => getGaresSncfDepartures(iataCode, departuresData))
             .then((departuresData) => Promise.all(departuresData.map(row => vehicleJourney(row, station, token))))
