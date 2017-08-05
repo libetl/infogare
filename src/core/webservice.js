@@ -1,10 +1,10 @@
 import request from 'axios'
 import moment from 'moment'
 import stations from './stations'
+import idfMapping from './idfMapping'
 
 const dateTimeFormat = 'YYYYMMDDTHHmmss'
 const sncfApiPrefix = 'https://api.sncf.com/v1/coverage/sncf/'
-const openDataStations = 'https://ressources.data.sncf.com/explore/dataset/referentiel-gares-voyageurs/download/?format=json&timezone=Europe/Berlin'
 const stationUrlPrefix = `${sncfApiPrefix}stop_areas/`
 const garesSncfDeparturesUrl = (tvs) => `https://www.gares-sncf.com/fr/train-times/${tvs.toUpperCase()}/departure`
 const stationUrl = (stationId, dateTime, startPage) =>
@@ -51,11 +51,6 @@ const test = (token) => request({
         'Authorization': token,
     },
 })
-
-const getStations = () => request({
-    method: 'get',
-    url: openDataStations
-}).then((result) => Promise.resolve([...result.data.records]))
 
 const getGaresSncfDepartures = (tvs, departuresData = []) => request({
     method: 'get',
@@ -110,7 +105,7 @@ const nextDepartures = ({long, lat}, token) => {
                     mode: e.display_informations.commercial_mode,
                     name: e.display_informations.code,
                     color: e.display_informations.color,
-                    number: e.display_informations.headsign,
+                    number: idfMapping[e.display_informations.headsign] || e.display_informations.headsign,
                     time: moment(e.stop_date_time.departure_date_time, dateTimeFormat).format('HH:mm'),
                     direction: e.route.direction.stop_area.name,
                     platform: e.gareSncf ? e.gareSncf.voie : '',
