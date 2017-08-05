@@ -21,7 +21,7 @@ const departures = (stationId = 'stop_area:OCE:SA:87391003', page = 0, token) =>
         'Authorization': token,
     },
 }).then((result) => Promise.resolve([...result.data.departures]))
-    .catch((error) => {console.log(error);Promise.resolve([])})
+  .catch((error) => {console.log(`${stationUrl(stationId, moment(), page)}: ${error}`);Promise.resolve([])})
 
 const place = (label, token) => request({
     method: 'get',
@@ -42,7 +42,7 @@ const inverseGeocoding = (coords, token) => request({
         throw new Error(`Gare non trouvée par géolocalisation inversée {lat:${coords.lat}, long:${coords.long}}`)
     }
     return Promise.resolve(result.data.places_nearby[0])
-}).catch((error) => {console.log(error);throw error})
+}).catch((error) => {console.log(`${inverseGeocodingUrl(coords)}: ${error}`);throw error})
 
 const test = (token) => request({
     method: 'get',
