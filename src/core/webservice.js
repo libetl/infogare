@@ -7,8 +7,7 @@ const dateTimeFormat = 'YYYYMMDDTHHmmss'
 const sncfApiPrefix = 'https://api.sncf.com/v1/coverage/sncf/'
 const stationUrlPrefix = `${sncfApiPrefix}stop_areas/`
 const garesSncfDeparturesUrl = (tvs) => `https://www.gares-sncf.com/fr/train-times/${tvs.toUpperCase()}/departure`
-const stationUrl = (stationId, dateTime, startPage) =>
-    `${stationUrlPrefix}${stationId}/departures?start_page=${startPage}&from_datetime=${dateTime.format(dateTimeFormat)}`
+const stationUrl = (stationId, dateTime, startPage) => `${stationUrlPrefix}${stationId}/departures?start_page=${startPage}&from_datetime=${dateTime.format(dateTimeFormat)}`
 const inverseGeocodingUrl = ({long, lat}) => `${sncfApiPrefix}coords/${long};${lat}/places_nearby?type[]=stop_area`
 const vehicleJourneyUrl = (vehicleJourney) => `${sncfApiPrefix}vehicle_journeys/${vehicleJourney}`
 const placeUrl = (place) => `${sncfApiPrefix}places?q=${place}`

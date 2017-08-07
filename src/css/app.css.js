@@ -57,10 +57,29 @@ export default styles = StyleSheet.create({
     mode: {
         color: '#fff',
         fontSize: 15,
-        flexShrink: 1
+        fontWeight: 'bold',
+        flexShrink: 1,
+        width: 60
     },
     modeIcon: {
         width: 30,
+        height: 30,
+        flexShrink: 1
+    },
+    modeIconPadding: {
+        marginTop: 7,
+        width: 30,
+        height: 30,
+        flexShrink: 1
+    },
+    bigModeIcon: {
+        width: 60,
+        height: 30,
+        flexShrink: 1
+    },
+    bigModeIconPadding: {
+        marginTop: 7,
+        width: 60,
         height: 30,
         flexShrink: 1
     },

@@ -3,3 +3,6 @@ node_modules/
 npm-debug.*
 .idea
 src/core/*.json
+.vscode
+jsconfig.json
+package-lock.json

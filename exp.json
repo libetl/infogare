@@ -17,5 +17,6 @@
   "android": {
     "package": "org.toilelibre.libe.trains"
   },
-  "scheme": "exp"
+  "scheme": "exp",
+  "privacy": "public"
 }
