@@ -74,10 +74,11 @@ const vehicleJourney = (departure, fromStation, token) => request({
     const allStopsCoords = result.data.vehicle_journeys[0].stop_times.map(stop_time => { return {
         name:stop_time.stop_point.name.replace(/ /g, '\u00a0').replace(/-/g, '\u2011').replace(/\//g, '\u00a0\u00a0\u00a0\u0338'),
         geometry:{coordinates:[parseFloat(stop_time.stop_point.coord.lon), parseFloat(stop_time.stop_point.coord.lat)]}}})
+    const missionCode = result.data.vehicle_journeys[0].name ? result.data.vehicle_journeys[0].name.substring(0, 4) : undefined
     const foundStationInJourney = closestStation(allStopsCoords, {lat: fromStation.geometry.coordinates[1], long: fromStation.geometry.coordinates[0]}).name
     const indexOfStop = allStops.indexOf(foundStationInJourney)
     const stops = allStops.slice(indexOfStop + 1)
-    return Promise.resolve({...departure, stops})
+    return Promise.resolve({...departure, stops, missionCode})
 })
 
 const distance = ([long1, lat1], [long2, lat2]) => Math.sqrt(Math.pow(long2 - long1, 2) + Math.pow(lat2 - lat1, 2))
@@ -104,7 +105,7 @@ const nextDepartures = ({long, lat}, token) => {
                     mode: e.display_informations.commercial_mode,
                     name: e.display_informations.code,
                     color: e.display_informations.color,
-                    number: idfMapping[e.display_informations.headsign] || e.display_informations.headsign,
+                    number: e.missionCode || idfMapping[e.display_informations.headsign] || e.display_informations.headsign,
                     time: moment(e.stop_date_time.departure_date_time, dateTimeFormat).format('HH:mm'),
                     direction: e.route.direction.stop_area.name,
                     platform: e.gareSncf ? e.gareSncf.voie : '',
