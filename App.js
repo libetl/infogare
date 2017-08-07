@@ -25,6 +25,7 @@ export default class App extends React.Component {
         this.updateLocation = this.updateLocation.bind(this)
         this.initNow = this.initNow.bind(this)
         this.validateToken = this.validateToken.bind(this)
+        this.viewOneDeparture = this.viewOneDeparture.bind(this)
     }
     componentDidMount() {
         AsyncStorage.getItem('@store:apiToken').then((apiToken) => {
@@ -89,6 +90,9 @@ export default class App extends React.Component {
             .then(() => AsyncStorage.setItem('@store:apiToken', newValue))
             .then(() => this.initNow(newValue))
             .catch((e) => this.setState({...this.state, loginError:e.message}))
+    }
+    viewOneDeparture(num) {
+        console.log(`selected: ${num}`)
     }
     render() {
         if (this.state.apiToken === null) {
