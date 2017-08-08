@@ -12,7 +12,7 @@ export default class App extends React.Component {
             ...props,
             geo: somePlaces.parisGareDeLyon,
             timetable: {
-                departures: [{}, {}, {}, {}, {}, {}, {}], station: 'chargement...',
+                departures: new Array(10).fill({}), station: 'chargement...',
                 firstScrollY: 3, secondScrollY: 3, detailsOfRow1Height: 0, detailsOfRow2Height: 0,
                 displayNowColon:true, apiToken: undefined
             }

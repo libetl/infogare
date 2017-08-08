@@ -9,7 +9,8 @@ export default class Departure extends React.Component {
     }
     render() {
         const departure = this.props.departure || {}
-        const style = styles[`${this.props.detailed ? 'big' : ''}${this.props.odd ? 'odd' : 'even'}`]
+        const style = {width: '100%', backgroundColor: this.props.odd ? '#0d5da6' : '#04396d', flexDirection: 'column',
+            alignItems: 'center', flexWrap: 'wrap', height: `${77.0 / this.props.rows * (this.props.detailed ? 2 : 1)}%`}
         const mode = (departure.mode || '').toLowerCase()
         const lineColorStyle = {width:30, height: 30,  padding: 5, paddingLeft: 11, fontWeight: 'bold',
             borderStyle: 'solid', borderWidth: 3, borderRadius: mode === 'rer' ? 12 : 3,
@@ -51,9 +52,9 @@ export default class Departure extends React.Component {
 
 Departure.propTypes = {
     num : PropTypes.number,
+    rows: PropTypes.number,
     detailed: PropTypes.bool,
     odd: PropTypes.bool,
     departure: PropTypes.object,
     parent: PropTypes.object
 }
-

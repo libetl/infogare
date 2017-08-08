@@ -13,39 +13,6 @@ export default styles = StyleSheet.create({
         flexGrow: 1,
         width: '100%'
     },
-    rowsContainer: {
-        height: '150%'
-    },
-    bigodd: {
-        height: '15.4%',
-        width: '100%',
-        backgroundColor: '#0d5da6',
-        flexDirection: 'column',
-        flexWrap: 'wrap'
-    },
-    bigeven: {
-        height: '15.4%',
-        width: '100%',
-        backgroundColor: '#04396d',
-        flexDirection: 'column',
-        flexWrap: 'wrap'
-    },
-    odd: {
-        height: '7.7%',
-        width: '100%',
-        backgroundColor: '#0d5da6',
-        flexDirection: 'column',
-        alignItems: 'center',
-        flexWrap: 'wrap'
-    },
-    even: {
-        height: '7.7%',
-        width: '100%',
-        backgroundColor: '#04396d',
-        flexDirection: 'column',
-        alignItems: 'center',
-        flexWrap: 'wrap'
-    },
     bottomPaddingAfterScrolldown: {
         height: '7.7%',
         width: '100%',

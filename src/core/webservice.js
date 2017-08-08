@@ -22,13 +22,13 @@ const departures = (stationId = 'stop_area:OCE:SA:87391003', page = 0, token) =>
 }).then((result) => Promise.resolve([...result.data.departures]))
   .catch((error) => {console.log(`${stationUrl(stationId, moment(), page)}: ${error}`);Promise.resolve([])})
 
-const place = (label, token) => request({
+const places = (label, token) => request({
     method: 'get',
     url: placeUrl(label),
     headers: {
         'Authorization': token,
     },
-}).then((result) => Promise.resolve(result.data.places.filter(place => place.embedded_type === 'stop_area').sort((a, b) => b.quality - a.quality)[0]))
+}).then((result) => Promise.resolve([result.data.places.filter(place => place.embedded_type === 'stop_area').sort((a, b) => b.quality - a.quality)]))
 
 const inverseGeocoding = (coords, token) => request({
     method: 'get',
@@ -40,7 +40,7 @@ const inverseGeocoding = (coords, token) => request({
     if (!result.data.places_nearby) {
         throw new Error(`Gare non trouvée par géolocalisation inversée {lat:${coords.lat}, long:${coords.long}}`)
     }
-    return Promise.resolve(result.data.places_nearby[0])
+    return Promise.resolve(result.data.places_nearby)
 }).catch((error) => {console.log(`${inverseGeocodingUrl(coords)}: ${error}`);throw error})
 
 const test = (token) => request({
@@ -96,9 +96,10 @@ const nextDepartures = ({long, lat}, token) => {
     const stationName = station.fields.intitule_gare
     const iataCode = station.fields.tvs
     const stationCoords = {long:station.geometry.coordinates[0], lat:station.geometry.coordinates[1]}
-    return inverseGeocoding(stationCoords, token).catch(e => place(stationName, token))
-            .then((station) => departures(station.id, 0, token))
-            .then((departuresData) => getGaresSncfDepartures(iataCode, departuresData))
+    return inverseGeocoding(stationCoords, token).catch(e => places(stationName, token))
+            .then((stations) => Promise.all(stations.map(station => departures(station.id, 0, token))))
+            .then((departuresData) => getGaresSncfDepartures(iataCode, [].concat.apply([], departuresData).sort((d1, d2) =>
+                d1.stop_date_time.base_departure_date_time.localeCompare(d2.stop_date_time.base_departure_date_time))))
             .then((departuresData) => Promise.all(departuresData.map(row => vehicleJourney(row, station, token))))
             .then((departuresData) => Promise.resolve({station: stationName,
                 departures:departuresData.map(e => {return {
