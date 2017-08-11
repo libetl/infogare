@@ -13,12 +13,12 @@ export default class App extends React.Component {
             geo: somePlaces.parisGareDeLyon,
             timetable: {
                 departures: new Array(10).fill({}), station: 'chargement...',
-                firstScrollY: 3, secondScrollY: 3, detailsOfRow1Height: 0, detailsOfRow2Height: 0,
+                firstScrollY: 3, secondScrollY: 3, stopsListOfRow1Height: 0, stopsListOfRow2Height: 0,
                 displayNowColon:true, apiToken: undefined
             }
         }
-        this.detailsOfRow1 = {}
-        this.detailsOfRow2 = {}
+        this.stopsListOfRow1 = {}
+        this.stopsListOfRow2 = {}
         this.autoScroll = this.autoScroll.bind(this)
         this.updateNowTime = this.updateNowTime.bind(this)
         this.updateTimetable = this.updateTimetable.bind(this)
@@ -43,7 +43,7 @@ export default class App extends React.Component {
                 webservice.nextDepartures(this.state.geo, this.state.apiToken)
                     .then((timetable) => this.setState({...this.state, timetable,
                         firstScrollY: 3, secondScrollY: 3,
-                        detailsOfRow1Height: 0, detailsOfRow2Height: 0,
+                        stopsListOfRow1Height: 0, stopsListOfRow2Height: 0,
                         displayNowColon:true}))
                     .then(() => setInterval(this.autoScroll, 3000))
                     .then(() => setInterval(this.updateTimetable, 54000))},
@@ -53,14 +53,14 @@ export default class App extends React.Component {
     autoScroll() {
         this.setState({
             ...this.state,
-            firstScrollY: this.state.detailsOfRow1Height < this.state.firstScrollY + 38 ? 3 : this.state.firstScrollY + 26.75,
-            secondScrollY: this.state.detailsOfRow2Height < this.state.secondScrollY + 38 ? 3 : this.state.secondScrollY + 26.75
+            firstScrollY: this.state.stopsListOfRow1Height < this.state.firstScrollY + Math.ceil((this.state.row1Height || 60) * 0.2) ? 8 :
+                this.state.firstScrollY + Math.ceil((this.state.row1Height || 60) * 0.2),
+            secondScrollY: this.state.stopsListOfRow2Height < this.state.secondScrollY + Math.ceil((this.state.row1Height || 60) * 0.2) ? 8 :
+                this.state.secondScrollY + Math.ceil((this.state.row1Height || 60) * 0.2)
         })
     }
     updateNowTime() {
-        this.setState({
-            ...this.state,
-            displayNowColon: !this.state.displayNowColon})
+        this.setState({...this.state, displayNowColon: !this.state.displayNowColon})
     }
     updateTimetable(geo) {
         webservice.nextDepartures(geo || this.state.geo, this.state.apiToken).then((timetable) =>
@@ -74,15 +74,13 @@ export default class App extends React.Component {
                 .then((timetable) => this.setState({...this.state, timetable}))})
     }
     measureView(event, rowName) {
-        this.setState({
-            ...this.state,
-            [`${rowName}Height`]: event.nativeEvent.layout.height
-        })
+        this.setState({...this.state,
+            [`${rowName}Height`]: event.nativeEvent.layout.height, [`${rowName}Width`]: event.nativeEvent.layout.width})
     }
     componentDidUpdate() {
-        if (this.detailsOfRow1 && this.detailsOfRow1.scrollTo) {
-            this.detailsOfRow1.scrollTo({x: 0, y: this.state.firstScrollY, animated: true})
-            this.detailsOfRow2.scrollTo({x: 0, y: this.state.secondScrollY, animated: true})
+        if (this.stopsListOfRow1 && this.stopsListOfRow1.scrollTo && this.stopsListOfRow2 && this.stopsListOfRow2.scrollTo) {
+            this.stopsListOfRow1.scrollTo({x: 0, y: this.state.firstScrollY, animated: true})
+            this.stopsListOfRow2.scrollTo({x: 0, y: this.state.secondScrollY, animated: true})
         }
     }
     validateToken(newValue) {
@@ -98,6 +96,7 @@ export default class App extends React.Component {
         if (this.state.apiToken === null) {
             return (<SignUp validateToken={this.validateToken} loginError={this.state.loginError}/>)
         }
-        return (<Timetable timetable={this.state.timetable} parent={this} displayNowColon={this.state.displayNowColon}/>)
+        return (<Timetable rowHeight={this.state.row1Height || 60} rowWidth={320} timetable={this.state.timetable}
+                           parent={this} displayNowColon={this.state.displayNowColon}/>)
     }
 }

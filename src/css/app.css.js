@@ -21,39 +21,16 @@ export default styles = StyleSheet.create({
         alignItems: 'center',
         flexWrap: 'wrap'
     },
-    mode: {
-        color: '#fff',
-        fontSize: 15,
-        fontWeight: 'bold',
-        flexShrink: 1,
-        width: 60
-    },
-    modeIcon: {
-        width: 30,
-        height: 30,
-        flexShrink: 1
-    },
-    modeIconPadding: {
-        marginTop: 7,
-        width: 30,
-        height: 30,
-        flexShrink: 1
-    },
     bigModeIcon: {
-        width: 60,
-        height: 30,
         flexShrink: 1
     },
     bigModeIconPadding: {
         marginTop: 7,
-        width: 60,
-        height: 30,
         flexShrink: 1
     },
     number: {
         color: '#fff',
         fontSize: 15,
-        width: '20%',
         flexShrink: 1
     },
     time: {
@@ -61,12 +38,6 @@ export default styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 'bold',
         flexShrink: 1
-    },
-    direction: {
-        color: '#fff',
-        fontSize: 15,
-        overflow: 'hidden',
-        width:'45%'
     },
     platform: {
         color: '#fff',
@@ -106,11 +77,6 @@ export default styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         overflow: 'hidden'
-    },
-    oneStop: {
-        color: '#fff',
-        fontSize: 20,
-        lineHeight: 35
     },
     yellowBullet: {
         color: '#dfc81f'
