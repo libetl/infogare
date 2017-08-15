@@ -56,12 +56,6 @@ export default styles = StyleSheet.create({
         height: 0,
         textAlign: 'center'
     },
-    split: {
-        marginBottom: -25,
-        height: '100%',
-        width: '100%',
-        flexDirection: 'row'
-    },
     dontsplit: {
         height: '100%',
         width: '100%',

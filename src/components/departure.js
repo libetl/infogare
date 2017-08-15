@@ -1,5 +1,5 @@
 import React from 'react'
-import {Image, ScrollView, Text, TouchableHighlight, View} from 'react-native'
+import {Image, PixelRatio, ScrollView, Text, TouchableHighlight, View} from 'react-native'
 import styles from '../css/app.css'
 import PropTypes from 'prop-types'
 
@@ -26,13 +26,15 @@ export default class Departure extends React.Component {
             {color: '#fff', fontSize: this.props.rowHeight * 0.45, fontWeight: 'bold', flexShrink: 1, width: 60} :
             {color: '#fff', fontSize: this.props.rowHeight * 0.23, fontWeight: 'bold', flexShrink: 1, width: 60}
         const bigModeIcon = this.props.detailed ? styles.bigModeIcon : styles.bigModeIconPadding
-        const oneStop = {color: '#fff', fontSize: stopsFontSize, lineHeight: Math.ceil(stopsFontSize + 15)}
+        const lineHeight = PixelRatio.getPixelSizeForLayoutSize(Math.ceil(stopsFontSize) + 6)
+        const oneStop = {color: '#fff', fontSize: stopsFontSize, lineHeight, includeFontPadding:false}
         const direction = {color: '#fff', fontSize: firstLineFontSize, overflow: 'hidden'}
+        const split = {marginBottom: -stopsFontSize - 5, height: '100%', width: '100%', flexDirection: 'row'}
         return (
             <View style={style}  onLayout={(event) => this.props.parent.measureView(event, `row${this.props.num}`)}>
                 <TouchableHighlight style={{width: '100%',height:'100%'}} onPress={() => this.props.parent.viewOneDeparture(this.props.num)} underlayColor='white'>
                     <View>
-                        <View style={this.props.detailed ? styles.split : styles.dontsplit} >
+                        <View style={this.props.detailed ? split : styles.dontsplit} >
                             {mode === 'transilien' ? <Image style={modeIcon} source={require('../images/transilien.png')} /> :
                                 mode === 'rer' ? <Image style={modeIcon} source={require('../images/rer.png')} /> :
                                     mode === 'intercités' ? <Image style={bigModeIcon} source={require('../images/intercites.png')} /> :

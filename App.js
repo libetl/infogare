@@ -51,12 +51,14 @@ export default class App extends React.Component {
         setInterval(this.updateNowTime, 500)
     }
     autoScroll() {
+        const fromTop = 4
+        const delta = Math.ceil((this.state.row1Height || 60) * 0.15) + 6
+        const maybeNextScrollY1 = this.state.firstScrollY + delta
+        const maybeNextScrollY2 = this.state.secondScrollY + delta
         this.setState({
             ...this.state,
-            firstScrollY: this.state.stopsListOfRow1Height < this.state.firstScrollY + Math.ceil((this.state.row1Height || 60) * 0.2) ? 8 :
-                this.state.firstScrollY + Math.ceil((this.state.row1Height || 60) * 0.2),
-            secondScrollY: this.state.stopsListOfRow2Height < this.state.secondScrollY + Math.ceil((this.state.row1Height || 60) * 0.2) ? 8 :
-                this.state.secondScrollY + Math.ceil((this.state.row1Height || 60) * 0.2)
+            firstScrollY: maybeNextScrollY1 >= this.state.stopsListOfRow1Height ? fromTop : maybeNextScrollY1,
+            secondScrollY: maybeNextScrollY2 >= this.state.stopsListOfRow2Height ? fromTop : maybeNextScrollY2
         })
     }
     updateNowTime() {
