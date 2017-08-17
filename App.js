@@ -1,5 +1,5 @@
 import React from 'react'
-import {AsyncStorage} from 'react-native'
+import {AsyncStorage, PixelRatio} from 'react-native'
 import webservice from './src/core/webservice'
 import somePlaces from './src/core/somePlaces'
 import SignUp from './src/components/signup'
@@ -52,7 +52,7 @@ export default class App extends React.Component {
     }
     autoScroll() {
         const fromTop = 4
-        const delta = Math.ceil((this.state.row1Height || 60) * 0.15) + 6
+        const delta = Math.ceil(((this.state.row1Height || 60) * 0.15 + 6) * PixelRatio.get())
         const maybeNextScrollY1 = this.state.firstScrollY + delta
         const maybeNextScrollY2 = this.state.secondScrollY + delta
         this.setState({

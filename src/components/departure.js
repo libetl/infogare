@@ -26,12 +26,12 @@ export default class Departure extends React.Component {
             {color: '#fff', fontSize: this.props.rowHeight * 0.45, fontWeight: 'bold', flexShrink: 1, width: 60} :
             {color: '#fff', fontSize: this.props.rowHeight * 0.23, fontWeight: 'bold', flexShrink: 1, width: 60}
         const bigModeIcon = this.props.detailed ? styles.bigModeIcon : styles.bigModeIconPadding
-        const lineHeight = PixelRatio.getPixelSizeForLayoutSize(Math.ceil(stopsFontSize) + 6)
+        const lineHeight = Math.ceil((stopsFontSize + 6) * PixelRatio.get())
         const oneStop = {color: '#fff', fontSize: stopsFontSize, lineHeight, includeFontPadding:false}
         const direction = {color: '#fff', fontSize: firstLineFontSize, overflow: 'hidden'}
-        const split = {marginBottom: -stopsFontSize - 5, height: '100%', width: '100%', flexDirection: 'row'}
+        const split = {marginBottom: -lineHeight, height: '100%', width: '100%', flexDirection: 'row'}
         return (
-            <View style={style}  onLayout={(event) => this.props.parent.measureView(event, `row${this.props.num}`)}>
+            <View style={style} onLayout={(event) => this.props.parent.measureView(event, `row${this.props.num}`)}>
                 <TouchableHighlight style={{width: '100%',height:'100%'}} onPress={() => this.props.parent.viewOneDeparture(this.props.num)} underlayColor='white'>
                     <View>
                         <View style={this.props.detailed ? split : styles.dontsplit} >
