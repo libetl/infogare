@@ -80,8 +80,10 @@ export default class App extends React.Component {
             [`${rowName}Height`]: event.nativeEvent.layout.height, [`${rowName}Width`]: event.nativeEvent.layout.width})
     }
     componentDidUpdate() {
-        if (this.stopsListOfRow1 && this.stopsListOfRow1.scrollTo && this.stopsListOfRow2 && this.stopsListOfRow2.scrollTo) {
+        if (this.stopsListOfRow1 && this.stopsListOfRow1.scrollTo) {
             this.stopsListOfRow1.scrollTo({x: 0, y: this.state.firstScrollY, animated: true})
+        }
+        if (this.stopsListOfRow2 && this.stopsListOfRow2.scrollTo) {
             this.stopsListOfRow2.scrollTo({x: 0, y: this.state.secondScrollY, animated: true})
         }
     }
