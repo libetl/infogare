@@ -21,24 +21,6 @@ export default styles = StyleSheet.create({
         alignItems: 'center',
         flexWrap: 'wrap'
     },
-    bigModeIcon: {
-        flexShrink: 1
-    },
-    bigModeIconPadding: {
-        marginTop: 7,
-        flexShrink: 1
-    },
-    number: {
-        color: '#fff',
-        fontSize: 15,
-        flexShrink: 1
-    },
-    time: {
-        color: '#dfc81f',
-        fontSize: 15,
-        fontWeight: 'bold',
-        flexShrink: 1
-    },
     platform: {
         color: '#fff',
         borderStyle: 'solid',

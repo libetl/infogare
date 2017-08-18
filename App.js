@@ -51,8 +51,8 @@ export default class App extends React.Component {
         setInterval(this.updateNowTime, 500)
     }
     autoScroll() {
-        const fromTop = 4
-        const delta = Math.ceil(((this.state.row1Height || 60) * 0.15 + 6) * PixelRatio.get())
+        const fromTop = 0
+        const delta = Math.ceil((this.state.row1Height || 60) * 0.15 + 4)
         const maybeNextScrollY1 = this.state.firstScrollY + delta
         const maybeNextScrollY2 = this.state.secondScrollY + delta
         this.setState({
