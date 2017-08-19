@@ -74,7 +74,9 @@ const vehicleJourney = (departure, fromStation, token) => request({
     const allStopsCoords = result.data.vehicle_journeys[0].stop_times.map(stop_time => { return {
         name:stop_time.stop_point.name.replace(/ /g, '\u00a0').replace(/-/g, '\u2011').replace(/\//g, '\u00a0\u00a0\u00a0\u0338'),
         geometry:{coordinates:[parseFloat(stop_time.stop_point.coord.lon), parseFloat(stop_time.stop_point.coord.lat)]}}})
-    const missionCode = result.data.vehicle_journeys[0].name ? result.data.vehicle_journeys[0].name.substring(0, 4) : undefined
+    const missionCode = result.data.vehicle_journeys[0].name &&
+        result.data.vehicle_journeys[0].name[0] >= 'A' &&  result.data.vehicle_journeys[0].name[0] <= 'Z'
+        ? result.data.vehicle_journeys[0].name.substring(0, 4) : undefined
     const foundStationInJourney = closestStation(allStopsCoords, {lat: fromStation.geometry.coordinates[1], long: fromStation.geometry.coordinates[0]}).name
     const indexOfStop = allStops.indexOf(foundStationInJourney)
     const stops = allStops.slice(indexOfStop + 1)
