@@ -58,8 +58,9 @@ const getGaresSncfDepartures = (tvs, departuresData = []) => request({
     if (!Array.isArray(result.data.trains)) {
         return Promise.resolve(departuresData)
     }
-    return Promise.resolve(departuresData.map(
-        departure => {return {gareSncf: result.data.trains.find(gare => gare.num === departure.display_informations.headsign),...departure}}))
+    return Promise.resolve(departuresData.map(departure => {
+        const gareSncf = result.data.trains.find(train => train.num === departure.display_informations.headsign)
+        return gareSncf && {gareSncf,...departure}}))
 })
 
 const vehicleJourney = (departure, fromStation, token) => request({
@@ -77,32 +78,40 @@ const vehicleJourney = (departure, fromStation, token) => request({
     const missionCode = result.data.vehicle_journeys[0].name &&
         result.data.vehicle_journeys[0].name[0] >= 'A' &&  result.data.vehicle_journeys[0].name[0] <= 'Z'
         ? result.data.vehicle_journeys[0].name.substring(0, 4) : undefined
-    const foundStationInJourney = closestStation(allStopsCoords, {lat: fromStation.geometry.coordinates[1], long: fromStation.geometry.coordinates[0]}).name
+    const foundStationInJourney = closestStations(allStopsCoords, {lat: fromStation.geometry.coordinates[1], long: fromStation.geometry.coordinates[0]})[0].name
     const indexOfStop = allStops.indexOf(foundStationInJourney)
     const stops = allStops.slice(indexOfStop + 1)
     return Promise.resolve({...departure, stops, missionCode})
 })
 
 const distance = ([long1, lat1], [long2, lat2]) => Math.sqrt(Math.pow(long2 - long1, 2) + Math.pow(lat2 - lat1, 2))
-const distanceBetweenStations= (station1, station2) =>
+const distanceBetween= (station1, station2) =>
     distance([station1.geometry.coordinates[1], station1.geometry.coordinates[0]],
         station2.geometry ? [station2.geometry.coordinates[1], station2.geometry.coordinates[0]] :
             [-station1.geometry.coordinates[1], -station1.geometry.coordinates[0]])
 
-const closestStation = (theStations, {long, lat}) => theStations.reduce((a, b) =>
-    distanceBetweenStations({geometry:{coordinates:[long, lat]}}, a) < distanceBetweenStations({geometry:{coordinates:[long, lat]}}, b) ?
-        a : b, theStations[0])
+const closestStations = (theStations, {long, lat}) => {
+    const thisPoint =  {geometry:{coordinates:[long, lat]}}
+    const closestStation = theStations.reduce((a, b) => 
+        distanceBetween(thisPoint, a) < distanceBetween(thisPoint, b) ? a : b, theStations[0])
+    return theStations.filter(station =>
+        station.geometry.coordinates[0] === closestStation.geometry.coordinates[0] &&
+        station.geometry.coordinates[1] === closestStation.geometry.coordinates[1])
+}
+
+const sortedByDateTime = (departuresData) => [].concat.apply([], departuresData).sort((d1, d2) =>
+    d1.stop_date_time.base_departure_date_time.localeCompare(d2.stop_date_time.base_departure_date_time))
+const flatten = (array) => array.reduce((a, b) => a.concat(b), []).filter(x => x)
 
 const nextDepartures = ({long, lat}, token) => {
-    const station = closestStation(registeredStations, {long, lat})
-    const stationName = station.fields.intitule_gare
-    const iataCode = station.fields.tvs
-    const stationCoords = {long:station.geometry.coordinates[0], lat:station.geometry.coordinates[1]}
+    const stations = closestStations(registeredStations, {long, lat})
+    const stationName = stations[0].fields.intitule_gare
+    const iataCodes = stations.map(station => (station.fields.tvs || '').split('|')[0])
+    const stationCoords = {long:stations[0].geometry.coordinates[0], lat:stations[0].geometry.coordinates[1]}
     return inverseGeocoding(stationCoords, token).catch(e => places(stationName, token))
             .then((stations) => Promise.all(stations.map(station => departures(station.id, 0, token))))
-            .then((departuresData) => getGaresSncfDepartures(iataCode, [].concat.apply([], departuresData).sort((d1, d2) =>
-                d1.stop_date_time.base_departure_date_time.localeCompare(d2.stop_date_time.base_departure_date_time))))
-            .then((departuresData) => Promise.all(departuresData.map(row => vehicleJourney(row, station, token))))
+            .then((departuresData) => Promise.all(iataCodes.map(iataCode => getGaresSncfDepartures(iataCode, sortedByDateTime(departuresData)))))
+            .then((departuresData) => Promise.all(flatten(departuresData).map(departure => vehicleJourney(departure, stations[0], token))))
             .then((departuresData) => Promise.resolve({station: stationName,
                 departures:departuresData.map(e => {return {
                     mode: e.display_informations.commercial_mode,
