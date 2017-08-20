@@ -21,17 +21,6 @@ export default styles = StyleSheet.create({
         alignItems: 'center',
         flexWrap: 'wrap'
     },
-    platform: {
-        color: '#fff',
-        borderStyle: 'solid',
-        borderWidth: 1,
-        borderColor: '#fff',
-        borderRadius: 6,
-        width: 30,
-        height: 30,
-        textAlign: 'center',
-        flexShrink: 1
-    },
     noPlatformYet: {
         color: '#fff',
         width: 0,

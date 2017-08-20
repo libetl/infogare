@@ -28,10 +28,11 @@ export default class Departure extends React.Component {
         const bigModeIcon = this.props.detailed ? {width:'20%'}:{marginTop: 7, width:'20%'}
         const lineHeight = Math.ceil(stopsFontSize + 4)
         const oneStop = {color: '#fff', fontSize: stopsFontSize, lineHeight, includeFontPadding:false}
-        const direction = {color: '#fff', fontSize: directionFontSize, overflow: 'hidden'}
+        const direction = {color: '#fff', fontSize: directionFontSize, overflow: 'hidden', flexGrow: 1}
         const split = {marginBottom: -lineHeight, height: '100%', width: '100%', flexDirection: 'row'}
         const number = {color: '#fff', width: '15%', fontSize: numberFontSize}
         const time = {color: '#dfc81f', width: '20%', fontSize: numberFontSize, fontWeight: 'bold'}
+        const platform = {color: '#fff', borderStyle: 'solid', borderWidth: 1, borderColor: '#fff', minWidth: 30, minHeight: 30, borderRadius: 6, width: numberFontSize, height: numberFontSize, textAlign: 'center', flexShrink: 1}
         return (
             <View style={style} onLayout={(event) => this.props.parent.measureView(event, `row${this.props.num}`)}>
                 <TouchableHighlight style={{width: '100%', height:'100%'}} onPress={() => this.props.parent.viewOneDeparture(this.props.num)} underlayColor='white'>
@@ -47,7 +48,7 @@ export default class Departure extends React.Component {
                             <Text style={time}>{departure.time}  </Text>
                             <Text style={direction}>{directionName}</Text>
                             <Text style={departure.platform && departure.platform.length > 0 ?
-                                styles.platform : styles.noPlatformYet}>{departure.platform}</Text>
+                                platform : styles.noPlatformYet}>{departure.platform}</Text>
                         </View>
                         {this.props.detailed &&
                         <ScrollView ref={(thisRef) => this.props.parent[`stopsListOfRow${this.props.detailsRow}`] = thisRef}
