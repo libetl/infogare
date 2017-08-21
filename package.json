@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "babel-preset-env": "^1.6.0",
     "babel-preset-expo": "^3.0.0",
+    "babel-preset-react-native-stage-0": "^1.0.1",
     "babel-register": "^6.26.0",
     "download": "6.2.5",
     "event-stream": "^3.3.4",
