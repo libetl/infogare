@@ -72,7 +72,7 @@ export default class App extends React.Component {
         navigator.geolocation.getCurrentPosition((position) => {
             this.setState({...this.state,
                 geo:{long: position.coords.longitude, lat: position.coords.latitude}})
-            webservice.nextDepartures(this.state.geo, this.state.apiToken)
+            webservice.nextDepartures(this.state.geo, this.state.apiToken, this.setState)
                 .then((timetable) => this.setState({...this.state, timetable}))})
     }
     measureView(event, rowName) {
