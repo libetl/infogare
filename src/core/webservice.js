@@ -29,7 +29,7 @@ const departures = (stationId, page = 0, token) => get(stationUrl(stationId, mom
     .then((result) => Promise.resolve([...result.data.departures]))
     .catch((error) => {console.log(`${stationUrl(stationId, moment(), page)}: ${error}`);Promise.resolve([])})
 
-const getGaresSncfDepartures = async (tvs) => get(garesSncfDeparturesUrl(tvs))
+const getGaresSncfDepartures = (tvs) => get(garesSncfDeparturesUrl(tvs))
     .then((result) => {
         if (!Array.isArray(result.data.trains)) {
             return Promise.resolve({})
