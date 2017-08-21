@@ -74,8 +74,7 @@ const flatten = (array) => array.reduce((a, b) => a.concat(b), []).filter(x => x
 
 export default {
     test: (token) => get(sncfApiPrefix, defaultEntity(token)),
-    nextDepartures: async ({long, lat}, token, notify = () => {
-    }) => {
+    nextDepartures: async ({long, lat}, token, notify = () => {}) => {
         const stations = closestStations(registeredStations, {long, lat})
         const stationName = stations[0].fields.intitule_gare
         const stationCoords = {long: stations[0].geometry.coordinates[0], lat: stations[0].geometry.coordinates[1]}
@@ -89,9 +88,10 @@ export default {
                 links: departure.links,
                 departureData: {
                     mode: departure.display_informations.commercial_mode,
+                    direction: departure.display_informations.direction.replace(/ \([^)]+\)$/, ''),
                     name: departure.display_informations.code,
                     color: departure.display_informations.color,
-                    number: idfMapping[departure.display_informations.headsign] || departure.display_informations.headsign,
+                    number: departure.display_informations.headsign,
                     time: moment(departure.stop_date_time.departure_date_time, dateTimeFormat).format('HH:mm')
                 }
             }
@@ -108,24 +108,29 @@ export default {
                 ...departure,
                 departureData: {
                     ...departure.departureData,
-                    platform: (allPlatformsDepartures.find(x => x.num === departure.departureData.number || {voie: ''})).voie
+                    number: idfMapping[departure.departureData.number] || departure.departureData.number,
+                    platform: (allPlatformsDepartures.find(x => x.num === departure.departureData.number) || {voie: ''}).voie
                 }
             }
         })
 
         notify({departures: departuresV2.map(x => x.departureData)})
 
-        const journeys = await Promise.all(departuresV2.map(departure => vehicleJourney(departure.links.find(link => link.type === 'vehicle_journey').id, stations[0].geometry.coordinates, token)))
+        const journeys = await Promise.all(
+            departuresV2.slice(0, 2).map(departure => vehicleJourney(departure.links.find(link => link.type === 'vehicle_journey').id,
+                                                                     stations[0].geometry.coordinates, token)))
 
         const departuresV3 = departuresV2.map(departure => {
             const journey = journeys.find(j => departure.links.some(link => link.id === j.link))
+            const addition = journey ? {
+                direction: journey.stops[journey.stops.length - 1],
+                number: journey.missionCode,
+                stops: journey.stops} : {}
             return {
                 ...departure,
                 departureData: {
                     ...departure.departureData,
-                    direction: journey.stops[journey.stops.length - 1],
-                    number: journey.missionCode || departure.departureData.number,
-                    stops: journey.stops
+                    ...addition
                 }
             }
         })

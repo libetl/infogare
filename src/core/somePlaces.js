@@ -5,6 +5,6 @@ export default {
     digoin: { lat: 46.4845325, long: 3.9851439 },
     auber: { lat: 48.8729105, long: 2.3259732 },
     champagneSurSeine: { lat: 48.409371, long: 2.7915463 },
-    parisGareDeLyon: {lat: 48.8443038, long: 2.3743773},
+    parisGareDeLyon: {lat: 48.8442662, long: 2.3743691},
     laDefense: {lat:48.8950328, long:2.2371217}
 }

@@ -40,7 +40,7 @@ export default class App extends React.Component {
         navigator.geolocation.getCurrentPosition((position) => {
                 this.setState({...this.state,
                     geo:{long: position.coords.longitude, lat: position.coords.latitude}})
-                webservice.nextDepartures(this.state.geo, this.state.apiToken)
+                webservice.nextDepartures(this.state.geo, this.state.apiToken, this.setState.bind(this))
                     .then((timetable) => this.setState({...this.state, timetable,
                         firstScrollY: 3, secondScrollY: 3,
                         stopsListOfRow1Height: 0, stopsListOfRow2Height: 0,
@@ -65,14 +65,14 @@ export default class App extends React.Component {
         this.setState({...this.state, displayNowColon: !this.state.displayNowColon})
     }
     updateTimetable(geo) {
-        webservice.nextDepartures(geo || this.state.geo, this.state.apiToken).then((timetable) =>
-            this.setState({...this.state, timetable}))
+        webservice.nextDepartures(geo || this.state.geo, this.state.apiToken, this.setState.bind(this))
+            .then((timetable) => this.setState({...this.state, timetable}))
     }
     updateLocation() {
         navigator.geolocation.getCurrentPosition((position) => {
             this.setState({...this.state,
                 geo:{long: position.coords.longitude, lat: position.coords.latitude}})
-            webservice.nextDepartures(this.state.geo, this.state.apiToken, this.setState)
+            webservice.nextDepartures(this.state.geo, this.state.apiToken, this.setState.bind(this))
                 .then((timetable) => this.setState({...this.state, timetable}))})
     }
     measureView(event, rowName) {

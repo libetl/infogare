@@ -1,7 +1,7 @@
 import webservice from '../src/core/webservice'
 import somePlaces from '../src/core/somePlaces'
 
-webservice.nextDepartures(somePlaces.laDefense, process.env.TOKEN)
+webservice.nextDepartures(somePlaces.parisGareDeLyon, process.env.TOKEN)
     .then(data => JSON.stringify(data, null, 2)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')

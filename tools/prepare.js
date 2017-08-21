@@ -30,7 +30,7 @@ const getSingleFileFromWebZips = (urls, singleFile, dest) => {
 zipEntryEmitter.on('fileFound', (entry, resultData) =>
         entry.pipe(es.split())
              .pipe(es.map((data, callback) => {
-                     const result = data.match(/DUA[0-9]{9},[0-9]{4},DUASN([0-9]{6})F[0-9]{5}-[0-9]_[0-9]{6},"([A-Z]{4})",[01],/)
+                     const result = data.match(/DUA[0-9]+,[0-9]+,DUASN([0-9]{6})F[0-9]{5}-[0-9]_[0-9]{6},"([A-Z]{4})",[01],/)
                      if (result) {
                         writeMappingEmitter.emit('mapping', resultData, {number:result[1], mission: result[2]})
                      }
