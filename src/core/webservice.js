@@ -6,6 +6,7 @@ import idfMapping from './idfMapping'
 const dateTimeFormat = 'YYYYMMDDTHHmmss'
 const sncfApiPrefix = 'https://api.sncf.com/v1/coverage/sncf/'
 const stationUrlPrefix = `${sncfApiPrefix}stop_areas/`
+const updating = '(mise à jour...)'
 const registeredStations = stations.filter (e => e.fields.tvs)
 const garesSncfDeparturesUrl = (tvs) => `https://www.gares-sncf.com/fr/train-times/${tvs.toUpperCase()}/departure`
 const stationUrl = (stationId, dateTime, startPage) => `${stationUrlPrefix}${stationId}/departures?start_page=${startPage}&from_datetime=${dateTime.format(dateTimeFormat)}`
@@ -79,7 +80,7 @@ export default {
         const stationName = stations[0].fields.intitule_gare
         const stationCoords = {long: stations[0].geometry.coordinates[0], lat: stations[0].geometry.coordinates[1]}
 
-        notify({station: `${stationName} (mise à jour...)`})
+        notify({timetable:{station: `${stationName}\n${updating}`, departures: new Array(10).fill({})}})
 
         const stationsAreas = await inverseGeocoding(stationCoords, token).catch(e => places(stationName, token))
         const openDataDepartures = await Promise.all(stationsAreas.map(stationArea => departures(stationArea.id, 0, token)))
@@ -97,7 +98,7 @@ export default {
             }
         })
 
-        notify({departures: departuresV1.map(x => x.departureData)})
+        notify({timetable:{station: `${stationName}\n${updating}`, departures: departuresV1.map(x => x.departureData)}})
 
         const iataCodes = stations.map(station => (station.fields.tvs || '').split('|')[0])
         const garesSncfDepartures = await Promise.all(iataCodes.map(iataCode => getGaresSncfDepartures(iataCode)))
@@ -114,7 +115,7 @@ export default {
             }
         })
 
-        notify({departures: departuresV2.map(x => x.departureData)})
+        notify({timetable:{station: `${stationName}\n${updating}`, departures: departuresV2.map(x => x.departureData)}})
 
         const journeys = await Promise.all(
             departuresV2.slice(0, 2).map(departure => vehicleJourney(departure.links.find(link => link.type === 'vehicle_journey').id,
@@ -124,7 +125,7 @@ export default {
             const journey = journeys.find(j => departure.links.some(link => link.id === j.link))
             const addition = journey ? {
                 direction: journey.stops[journey.stops.length - 1],
-                number: journey.missionCode,
+                number: journey.missionCode || departure.departureData.number,
                 stops: journey.stops} : {}
             return {
                 ...departure,
@@ -135,7 +136,7 @@ export default {
             }
         })
 
-        notify({station: stationName, departures: departuresV3.map(x => x.departureData)})
+        notify({timetable:{station: stationName, departures: departuresV3.map(x => x.departureData)}})
 
         return Promise.resolve({station: stationName, departures: departuresV3.map(x => x.departureData)})
     }

@@ -65,7 +65,7 @@ export default class App extends React.Component {
         this.setState({...this.state, displayNowColon: !this.state.displayNowColon})
     }
     updateTimetable(geo) {
-        webservice.nextDepartures(geo || this.state.geo, this.state.apiToken, this.setState.bind(this))
+        webservice.nextDepartures(geo || this.state.geo, this.state.apiToken)
             .then((timetable) => this.setState({...this.state, timetable}))
     }
     updateLocation() {

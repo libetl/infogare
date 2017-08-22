@@ -22,10 +22,10 @@ export default class Departure extends React.Component {
             borderColor: `#${departure.color}`, color:`#${departure.color}`,
             marginTop: this.props.detailed ? 0 : 7}
         const modeIcon = this.props.detailed ? {height: '23%', width:'10%'} : {marginTop: 7, height: '45%', width:'10%'}
+        const bigModeIcon = this.props.detailed ? {height: '23%', width:'22%'} : {marginTop: 7, height: '45%', width:'22%'}
         const modeText = this.props.detailed ?
             {color: '#fff', minWidth: this.props.rowWidth * 0.25, fontSize: Math.min(this.props.rowHeight * 0.45, this.props.rowWidth  * 0.20 / mode.length), fontWeight: 'bold', width: 60} :
             {color: '#fff', minWidth: this.props.rowWidth * 0.25, fontSize: Math.min(this.props.rowHeight * 0.23, this.props.rowWidth  * 0.20 / mode.length), fontWeight: 'bold', width: 60}
-        const bigModeIcon = this.props.detailed ? {width:'20%'}:{marginTop: 7, width:'20%'}
         const lineHeight = Math.ceil(stopsFontSize + 4)
         const oneStop = {color: '#fff', fontSize: stopsFontSize, lineHeight, includeFontPadding:false}
         const direction = {color: '#fff', fontSize: directionFontSize, overflow: 'hidden', flexGrow: 1}
