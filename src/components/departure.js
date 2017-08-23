@@ -9,7 +9,7 @@ export default class Departure extends React.Component {
     }
     render() {
         const departure = this.props.departure || {}
-        const directionName = (!departure.stops ? departure.direction : departure.stops[departure.stops.length - 1]) || ' '
+        const directionName = (!departure.stops || departure.stops.length === 0? departure.direction : departure.stops[departure.stops.length - 1]) || ' '
         const directionFontSize = Math.min(this.props.rowHeight * 0.3, this.props.rowWidth * 0.45 / directionName.length)
         const numberFontSize = Math.min(this.props.rowHeight * 0.1, this.props.rowWidth / directionName.length)
         const stopsFontSize = this.props.rowHeight * 0.15

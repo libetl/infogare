@@ -25,6 +25,7 @@ export default class App extends React.Component {
         this.updateLocation = this.updateLocation.bind(this)
         this.initNow = this.initNow.bind(this)
         this.validateToken = this.validateToken.bind(this)
+        this.skip = this.skip.bind(this)
         this.viewOneDeparture = this.viewOneDeparture.bind(this)
     }
     componentDidMount() {
@@ -93,12 +94,16 @@ export default class App extends React.Component {
             .then(() => this.initNow(newValue))
             .catch((e) => this.setState({...this.state, loginError:e.message}))
     }
+    skip() {
+        this.setState({...this.state, apiToken: undefined})
+        this.initNow(undefined)
+    }
     viewOneDeparture(num) {
         console.log(`selected: ${num}`)
     }
     render() {
         if (this.state.apiToken === null) {
-            return (<SignUp validateToken={this.validateToken} loginError={this.state.loginError}/>)
+            return (<SignUp validateToken={this.validateToken} skip={this.skip} loginError={this.state.loginError}/>)
         }
         return (<Timetable rowHeight={this.state.row1Height || 60} rowWidth={320} timetable={this.state.timetable}
                            parent={this} displayNowColon={this.state.displayNowColon}/>)

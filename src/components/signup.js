@@ -20,14 +20,19 @@ export default class SignUp extends React.Component {
                 <View><Text>Token :</Text><TextInput onChangeText={(text) => this.setState({savedToken: text})}
                                                      id='apiToken' label='token sncf' style={styles.signIn}/></View>
                 <Text> </Text>
+                <Text>Vous pouvez ignorer cette étape, mais c'est dommage, car je ne pourrai pas tout afficher.</Text>
+                <Text> </Text>
                 <Text>{this.props.loginError}</Text>
             </View>
-            <Button title='ok' onPress={() => this.props.validateToken(this.state.savedToken)} />
+            <Button title='ok' onPress={() => this.props.validateToken(this.state ? this.state.savedToken : undefined)} />
+            <Text> </Text>
+            <Button title='passer' onPress={() => this.props.skip()} />
         </Modal>)
     }
 }
 
 SignUp.propTypes = {
     loginError: PropTypes.string,
+    skip: PropTypes.func.isRequired,
     validateToken: PropTypes.func.isRequired,
 }
