@@ -120,9 +120,9 @@ export default {
         }) : allPlatformsDepartures.map(departure => {
             return {
                 departureData: {
-                    mode: departure.type.split(' ')[0],
+                    mode: departure.type ? departure.type.split(' ')[0] : '',
                     direction: departure.origdest,
-                    name: departure.type.includes(' ') ? departure.type.split(' ')[1] : '',
+                    name: departure.type && departure.type.includes(' ') ? departure.type.split(' ')[1] : '',
                     color: '000000',
                     number: departure.num,
                     time: departure.heure,
