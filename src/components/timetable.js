@@ -1,6 +1,7 @@
 import styles from '../css/app.css'
 import Departure from '../components/departure'
 import Footer from '../components/footer'
+import Details from '../components/details'
 import React from 'react'
 import {ScrollView, Text, View} from 'react-native'
 import PropTypes from 'prop-types'
@@ -13,6 +14,7 @@ export default class Timetable extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <Details open={this.props.parent.detailsOfTrain} onClose={this.props.parent.hideDetails}/>
                 <View style={styles.statusbar}/>
                 <ScrollView style={styles.scrollView} contentContainerStyle={{height: `${this.props.timetable.departures.length * 15}%`}}>
                 {(!this.props.timetable.departures ? new Array(10) : this.props.timetable.departures).map((departure, i) =>

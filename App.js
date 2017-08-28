@@ -27,6 +27,7 @@ export default class App extends React.Component {
         this.validateToken = this.validateToken.bind(this)
         this.skip = this.skip.bind(this)
         this.viewOneDeparture = this.viewOneDeparture.bind(this)
+        this.hideDetails = this.hideDetails.bind(this)
     }
     componentDidMount() {
         AsyncStorage.getItem('@store:apiToken').then((apiToken) => {
@@ -100,6 +101,10 @@ export default class App extends React.Component {
     }
     viewOneDeparture(num) {
         console.log(`selected: ${num}`)
+        this.setState({...this.state, detailsOfTrain: num})
+    }
+    hideDetails() {
+        this.setState({...this.state, detailsOfTrain: undefined})
     }
     render() {
         if (this.state.apiToken === null) {
