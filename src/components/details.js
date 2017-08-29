@@ -2,14 +2,6 @@ import React from 'react'
 import {Image, Modal, StyleSheet, Text, View} from 'react-native'
 
 const styles = StyleSheet.create({
-    "body": {
-        "backgroundColor": "#f4ecf4",
-        "width": "100%",
-        "height": "100%",
-        //"margin": "0",
-        //"padding": "0",
-        //"fontSize": "1.4vw"
-    },
     "View": {
         "display": "block"
     },
@@ -17,6 +9,7 @@ const styles = StyleSheet.create({
         "fontFamily": "achemine"
     },
     "screen": {
+        "backgroundColor": "#f4ecf4",
         "display": "flex",
         "flexDirection": "column",
         "flexWrap": "nowrap",
@@ -46,12 +39,13 @@ const styles = StyleSheet.create({
     "description": {
         "height": "100%",
         "width": "34.75%",
-        "color": "#004494",
         "fontWeight": "bold"
     },
     "finalBullet": {
         "color": "#ffec00",
         "backgroundColor": "#6969AF",
+        "textAlign": "center",
+        "paddingLeft" : 2
         //"padding": 0
     },
     "bulletPadding": {
@@ -70,7 +64,8 @@ const styles = StyleSheet.create({
         //"padding": "5px",
         //"paddingLeft": "0px",
         //"paddingRight": "0px",
-        "alignSelf": "flex-start"
+        "alignSelf": "flex-start",
+        "textAlign": "center"
     },
     "stops": {
         "height": "100%",
@@ -88,6 +83,11 @@ const styles = StyleSheet.create({
         "marginTop": "-1.5%"
     },
     "finalStop": {
+        "display": "flex",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "alignSelf" : "flex-start",
+        "paddingRight" : 5,
         "backgroundColor": "#6969AF",
         //"display": "inline",
         "borderStyle": "solid",
@@ -96,11 +96,14 @@ const styles = StyleSheet.create({
         "borderRadius": 8
     },
     "stopText": {
+        "color": "#FFFFFF",
         "alignSelf": "flex-end",
         "marginLeft": "2.5%"
     },
     "finalStopText": {
+        "color": "#FFFFFF",
         "fontWeight": "bold",
+        "paddingLeft": 10
         //"paddingRight": "5px"
     },
     "stopTopPadding": {
@@ -120,17 +123,22 @@ const styles = StyleSheet.create({
         "marginBottom": "-6.1%"
     },
     "list": {
-        //"paddingLeft": "2.8%",
+        "paddingLeft": "2.8%",
         "fontSize": 20
     },
-    "logo": {
-        "display": "block",
-        //"backgroundImage": "url('./logo.svg')",
-        //"backgroundRepeat": "no-repeat",
-        "height": "8.33%",
-        "width": "100%",
-        //"margin": "3.33%",
+    "brand": {
+        "height":"20%",
+        "width":"20%",
+        "marginLeft": "3.66%",
+        "marginBottom": "0%",
+        "marginRight": "3.66%",
         "marginTop": "3.66%"
+    },
+    "logo": {
+        "height": "100%",
+        "width": "100%",
+        "minWidth": 60
+        //"margin": "3.33%",
     },
     "front": {
         "display": "flex",
@@ -158,7 +166,8 @@ const styles = StyleSheet.create({
     },
     "time": {
         "fontSize": 35,
-        "fontWeight": "bold"
+        "fontWeight": "bold",
+        "color": "#004494"
     },
     "status": {
         "marginLeft": "15%",
@@ -166,33 +175,45 @@ const styles = StyleSheet.create({
     },
     "ontime": {
         "fontSize": 15,
-        "fontWeight": "bold"
+        "fontWeight": "bold",
+        "color": "#004494"
     },
     "direction": {
         "marginTop": "4%",
-        "marginLeft": "3.67%",
+        "marginLeft": "3.67%"
+    },
+    "directionText": {
+        "fontWeight": "bold",
+        "color": "#004494",
         "fontSize": 35
     },
     "mode": {
+        "color": "#6969AF",
         "fontSize": 19,
         "fontWeight": "normal"
     },
     "number": {
+        "marginLeft": "6%",
+        "alignSelf": "flex-end"
+    },
+    "numberText": {
         "color": "#6969AF",
         "fontSize": 17,
-        "marginLeft": "6%",
-        "alignSelf": "flex-end",
         "fontWeight": "normal"
     },
     "type": {
-        "color": "#6969AF",
-        "fontSize": 74,
         "opacity": 0.2,
         "position": "absolute",
         //"writingMode": "sideways-lr",
         "zIndex": -1,
-        "top": "6.66%",
-        "left": "22%"
+        "bottom": "52.66%",
+        "left": "-32%",
+        "width": 240,
+        "transform": [{ "rotate": "270deg"}]
+    },
+    "typeText": {
+        "color": "#6969AF",
+        "fontSize": 74,
     },
     "composition": {
         "display": "flex",
@@ -252,8 +273,8 @@ const styles = StyleSheet.create({
         "width": "100%",
         "height": "30%",
         "borderStyle": "dotted",
-        "borderWidth": 5,
-        "borderColor": "#FFEC00",
+        "borderBottomWidth": 1,
+        "borderBottomColor": "#FFEC00",
         "marginBottom": "-18%"
     },
     "carriagesList": {
@@ -393,16 +414,16 @@ export default class Details extends React.Component {
                 <View style={styles.screen}>
                     <View style={styles.journey}>
                         <View style={styles.description}>
-                            <View style={styles.type}><Text>départ</Text></View>
-                            <View style={styles.brand}><Image style={styles.logo}/></View>
+                            <View style={styles.type}><Text style={styles.typeText}>départ</Text></View>
+                            <View style={styles.brand}><Image style={styles.logo} source={require('../images/logo.png')} /></View>
                             <View style={styles.punctuality}>
                                 <View><Text style={styles.time}>05h58</Text></View>
                                 <View style={styles.status}><Text style={styles.ontime}>à l'heure</Text></View>
                             </View>
-                            <View style={styles.direction}><Text>Strasbourg</Text></View>
+                            <View style={styles.direction}><Text style={styles.directionText}>Strasbourg</Text></View>
                             <View style={styles.train}>
-                                <View style={styles.mode}><Text>TGV</Text></View>
-                                <View style={styles.number}><Text>6880</Text></View>
+                                <View><Text style={styles.mode}>TGV</Text></View>
+                                <View style={styles.number}><Text style={styles.numberText}>6880</Text></View>
                             </View>
                         </View>
                         <View style={styles.stops}>
