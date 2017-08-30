@@ -141,26 +141,29 @@ const styles = StyleSheet.create({
         //"margin": "3.33%",
     },
     "front": {
+        "minWidth": 30,
         "display": "flex",
         "flexDirection": "column",
         "flexWrap": "wrap",
-        "width": "9%"
+        "width": "7.2%"
     },
     "rear": {
         "display": "flex",
         "flexDirection": "column",
         "flexWrap": "wrap",
-        "width": "9%"
+        "width": "7.2%"
     },
     "carriageFront": {
         "flexGrow": 1,
         //"backgroundImage": "url('./rear.svg')",
         //"backgroundRepeat": "no-repeat",
         //"transform": "scaleX(-1)",
-        "marginRight": "4%"
+        "marginRight": "4%",
+        "width": "100%"
     },
     "carriageRear": {
         "flexGrow": 1,
+        "height":"50%"
         //"backgroundImage": "url('./rear.svg')",
         //"backgroundRepeat": "no-repeat"
     },
@@ -229,7 +232,6 @@ const styles = StyleSheet.create({
         "width": "10%"
     },
     "platformTitle": {
-        "color": "#51134B",
         "backgroundColor": "white",
         "borderStyle": "solid",
         "borderWidth": 2,
@@ -239,38 +241,47 @@ const styles = StyleSheet.create({
         //"paddingLeft": "5%",
         "fontSize": 8,
         "fontWeight": "bold",
-        "width": "28%"
+        "height":20,
+        "width": "28%",
+        "minWidth": 37
+    },
+    "platformTitleText": {
+        "color": "#51134B"
     },
     "platformValue": {
-        "marginTop": "-2%",
+        "marginTop": "-10%",
         "fontSize": 35,
-        //"paddingLeft": "7%",
+        "paddingLeft": "40%"
+    },
+    "platformValueText": {
+        "color": "white",
+        "textDecorationLine" : "underline",
         "textDecorationStyle": "solid"
     },
     "schema": {
-        "marginTop": "5%",
-        "marginBottom": "-30%",
+        "marginTop": "2%",
         "display": "flex",
         "flexDirection": "row",
         "flexWrap": "wrap"
     },
     "destination": {
+        "width": "100%",
+        "flexGrow": 1
+    },
+    "destinationText": {
         "textAlign": "center",
         "color": "#FFEC00",
         "fontSize": 16,
         "fontWeight": "bold",
-        "width": "100%"
     },
-    "carriages": {
+    "destinationParent": {
         "display": "flex",
         "flexDirection": "row",
         "flexWrap": "wrap",
         "width": "75.5%"
     },
     "ground": {
-        "paddingTop": "13%",
         "paddingBottom": "5%",
-        "width": "100%",
         "height": "30%",
         "borderStyle": "dotted",
         "borderBottomWidth": 1,
@@ -281,15 +292,17 @@ const styles = StyleSheet.create({
         "display": "flex",
         "flexDirection": "row",
         "flexWrap": "wrap",
-        "height": "100%",
+        "height": 100,
         "textAlign": "center"
     },
     "carriageNumber": {
+        "flexShrink": 1,
         "fontSize": 18,
         "fontWeight": "bold",
-        "flexShrink": 1
+        "color": "white"
     },
     "carriage": {
+        "minWidth": 30,
         "display": "flex",
         "flexDirection": "column",
         "flexWrap": "wrap",
@@ -301,27 +314,32 @@ const styles = StyleSheet.create({
         "flexGrow": 1
     },
     "trainDrawing": {
-        "width": "71%",
-        "marginLeft": "19.0%"
+        "width": "100%"
     },
     "landmarks": {
         "display": "flex",
         "flexDirection": "row",
         "flexWrap": "wrap",
         "width": "100%",
-        "height": "20%",
+        "height": "15%",
         "overflow": "hidden"
     },
     "landmark": {
-        "width": "4%",
-        "fontSize": 22,
+        "width": "2%",
         "backgroundColor": "#003a79",
         "borderStyle": "solid",
         "borderWidth": 2,
         "borderColor": "white",
         "borderRadius": 5,
+        "minWidth": 20,
+        "minHeight": 25,
         "fontWeight": "bold",
         "textAlign": "center"
+    },
+    "landmarkText": {
+        "padding" : 5,
+        "fontSize": 12,
+        "color": "white"
     },
     "landmarkR": {
         "marginLeft": "26%"
@@ -358,47 +376,57 @@ const styles = StyleSheet.create({
     },
     "info": {
         "flexGrow": 1,
-        "height": "70%",
+        "height": "47%",
         "alignSelf": "flex-end",
+        //"textTransform": "uppercase",
+        "overflow": "hidden"
+    },
+    "infoText": {
         "fontSize": 23,
         "fontStyle": "italic",
+        "color": "white"
         //"textTransform": "uppercase",
-        "overflow": "hidden",
-        "width": "80%"
     },
     "now": {
         "flexShrink": 1,
-        "width": "13%",
-        "height": "60%",
+        "marginTop": "20%",
+        "width": "10%",
+        "minWidth" : 80,
+        "height": "45%",
         "alignSelf": "flex-end",
         "marginRight": "2%",
         "backgroundColor": "#003a79",
         "borderStyle": "solid",
-        "borderWidth": 5,
+        "borderWidth": 2,
         "borderColor": "white",
         "borderBottomWidth": 0,
         "borderRadius": 10
     },
     "hhmmss": {
-        "paddingTop": "5%"
+        "display": "flex",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
     },
     "hour": {
         //"margin": "10%",
-        "paddingTop": "20%",
-        "fontSize": 22,
+        "paddingTop": "5%",
+        "paddingLeft": "5%",
+        "fontSize": 18,
         "fontWeight": "bold",
-        "marginRight": "5%"
+        "marginRight": "5%",
+        "color": "white"
     },
     "minutes": {
-        "marginTop": "10%",
-        "paddingTop": "20%",
-        "fontSize": 22,
+        "paddingTop": "5%",
+        "paddingLeft": "5%",
+        "fontSize": 18,
         "fontWeight": "bold",
-        "marginRight": "4%"
+        "marginRight": "5%",
+        "color": "white"
     },
     "seconds": {
-        "marginTop": "10%",
-        "paddingTop": "20%",
+        "marginTop": "5%",
+        "paddingTop": "5%",
         "fontSize": 14,
         "fontWeight": "bold",
         "color": "#f5a665"
@@ -445,22 +473,22 @@ export default class Details extends React.Component {
                         <View style={styles.schema}>
                             <View style={styles.platform}>
                                 <View style={styles.platformTitle}>
-                                    <Text>Voie</Text>
+                                    <Text style={styles.platformTitleText}>Voie</Text>
                                 </View>
                                 <View style={styles.platformValue}>
-                                    <Text>&nbsp;E&nbsp;</Text>
+                                    <Text style={styles.platformValueText}>&nbsp;E&nbsp;</Text>
                                 </View>
                             </View>
-                            <View style={styles.carriages}>
+                            <View style={styles.destinationParent}>
                                 <View style={styles.destination}>
-                                    <Text>Strasbourg</Text>
+                                    <Text style={styles.destinationText}>Strasbourg</Text>
                                 </View>
                             </View>
                         </View>
                         <View style={styles.ground}>
                             <View style={styles.trainDrawing}>
                                 <View style={styles.carriagesList}>
-                                    <View style={styles.front}><Text style={styles.carriageNumber}>&nbsp;</Text><Image style={styles.carriageFront}/></View>
+                                    <View style={styles.front}><Text style={styles.carriageNumber}>&nbsp;</Text><Image style={styles.carriageFront} source={require('../images/rear.png')}/></View>
                                     <View style={styles.carriage}><Text style={styles.carriageNumber}>18</Text><View style={styles.carriageDrawing}/></View>
                                     <View style={styles.carriage}><Text style={styles.carriageNumber}>17</Text><View style={styles.carriageDrawing}/></View>
                                     <View style={styles.carriage}><Text style={styles.carriageNumber}>16</Text><View style={styles.carriageDrawing}/></View>
@@ -469,23 +497,23 @@ export default class Details extends React.Component {
                                     <View style={styles.carriage}><Text style={styles.carriageNumber}>13</Text><View style={styles.carriageDrawing}/></View>
                                     <View style={styles.carriage}><Text style={styles.carriageNumber}>12</Text><View style={styles.carriageDrawing}/></View>
                                     <View style={styles.carriage}><Text style={styles.carriageNumber}>11</Text><View style={styles.carriageDrawing}/></View>
-                                    <View style={styles.rear}><Text style={styles.carriageNumber}>&nbsp;</Text><Image style={styles.carriageRear}/></View>
+                                    <View style={styles.rear}><Text style={styles.carriageNumber}>&nbsp;</Text><Image style={styles.carriageRear} source={require('../images/rear.png')}/></View>
                                 </View>
                             </View>
                         </View>
                         <View style={styles.landmarks}>
-                            <View style={styles.landmark}><Text>R</Text></View>
-                            <View style={styles.landmark}><Text>S</Text></View>
-                            <View style={styles.landmark}><Text>T</Text></View>
-                            <View style={styles.landmark}><Text>U</Text></View>
-                            <View style={styles.landmark}><Text>V</Text></View>
-                            <View style={styles.landmark}><Text>W</Text></View>
-                            <View style={styles.landmark}><Text>X</Text></View>
-                            <View style={styles.landmark}><Text>Y</Text></View>
-                            <View style={styles.landmark}><Text>Z</Text></View>
+                            <View style={styles.landmark}><Text style={styles.landmarkText}>R</Text></View>
+                            <View style={styles.landmark}><Text style={styles.landmarkText}>S</Text></View>
+                            <View style={styles.landmark}><Text style={styles.landmarkText}>T</Text></View>
+                            <View style={styles.landmark}><Text style={styles.landmarkText}>U</Text></View>
+                            <View style={styles.landmark}><Text style={styles.landmarkText}>V</Text></View>
+                            <View style={styles.landmark}><Text style={styles.landmarkText}>W</Text></View>
+                            <View style={styles.landmark}><Text style={styles.landmarkText}>X</Text></View>
+                            <View style={styles.landmark}><Text style={styles.landmarkText}>Y</Text></View>
+                            <View style={styles.landmark}><Text style={styles.landmarkText}>Z</Text></View>
                         </View>
                         <View style={styles.statusbar}>
-                            <View style={styles.info}><Text>, accès non garanti 2 minutes avant le départ</Text></View>
+                            <View style={styles.info}><Text style={styles.infoText}>{'2 minutes avant'.toUpperCase()}</Text></View>
                             <View style={styles.now}>
                                 <View style={styles.hhmmss}>
                                     <Text style={styles.hour}>05</Text><Text style={styles.minutes}>52</Text><Text style={styles.seconds}>01</Text>
