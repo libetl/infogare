@@ -450,6 +450,7 @@ export default class Details extends React.Component {
         const details = this.props.details || {}
         const mode = (details.mode || '').toLowerCase()
         const directionName = details.direction || ' '
+        const stops = details.stops || [{}]
         return (
             <Modal animationType={"slide"} visible={this.props.details !== undefined} onRequestClose={this.props.onClose} contentLabel="Details">
                 <View style={styles.screen}>
@@ -478,9 +479,9 @@ export default class Details extends React.Component {
                         <View style={styles.stops}>
                             <View style={styles.list}>
                                 <View style={styles.stopTopPadding}><Text style={styles.bulletPadding}>&#x25CF;</Text><Text style={styles.stopText}/></View>
-                                {details.stops.slice(0, -1).map(stop => (<View style={styles.stop}><Text style={styles.bullet}>&#x25CF;</Text><Text style={styles.stopText}>{stop}</Text></View>))}
+                                {stops.slice(0, -1).map(stop => (<View style={styles.stop}><Text style={styles.bullet}>&#x25CF;</Text><Text style={styles.stopText}>{stop}</Text></View>))}
                                 <View style={styles.beforeFinalStopPadding}><Text style={styles.bulletPadding}>&#x25CF;</Text><Text style={styles.stopText}/></View>
-                                <View style={styles.finalStop}><Text style={styles.finalBullet}>&#x25CF;</Text><Text style={styles.finalStopText}>&nbsp;&nbsp;{details.stops.slice(-1)[0]}</Text></View>
+                                <View style={styles.finalStop}><Text style={styles.finalBullet}>&#x25CF;</Text><Text style={styles.finalStopText}>&nbsp;&nbsp;{stops.slice(-1)[0]}</Text></View>
                             </View>
                         </View>
                     </View>
