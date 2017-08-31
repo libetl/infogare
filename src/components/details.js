@@ -158,12 +158,15 @@ const styles = StyleSheet.create({
         //"backgroundImage": "url('./rear.svg')",
         //"backgroundRepeat": "no-repeat",
         //"transform": "scaleX(-1)",
-        "marginRight": "4%",
-        "width": "100%"
+        "height": "50%",
+        "width": "100%",
+        "transform" : [{"scaleX": -1}]
     },
     "carriageRear": {
         "flexGrow": 1,
-        "height":"50%"
+        "height": "50%",
+        "width": "100%",
+        "minWidth": 40
         //"backgroundImage": "url('./rear.svg')",
         //"backgroundRepeat": "no-repeat"
     },
@@ -322,7 +325,10 @@ const styles = StyleSheet.create({
         "flexWrap": "wrap",
         "width": "100%",
         "height": "15%",
-        "overflow": "hidden"
+        "overflow": "hidden",
+        "marginTop" : "15%",
+        "marginLeft" : "15%",
+        "marginBottom" : "-15%"
     },
     "landmark": {
         "width": "2%",
