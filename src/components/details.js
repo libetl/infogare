@@ -1,5 +1,6 @@
 import React from 'react'
 import {Image, Modal, StyleSheet, Text, View} from 'react-native'
+import moment from 'moment'
 
 const styles = StyleSheet.create({
     "View": {
@@ -188,15 +189,14 @@ const styles = StyleSheet.create({
         "marginTop": "4%",
         "marginLeft": "3.67%"
     },
-    "directionText": {
-        "fontWeight": "bold",
-        "color": "#004494",
-        "fontSize": 35
-    },
     "mode": {
-        "color": "#6969AF",
+        "color": "#193479",
         "fontSize": 19,
         "fontWeight": "normal"
+    },
+    "modeIcon": {
+        "height": 30,
+        "width": 30
     },
     "number": {
         "marginLeft": "6%",
@@ -262,10 +262,11 @@ const styles = StyleSheet.create({
         "textDecorationStyle": "solid"
     },
     "schema": {
-        "marginTop": "2%",
+        "marginTop": 5,
         "display": "flex",
         "flexDirection": "row",
-        "flexWrap": "wrap"
+        "flexWrap": "wrap",
+        "marginBottom": "-5%"
     },
     "destination": {
         "width": "100%",
@@ -286,6 +287,7 @@ const styles = StyleSheet.create({
     "ground": {
         "paddingBottom": "5%",
         "height": "30%",
+        "minHeight": 50,
         "borderStyle": "dotted",
         "borderBottomWidth": 1,
         "borderBottomColor": "#FFEC00",
@@ -340,7 +342,7 @@ const styles = StyleSheet.create({
         "minWidth": 20,
         "minHeight": 25,
         "fontWeight": "bold",
-        "textAlign": "center"
+        "textAlign": "center",
     },
     "landmarkText": {
         "padding" : 5,
@@ -395,6 +397,7 @@ const styles = StyleSheet.create({
     },
     "now": {
         "flexShrink": 1,
+        "paddingBottom":45,
         "marginTop": "20%",
         "width": "10%",
         "minWidth" : 80,
@@ -405,6 +408,7 @@ const styles = StyleSheet.create({
         "borderStyle": "solid",
         "borderWidth": 2,
         "borderColor": "white",
+        "borderBottomColor": "#003a79",
         "borderBottomWidth": 0,
         "borderRadius": 10
     },
@@ -443,51 +447,56 @@ export default class Details extends React.Component {
         super(props)
     }
     render() {
+        const details = this.props.details || {}
+        const mode = (details.mode || '').toLowerCase()
+        const directionName = details.direction || ' '
         return (
-            <Modal animationType={"slide"} isOpen={this.props.open} visible={this.props.open} onRequestClose={this.props.onClose} contentLabel="Details">
+            <Modal animationType={"slide"} visible={this.props.details !== undefined} onRequestClose={this.props.onClose} contentLabel="Details">
                 <View style={styles.screen}>
                     <View style={styles.journey}>
                         <View style={styles.description}>
                             <View style={styles.type}><Text style={styles.typeText}>départ</Text></View>
                             <View style={styles.brand}><Image style={styles.logo} source={require('../images/logo.png')} /></View>
                             <View style={styles.punctuality}>
-                                <View><Text style={styles.time}>05h58</Text></View>
+                                <View><Text style={styles.time}>{(details.time || '').replace(':', 'h')}</Text></View>
                                 <View style={styles.status}><Text style={styles.ontime}>à l'heure</Text></View>
                             </View>
-                            <View style={styles.direction}><Text style={styles.directionText}>Strasbourg</Text></View>
+                            <View style={styles.direction}><Text style={{fontSize : this.props.rowWidth / directionName.length, fontWeight: "bold", color: "#004494"}}>{directionName}</Text></View>
                             <View style={styles.train}>
-                                <View><Text style={styles.mode}>TGV</Text></View>
-                                <View style={styles.number}><Text style={styles.numberText}>6880</Text></View>
+                                <View>{mode === 'transilien' ? <Image style={styles.modeIcon} source={require('../images/transilienB.png')} /> :
+                                    mode === 'rer' ? <Image style={styles.modeIcon} source={require('../images/rerB.png')} /> :
+                                        mode === 'intercités' ? <Image style={styles.modeIcon} source={require('../images/intercitesB.png')} /> :
+                                            mode === 'intercités de nuit' ? <Image style={styles.modeIcon} source={require('../images/intercitesB.png')} /> :
+                                                <Text style={styles.mode}>{mode.toUpperCase()}</Text>}</View>
+                                <View style={styles.number}>
+                                    {details.name &&
+                                    <Text style={{fontWeight: 'bold', borderStyle: 'solid', borderWidth: 3, borderRadius: mode === 'rer' ? 30 : 3,
+                                        borderColor: `#${details.color}`, color:`#${details.color}`, textAlign: 'center'}}>{details.name}</Text>}
+                                    <Text style={styles.numberText}>{details.number}</Text></View>
                             </View>
                         </View>
                         <View style={styles.stops}>
                             <View style={styles.list}>
                                 <View style={styles.stopTopPadding}><Text style={styles.bulletPadding}>&#x25CF;</Text><Text style={styles.stopText}/></View>
-                                <View style={styles.stop}><Text style={styles.bullet}>&#x25CF;</Text><Text style={styles.stopText}>Macon Ville</Text></View>
-                                <View style={styles.stop}><Text style={styles.bullet}>&#x25CF;</Text><Text style={styles.stopText}>Chalon sur Saône</Text></View>
-                                <View style={styles.stop}><Text style={styles.bullet}>&#x25CF;</Text><Text style={styles.stopText}>Dijon Ville</Text></View>
-                                <View style={styles.stop}><Text style={styles.bullet}>&#x25CF;</Text><Text style={styles.stopText}>Besançon F.Comte TGV</Text></View>
-                                <View style={styles.stop}><Text style={styles.bullet}>&#x25CF;</Text><Text style={styles.stopText}>Belfort Montbéliard TGV</Text></View>
-                                <View style={styles.stop}><Text style={styles.bullet}>&#x25CF;</Text><Text style={styles.stopText}>Mulhouse Ville</Text></View>
-                                <View style={styles.stop}><Text style={styles.bullet}>&#x25CF;</Text><Text style={styles.stopText}>Colmar</Text></View>
+                                {details.stops.slice(0, -1).map(stop => (<View style={styles.stop}><Text style={styles.bullet}>&#x25CF;</Text><Text style={styles.stopText}>{stop}</Text></View>))}
                                 <View style={styles.beforeFinalStopPadding}><Text style={styles.bulletPadding}>&#x25CF;</Text><Text style={styles.stopText}/></View>
-                                <View style={styles.finalStop}><Text style={styles.finalBullet}>&#x25CF;</Text><Text style={styles.finalStopText}>&nbsp;&nbsp;Strasbourg</Text></View>
+                                <View style={styles.finalStop}><Text style={styles.finalBullet}>&#x25CF;</Text><Text style={styles.finalStopText}>&nbsp;&nbsp;{details.stops.slice(-1)[0]}</Text></View>
                             </View>
                         </View>
                     </View>
                     <View style={styles.composition}>
                         <View style={styles.schema}>
-                            <View style={styles.platform}>
+                            {details.platform ? (<View style={styles.platform}>
                                 <View style={styles.platformTitle}>
                                     <Text style={styles.platformTitleText}>Voie</Text>
                                 </View>
                                 <View style={styles.platformValue}>
-                                    <Text style={styles.platformValueText}>&nbsp;E&nbsp;</Text>
+                                    <Text style={styles.platformValueText}>&nbsp;{details.platform}&nbsp;</Text>
                                 </View>
-                            </View>
+                            </View>) : <View style={styles.platform}/>}
                             <View style={styles.destinationParent}>
                                 <View style={styles.destination}>
-                                    <Text style={styles.destinationText}>Strasbourg</Text>
+                                    <Text style={styles.destinationText}>{details.direction}</Text>
                                 </View>
                             </View>
                         </View>
@@ -522,7 +531,7 @@ export default class Details extends React.Component {
                             <View style={styles.info}><Text style={styles.infoText}>{'2 minutes avant'.toUpperCase()}</Text></View>
                             <View style={styles.now}>
                                 <View style={styles.hhmmss}>
-                                    <Text style={styles.hour}>05</Text><Text style={styles.minutes}>52</Text><Text style={styles.seconds}>01</Text>
+                                    <Text style={styles.hour}>{this.props.displayNowColon ? moment().format('HH:mm') : moment().format('HH mm')}</Text><Text style={styles.seconds}>{moment().format('ss')}</Text>
                                 </View>
                             </View>
                         </View>

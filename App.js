@@ -5,6 +5,7 @@ import somePlaces from './src/core/somePlaces'
 import SignUp from './src/components/signup'
 import Timetable from './src/components/timetable'
 
+console.disableYellowBox = true
 export default class App extends React.Component {
     constructor(props) {
         super(props)
@@ -47,10 +48,11 @@ export default class App extends React.Component {
                         firstScrollY: 3, secondScrollY: 3,
                         stopsListOfRow1Height: 0, stopsListOfRow2Height: 0,
                         displayNowColon:true}))
-                    .then(() => setInterval(this.autoScroll, 3000))
-                    .then(() => setInterval(this.updateTimetable, 54000))},
+        //            .then(() => setInterval(this.autoScroll, 3000))
+        //            .then(() => setInterval(this.updateTimetable, 54000))
+            },
             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
-        setInterval(this.updateNowTime, 500)
+        //setInterval(this.updateNowTime, 500)
     }
     autoScroll() {
         const fromTop = 0
@@ -101,10 +103,10 @@ export default class App extends React.Component {
     }
     viewOneDeparture(num) {
         console.log(`selected: ${num}`)
-        this.setState({...this.state, detailsOfTrain: num})
+        this.setState({...this.state, departureDetails: this.state.timetable.departures[num]})
     }
     hideDetails() {
-        this.setState({...this.state, detailsOfTrain: undefined})
+        this.setState({...this.state, departureDetails: undefined})
     }
     render() {
         if (this.state.apiToken === null) {
