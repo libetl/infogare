@@ -1,5 +1,5 @@
 import React from 'react'
-import {Image, Modal, StyleSheet, Text, View} from 'react-native'
+import {Button, Image, Modal, StyleSheet, Text, View} from 'react-native'
 import moment from 'moment'
 
 const styles = StyleSheet.create({
@@ -39,48 +39,36 @@ const styles = StyleSheet.create({
     },
     "description": {
         "height": "100%",
-        "width": "34.75%",
-        "fontWeight": "bold"
+        "width": "34.75%"
     },
     "finalBullet": {
         "color": "#ffec00",
         "backgroundColor": "#6969AF",
         "textAlign": "center",
         "paddingLeft" : 2
-        //"padding": 0
     },
     "bulletPadding": {
         "minWidth": "3.2%",
         "color": "#6969AF",
         "backgroundColor": "#6969AF",
-        //"padding": "5px",
-        //"paddingLeft": "0px",
-        //"paddingRight": "0px",
         "alignSelf": "flex-start"
     },
     "bullet": {
         "minWidth": "3.2%",
         "color": "#ffec00",
         "backgroundColor": "#6969AF",
-        //"padding": "5px",
-        //"paddingLeft": "0px",
-        //"paddingRight": "0px",
         "alignSelf": "flex-start",
         "textAlign": "center"
     },
     "stops": {
         "height": "100%",
         "flexGrow": 1,
-        "backgroundColor": "#004494",
-        "color": "white",
-        "fontSize": 12
+        "backgroundColor": "#004494"
     },
     "stop": {
         "display": "flex",
         "flexDirection": "row",
         "flexWrap": "wrap",
-        //"padding": "0",
-        //"margin": "0",
         "marginTop": "-1.5%"
     },
     "finalStop": {
@@ -90,7 +78,6 @@ const styles = StyleSheet.create({
         "alignSelf" : "flex-start",
         "paddingRight" : 5,
         "backgroundColor": "#6969AF",
-        //"display": "inline",
         "borderStyle": "solid",
         "borderWidth": 2,
         "borderColor": "#6969AF",
@@ -105,27 +92,21 @@ const styles = StyleSheet.create({
         "color": "#FFFFFF",
         "fontWeight": "bold",
         "paddingLeft": 10
-        //"paddingRight": "5px"
     },
     "stopTopPadding": {
         "display": "flex",
         "flexDirection": "row",
         "flexWrap": "wrap",
-        //"padding": "0",
-        //"margin": "0",
         "marginBottom": "-5%"
     },
     "beforeFinalStopPadding": {
         "display": "flex",
         "flexDirection": "row",
         "flexWrap": "wrap",
-        //"padding": "0",
-        //"margin": "0",
         "marginBottom": "-6.1%"
     },
     "list": {
-        "paddingLeft": "2.8%",
-        "fontSize": 20
+        "paddingLeft": "2.8%"
     },
     "brand": {
         "height":"20%",
@@ -139,7 +120,6 @@ const styles = StyleSheet.create({
         "height": "100%",
         "width": "100%",
         "minWidth": 60
-        //"margin": "3.33%",
     },
     "front": {
         "minWidth": 30,
@@ -156,9 +136,6 @@ const styles = StyleSheet.create({
     },
     "carriageFront": {
         "flexGrow": 1,
-        //"backgroundImage": "url('./rear.svg')",
-        //"backgroundRepeat": "no-repeat",
-        //"transform": "scaleX(-1)",
         "height": "50%",
         "width": "100%",
         "transform" : [{"scaleX": -1}]
@@ -168,8 +145,6 @@ const styles = StyleSheet.create({
         "height": "50%",
         "width": "100%",
         "minWidth": 40
-        //"backgroundImage": "url('./rear.svg')",
-        //"backgroundRepeat": "no-repeat"
     },
     "time": {
         "fontSize": 35,
@@ -210,7 +185,6 @@ const styles = StyleSheet.create({
     "type": {
         "opacity": 0.2,
         "position": "absolute",
-        //"writingMode": "sideways-lr",
         "zIndex": -1,
         "bottom": "52.66%",
         "left": "-32%",
@@ -226,7 +200,6 @@ const styles = StyleSheet.create({
         "flexDirection": "column",
         "flexWrap": "nowrap",
         "backgroundColor": "#51134B",
-        "color": "white",
         "flexGrow": 1,
         "width": "100%",
         "height": "32.67%"
@@ -241,7 +214,6 @@ const styles = StyleSheet.create({
         "borderColor": "#51134B",
         "borderRadius": 7,
         "marginLeft": "15%",
-        //"paddingLeft": "5%",
         "fontSize": 8,
         "fontWeight": "bold",
         "height":20,
@@ -297,8 +269,7 @@ const styles = StyleSheet.create({
         "display": "flex",
         "flexDirection": "row",
         "flexWrap": "wrap",
-        "height": 100,
-        "textAlign": "center"
+        "height": 50
     },
     "carriageNumber": {
         "flexShrink": 1,
@@ -340,14 +311,13 @@ const styles = StyleSheet.create({
         "borderColor": "white",
         "borderRadius": 5,
         "minWidth": 20,
-        "minHeight": 25,
-        "fontWeight": "bold",
-        "textAlign": "center",
+        "minHeight": 25
     },
     "landmarkText": {
         "padding" : 5,
         "fontSize": 12,
-        "color": "white"
+        "color": "white",
+        "fontWeight": "bold"
     },
     "landmarkR": {
         "marginLeft": "26%"
@@ -386,14 +356,12 @@ const styles = StyleSheet.create({
         "flexGrow": 1,
         "height": "47%",
         "alignSelf": "flex-end",
-        //"textTransform": "uppercase",
         "overflow": "hidden"
     },
     "infoText": {
         "fontSize": 23,
         "fontStyle": "italic",
         "color": "white"
-        //"textTransform": "uppercase",
     },
     "now": {
         "flexShrink": 1,
@@ -418,7 +386,6 @@ const styles = StyleSheet.create({
         "flexWrap": "wrap",
     },
     "hour": {
-        //"margin": "10%",
         "paddingTop": "5%",
         "paddingLeft": "5%",
         "fontSize": 18,
@@ -440,6 +407,11 @@ const styles = StyleSheet.create({
         "fontSize": 14,
         "fontWeight": "bold",
         "color": "#f5a665"
+    },
+    "leaveThisPlatform" : {
+        "position": "absolute",
+        "top": 5,
+        "right" : 5
     }})
 
 export default class Details extends React.Component {
@@ -479,7 +451,7 @@ export default class Details extends React.Component {
                         <View style={styles.stops}>
                             <View style={styles.list}>
                                 <View style={styles.stopTopPadding}><Text style={styles.bulletPadding}>&#x25CF;</Text><Text style={styles.stopText}/></View>
-                                {stops.slice(0, -1).map(stop => (<View style={styles.stop}><Text style={styles.bullet}>&#x25CF;</Text><Text style={styles.stopText}>{stop}</Text></View>))}
+                                {stops.slice(0, -1).map((stop, num) => (<View key={num} style={styles.stop}><Text style={styles.bullet}>&#x25CF;</Text><Text style={styles.stopText}>{stop}</Text></View>))}
                                 <View style={styles.beforeFinalStopPadding}><Text style={styles.bulletPadding}>&#x25CF;</Text><Text style={styles.stopText}/></View>
                                 <View style={styles.finalStop}><Text style={styles.finalBullet}>&#x25CF;</Text><Text style={styles.finalStopText}>&nbsp;&nbsp;{stops.slice(-1)[0]}</Text></View>
                             </View>
@@ -537,6 +509,9 @@ export default class Details extends React.Component {
                             </View>
                         </View>
                     </View>
+                </View>
+                <View style={styles.leaveThisPlatform}>
+                    <Button onPress={this.props.onClose} title='☓' color='#841584' accessibilityLabel='Quitter ce quai'/>
                 </View>
             </Modal>
         )
