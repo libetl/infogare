@@ -424,7 +424,6 @@ export default class Details extends React.Component {
         const directionName = details.direction || ' '
         const stops = details.stops || [{}]
         const finalStop = typeof stops.slice(-1)[0] === 'object' ? '?' : stops.slice(-1)[0]
-        console.log(finalStop)
         return (
             <Modal animationType={"slide"} visible={this.props.details !== undefined} onRequestClose={this.props.onClose} contentLabel="Details">
                 <View style={styles.screen}>
