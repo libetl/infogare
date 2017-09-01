@@ -443,7 +443,7 @@ export default class Details extends React.Component {
                                             mode === 'intercités de nuit' ? <Image style={styles.modeIcon} source={require('../images/intercitesB.png')} /> :
                                                 <Text style={styles.mode}>{mode.toUpperCase()}</Text>}</View>
                                 <View style={styles.number}>
-                                    {details.name &&
+                                    {!details.name ? <Text style={{'display': 'none'}}/> :
                                     <Text style={{fontWeight: 'bold', borderStyle: 'solid', borderWidth: 3, borderRadius: mode === 'rer' ? 30 : 3,
                                         borderColor: `#${details.color}`, color:`#${details.color}`, textAlign: 'center'}}>{details.name}</Text>}
                                     <Text style={styles.numberText}>{details.number}</Text></View>
