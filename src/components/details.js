@@ -4,7 +4,6 @@ import moment from 'moment'
 
 const styles = StyleSheet.create({
     "View": {
-        "display": "block"
     },
     "Text": {
         "fontFamily": "achemine"
