@@ -15,7 +15,7 @@ export default class App extends React.Component {
             timetable: {
                 departures: new Array(10).fill({}), station: 'chargement...',
                 firstScrollY: 3, secondScrollY: 3, stopsListOfRow1Height: 0, stopsListOfRow2Height: 0,
-                displayNowColon:true, apiToken: undefined
+                displayNowColon:true, apiToken: undefined, currentlyUpdating: false
             }
         }
         this.stopsListOfRow1 = {}
@@ -73,11 +73,12 @@ export default class App extends React.Component {
             .then((timetable) => this.setState({...this.state, timetable}))
     }
     updateLocation() {
+        this.setState({currentlyUpdating:true})
         navigator.geolocation.getCurrentPosition((position) => {
             this.setState({...this.state,
                 geo:{long: position.coords.longitude, lat: position.coords.latitude}})
             webservice.nextDepartures(this.state.geo, this.state.apiToken, this.setState.bind(this))
-                .then((timetable) => this.setState({...this.state, timetable}))})
+                .then((timetable) => this.setState({...this.state, currentlyUpdating:false, timetable}))})
     }
     measureView(event, rowName) {
         this.setState({...this.state,
