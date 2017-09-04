@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, Image, Modal, StyleSheet, Text, View} from 'react-native'
+import {Button, Image, Modal, ScrollView, StyleSheet, Text, View} from 'react-native'
 import moment from 'moment'
 
 const styles = StyleSheet.create({
@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     },
     "stops": {
         "height": "100%",
+        "paddingLeft": "2.8%",
         "flexGrow": 1,
         "backgroundColor": "#004494"
     },
@@ -104,9 +105,6 @@ const styles = StyleSheet.create({
         "flexWrap": "wrap",
         "marginBottom": "-6.1%"
     },
-    "list": {
-        "paddingLeft": "2.8%"
-    },
     "brand": {
         "height":"20%",
         "width":"20%",
@@ -135,13 +133,13 @@ const styles = StyleSheet.create({
     },
     "carriageFront": {
         "flexGrow": 1,
-        "height": "50%",
+        "height": "20%",
         "width": "100%",
         "transform" : [{"scaleX": -1}]
     },
     "carriageRear": {
         "flexGrow": 1,
-        "height": "50%",
+        "height": "20%",
         "width": "100%",
         "minWidth": 40
     },
@@ -257,12 +255,11 @@ const styles = StyleSheet.create({
     },
     "ground": {
         "paddingBottom": "5%",
-        "height": "30%",
         "minHeight": 50,
         "borderStyle": "dotted",
         "borderBottomWidth": 1,
         "borderBottomColor": "#FFEC00",
-        "marginBottom": "-18%"
+        "flexGrow": 1
     },
     "carriagesList": {
         "display": "flex",
@@ -298,7 +295,6 @@ const styles = StyleSheet.create({
         "width": "100%",
         "height": "15%",
         "overflow": "hidden",
-        "marginTop" : "15%",
         "marginLeft" : "15%",
         "marginBottom" : "-15%"
     },
@@ -349,13 +345,17 @@ const styles = StyleSheet.create({
         "display": "flex",
         "flexDirection": "row",
         "flexWrap": "wrap",
-        "flexGrow": 1
+        "flexShrink": 1,
+        "height":"1%",
+        "minHeight": 40,
+        "alignSelf": "flex-end",
+        "marginTop": -5,
     },
     "info": {
         "flexGrow": 1,
-        "height": "47%",
+        "height": 30,
         "alignSelf": "flex-end",
-        "overflow": "hidden"
+        "width":"1%"
     },
     "infoText": {
         "fontSize": 23,
@@ -364,11 +364,9 @@ const styles = StyleSheet.create({
     },
     "now": {
         "flexShrink": 1,
-        "paddingBottom":45,
-        "marginTop": "20%",
+        "height": 35,
         "width": "10%",
         "minWidth" : 80,
-        "height": "45%",
         "alignSelf": "flex-end",
         "marginRight": "2%",
         "backgroundColor": "#003a79",
@@ -444,18 +442,17 @@ export default class Details extends React.Component {
                                 <View style={styles.number}>
                                     {!details.name ? <Text style={{'display': 'none'}}/> :
                                     <Text style={{fontWeight: 'bold', borderStyle: 'solid', borderWidth: 3, borderRadius: mode === 'rer' ? 30 : 3,
-                                        borderColor: `#${details.color}`, color:`#${details.color}`, textAlign: 'center'}}>{details.name}</Text>}
+                                        borderColor: `#${details.color}`, color:`#${details.color}`, textAlign: 'center',"height": 30,
+                                        "width": 30}}>{details.name}</Text>}
                                     <Text style={styles.numberText}>{details.number}</Text></View>
                             </View>
                         </View>
-                        <View style={styles.stops}>
-                            <View style={styles.list}>
-                                <View style={styles.stopTopPadding}><Text style={styles.bulletPadding}>&#x25CF;</Text><Text style={styles.stopText}/></View>
-                                {stops.slice(0, -1).map((stop, num) => (<View key={num} style={styles.stop}><Text style={styles.bullet}>&#x25CF;</Text><Text style={styles.stopText}>{stop}</Text></View>))}
-                                <View style={styles.beforeFinalStopPadding}><Text style={styles.bulletPadding}>&#x25CF;</Text><Text style={styles.stopText}/></View>
-                                <View style={styles.finalStop}><Text style={styles.finalBullet}>&#x25CF;</Text><Text style={styles.finalStopText}>&nbsp;&nbsp;{finalStop}</Text></View>
-                            </View>
-                        </View>
+                        <ScrollView style={styles.stops}>
+                            <View style={styles.stopTopPadding}><Text style={styles.bulletPadding}>&#x25CF;</Text><Text style={styles.stopText}/></View>
+                            {stops.slice(0, -1).map((stop, num) => (<View key={num} style={styles.stop}><Text style={styles.bullet}>&#x25CF;</Text><Text style={styles.stopText}>{stop}</Text></View>))}
+                            <View style={styles.beforeFinalStopPadding}><Text style={styles.bulletPadding}>&#x25CF;</Text><Text style={styles.stopText}/></View>
+                            <View style={styles.finalStop}><Text style={styles.finalBullet}>&#x25CF;</Text><Text style={styles.finalStopText}>&nbsp;&nbsp;{finalStop}</Text></View>
+                        </ScrollView>
                     </View>
                     <View style={styles.composition}>
                         <View style={styles.schema}>
@@ -488,20 +485,20 @@ export default class Details extends React.Component {
                                     <View style={styles.rear}><Text style={styles.carriageNumber}>&nbsp;</Text><Image style={styles.carriageRear} source={require('../images/rear.png')}/></View>
                                 </View>
                             </View>
-                        </View>
-                        <View style={styles.landmarks}>
-                            <View style={styles.landmark}><Text style={styles.landmarkText}>R</Text></View>
-                            <View style={styles.landmark}><Text style={styles.landmarkText}>S</Text></View>
-                            <View style={styles.landmark}><Text style={styles.landmarkText}>T</Text></View>
-                            <View style={styles.landmark}><Text style={styles.landmarkText}>U</Text></View>
-                            <View style={styles.landmark}><Text style={styles.landmarkText}>V</Text></View>
-                            <View style={styles.landmark}><Text style={styles.landmarkText}>W</Text></View>
-                            <View style={styles.landmark}><Text style={styles.landmarkText}>X</Text></View>
-                            <View style={styles.landmark}><Text style={styles.landmarkText}>Y</Text></View>
-                            <View style={styles.landmark}><Text style={styles.landmarkText}>Z</Text></View>
+                            <View style={styles.landmarks}>
+                                <View style={styles.landmark}><Text style={styles.landmarkText}>R</Text></View>
+                                <View style={styles.landmark}><Text style={styles.landmarkText}>S</Text></View>
+                                <View style={styles.landmark}><Text style={styles.landmarkText}>T</Text></View>
+                                <View style={styles.landmark}><Text style={styles.landmarkText}>U</Text></View>
+                                <View style={styles.landmark}><Text style={styles.landmarkText}>V</Text></View>
+                                <View style={styles.landmark}><Text style={styles.landmarkText}>W</Text></View>
+                                <View style={styles.landmark}><Text style={styles.landmarkText}>X</Text></View>
+                                <View style={styles.landmark}><Text style={styles.landmarkText}>Y</Text></View>
+                                <View style={styles.landmark}><Text style={styles.landmarkText}>Z</Text></View>
+                            </View>
                         </View>
                         <View style={styles.statusbar}>
-                            <View style={styles.info}><Text style={styles.infoText}>{'2 minutes avant'.toUpperCase()}</Text></View>
+                            <ScrollView style={styles.info} horizontal={true}><Text style={styles.infoText}>{'L\'accès au train ne peut être garanti 2 minutes avant le départ.'.toUpperCase()}</Text></ScrollView>
                             <View style={styles.now}>
                                 <View style={styles.hhmmss}>
                                     <Text style={styles.hour}>{this.props.displayNowColon ? moment().format('HH:mm') : moment().format('HH mm')}</Text><Text style={styles.seconds}>{moment().format('ss')}</Text>
