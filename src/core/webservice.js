@@ -187,8 +187,8 @@ export default {
                 departureData: {
                     ...departure.departureData,
                     time: minutesBeforeDeparture > thresholdBetweenTimeAndDistance ? departure.departureData.time :
-                          realTimeTrain && realTimeTrain.names.includes('OnPlatform') ? 'à quai' :
-                            realTimeTrain ? `< ${Math.ceil(realTimeTrain.distance)} km` : departure.departureData.time
+                          realTimeTrain && realTimeTrain.names.includes('OnPlatform') && Math.ceil(realTimeTrain.distance) <= 1 ? 'à quai' :
+                            realTimeTrain ? `< ${Math.ceil(realTimeTrain.distance)} km` : 'retardé'
                 }
             }
         })
