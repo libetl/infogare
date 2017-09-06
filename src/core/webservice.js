@@ -35,8 +35,8 @@ const realtimeMap = ({lat, long}) => get(`http://sncf-maps.hafas.de/carto/livema
             .map(train => {return {...train, names:train.remarks.filter(r => r.code = 'FD').map(r => r.txtN)}})
             .map(train => {return {...train, number:(train.names.map(name => name.match(/\s+[0-9]+$/) && parseInt(name.match(/\s+[0-9]+$/)[0])) || [])[0]}})
             .map(train => {return {...train, distance:haversine({lat, long}, {lat:train.pos.y / 1E6, long:train.pos.x / 1E6})}})
-    return Promise.resolve(data)
-})
+        return Promise.resolve(data)
+    })
 const fetch = (url, entity) => entity && entity.headers && entity.headers.Authorization === null ? Promise.resolve() : get(url, entity)
 const places = (label, token) => fetch(placeUrl(label), defaultEntity(token))
     .then((result) => Promise.resolve([result.data.places.filter(place => place.embedded_type === 'stop_area').sort((a, b) => b.quality - a.quality)]))
@@ -66,19 +66,19 @@ const getGaresSncfDepartures = (tvs) => fetch(garesSncfDeparturesUrl(tvs))
 
 const vehicleJourney = (link, fromCoords, token) => fetch(vehicleJourneyUrl(link), defaultEntity(token))
     .then((result) => {
-    const allStops = result.data.vehicle_journeys[0].stop_times.map(
-        stop_time => stop_time.stop_point.name.replace(/ /g, '\u00a0').replace(/-/g, '\u2011').replace(/\//g, '\u00a0\u00a0\u00a0\u0338'))
-    const allStopsCoords = result.data.vehicle_journeys[0].stop_times.map(stop_time => { return {
-        name:stop_time.stop_point.name.replace(/ /g, '\u00a0').replace(/-/g, '\u2011').replace(/\//g, '\u00a0\u00a0\u00a0\u0338'),
-        geometry:{coordinates:[parseFloat(stop_time.stop_point.coord.lon), parseFloat(stop_time.stop_point.coord.lat)]}}})
-    const missionCode = result.data.vehicle_journeys[0].name &&
-    result.data.vehicle_journeys[0].name[0] >= 'A' &&  result.data.vehicle_journeys[0].name[0] <= 'Z'
-        ? result.data.vehicle_journeys[0].name.substring(0, 4) : undefined
-    const foundStationInJourney = closestStations(allStopsCoords, {lat: fromCoords[1], long: fromCoords[0]})[0].name
-    const indexOfStop = allStops.indexOf(foundStationInJourney)
-    const stops = allStops.slice(indexOfStop + 1)
-    return Promise.resolve({link, stops, missionCode})
-})
+        const allStops = result.data.vehicle_journeys[0].stop_times.map(
+            stop_time => stop_time.stop_point.name.replace(/ /g, '\u00a0').replace(/-/g, '\u2011').replace(/\//g, '\u00a0\u00a0\u00a0\u0338'))
+        const allStopsCoords = result.data.vehicle_journeys[0].stop_times.map(stop_time => { return {
+            name:stop_time.stop_point.name.replace(/ /g, '\u00a0').replace(/-/g, '\u2011').replace(/\//g, '\u00a0\u00a0\u00a0\u0338'),
+            geometry:{coordinates:[parseFloat(stop_time.stop_point.coord.lon), parseFloat(stop_time.stop_point.coord.lat)]}}})
+        const missionCode = result.data.vehicle_journeys[0].name &&
+        result.data.vehicle_journeys[0].name[0] >= 'A' &&  result.data.vehicle_journeys[0].name[0] <= 'Z'
+            ? result.data.vehicle_journeys[0].name.substring(0, 4) : undefined
+        const foundStationInJourney = closestStations(allStopsCoords, {lat: fromCoords[1], long: fromCoords[0]})[0].name
+        const indexOfStop = allStops.indexOf(foundStationInJourney)
+        const stops = allStops.slice(indexOfStop + 1)
+        return Promise.resolve({link, stops, missionCode})
+    })
 
 const distance = ([long1, lat1], [long2, lat2]) => Math.sqrt(Math.pow(long2 - long1, 2) + Math.pow(lat2 - lat1, 2))
 const distanceBetween= (station1, station2) =>
@@ -159,8 +159,8 @@ export default {
 
         const journeys = await Promise.all(
             departuresV2.slice(0, 2).map(departure => departure.links &&
-                                                      vehicleJourney(departure.links.find(link => link.type === 'vehicle_journey').id,
-                                                                     stations[0].geometry.coordinates, token)))
+                vehicleJourney(departure.links.find(link => link.type === 'vehicle_journey').id,
+                    stations[0].geometry.coordinates, token)))
 
         const departuresV3 = departuresV2.map(departure => {
             const journey = journeys.find(j => departure.links && departure.links.some(link => link.id === j.link))
@@ -186,9 +186,13 @@ export default {
             return {...departure,
                 departureData: {
                     ...departure.departureData,
-                    time: minutesBeforeDeparture > thresholdBetweenTimeAndDistance ? departure.departureData.time :
-                          realTimeTrain && realTimeTrain.names.includes('OnPlatform') && Math.ceil(realTimeTrain.distance) <= 1 ? 'à quai' :
-                            realTimeTrain ? `< ${Math.ceil(realTimeTrain.distance)} km` : 'retardé'
+                    time: minutesBeforeDeparture > thresholdBetweenTimeAndDistance ?
+                        departure.departureData.time :
+                        realTimeTrain && realTimeTrain.names.includes('OnPlatform') && realTimeTrain.distance <= 0.4 ?
+                            'à quai' :
+                            realTimeTrain ?
+                                `< ${Math.ceil(realTimeTrain.distance)} km` :
+                                departure.departureData.mode.toLowerCase() === 'rer' ?  departure.departureData.time : 'retardé'
                 }
             }
         })
