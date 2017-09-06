@@ -177,7 +177,7 @@ export default {
             }
         })
 
-        notify({timetable:{station: stationName, departures: departuresV3.map(x => x.departureData)}})
+        notify({timetable:{station: `${stationName}\n${updating}`, departures: departuresV3.map(x => x.departureData)}})
 
         const realTimeData = await realtimeMap(stationCoords)
         const departuresV4 = departuresV3.map(departure => {
