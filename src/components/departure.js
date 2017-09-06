@@ -31,8 +31,7 @@ export default class Departure extends React.Component {
         const direction = {color: '#fff', fontSize: directionFontSize, overflow: 'hidden', flexGrow: 1}
         const split = {marginBottom: -lineHeight, height: '100%', width: '100%', flexDirection: 'row'}
         const number = {color: '#fff', width: '15%', fontSize: numberFontSize}
-        const time = (departure.time||'').match(/[0-9][0-9]:[0-9][0-9]/) ? {color: '#dfc81f', width: '20%', fontSize: numberFontSize, fontWeight: 'bold'} :
-            {color: '#f5a665', width: '20%', fontSize: numberFontSize, fontWeight: 'bold'}
+        const time = {color: departure.status ? '#f5a665' : '#dfc81f', width: '20%', fontSize: numberFontSize, fontWeight: 'bold'}
         const platform = {color: '#fff', borderStyle: 'solid', borderWidth: 1, borderColor: '#fff', minWidth: 30, minHeight: 30, borderRadius: 6, width: numberFontSize, height: numberFontSize, textAlign: 'center', flexShrink: 1}
         return (
             <View style={style} onLayout={(event) => this.props.parent.measureView(event, `row${this.props.num}`)}>
@@ -46,7 +45,7 @@ export default class Departure extends React.Component {
                                             <Text style={modeText}>{mode.toUpperCase()}</Text>}
                             {departure.name ? <Text style={lineColorStyle}>{departure.name}</Text> : <Text>{departure.name}</Text>}
                             <Text style={number}>{departure.number}</Text>
-                            <Text style={time}>{departure.time}  </Text>
+                            <Text style={time}>{departure.status || departure.time}  </Text>
                             <Text style={direction}>{directionName}</Text>
                             <Text style={departure.platform && departure.platform.length > 0 ?
                                 platform : styles.noPlatformYet}>{departure.platform}</Text>

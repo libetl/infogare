@@ -186,13 +186,11 @@ export default {
             return {...departure,
                 departureData: {
                     ...departure.departureData,
-                    time: minutesBeforeDeparture > thresholdBetweenTimeAndDistance ?
-                        departure.departureData.time :
-                        realTimeTrain && realTimeTrain.names.includes('OnPlatform') && realTimeTrain.distance <= 0.4 ?
-                            'à quai' :
-                            realTimeTrain ?
-                                `< ${Math.ceil(realTimeTrain.distance)} km` :
-                                departure.departureData.mode.toLowerCase() === 'rer' ?  departure.departureData.time : 'retardé'
+                    status: minutesBeforeDeparture > thresholdBetweenTimeAndDistance ? undefined :
+                        realTimeTrain && realTimeTrain.names.includes('OnPlatform') && realTimeTrain.distance <= 0.4 ? 'à quai' :
+                            realTimeTrain ? `< ${Math.ceil(realTimeTrain.distance)} km` :
+                                departure.departureData.mode.toLowerCase() === 'rer' ?  undefined :
+                                    'retardé'
                 }
             }
         })

@@ -430,7 +430,7 @@ export default class Details extends React.Component {
                             <View style={styles.brand}><Image style={styles.logo} source={require('../images/logo.png')} /></View>
                             <View style={styles.punctuality}>
                                 <View><Text style={styles.time}>{(details.time || '').replace(':', 'h')}</Text></View>
-                                <View style={styles.status}><Text style={styles.ontime}>à l'heure</Text></View>
+                                <View style={styles.status}><Text style={styles.ontime}>{details.status || `à l'heure`}</Text></View>
                             </View>
                             <View style={styles.direction}><Text style={{fontSize : this.props.rowWidth / directionName.length, fontWeight: "bold", color: "#004494"}}>{directionName}</Text></View>
                             <View style={styles.train}>
