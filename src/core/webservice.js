@@ -15,6 +15,13 @@ const vehicleJourneyUrl = (vehicleJourney) => `${sncfApiPrefix}vehicle_journeys/
 const placeUrl = (place) => `${sncfApiPrefix}places?q=${place}`
 const defaultEntity = (token) => {return {headers: {Authorization: token || null}}}
 
+const realtimeMap = ({lat, long}) => get(`http://sncf-maps.hafas.de/carto/livemaps?service=journeygeopos&rect=-190795,48614130,6488893,51453391&i=35000&is=5000&prod=27&date=${moment().format('YYYYMMDD')}&time=${moment().format('HHmm00')}&tpm=REPORT_ONLY&its=CT|INTERNATIONAL,CT|TGV,CT|INTERCITE,CT|TER,CT|TRANSILIEN&un=true&livemapCallback=`, {headers:{Referer:'http://www.sncf.com/fr/geolocalisation'}})
+    .then(({data:{svcResL:[{res:{common:{prodL,remL,locL},jnyL}}]}}) =>
+        Promise.resolve( jnyL
+            .filter(train => Math.pow(train.pos.x / 1E6 - long, 2) + Math.pow(train.pos.y / 1E6 - lat, 2) < 0.0001)
+            .map(train => {return {...train, ...prodL[train.prodX], remarks:[...new Set(train.remL)].map(rem => {return {...rem, ...remL[rem.remX]}}),
+                lines:train.ani && [...new Set(train.ani.fLocX)].map(loc => locL[loc])}})
+            .map(train => {return {...train, names:train.remarks.filter(r => r.code = 'FD').map(r => r.txtN)}})))
 const fetch = (url, entity) => entity && entity.headers && entity.headers.Authorization === null ? Promise.resolve() : get(url, entity)
 const places = (label, token) => fetch(placeUrl(label), defaultEntity(token))
     .then((result) => Promise.resolve([result.data.places.filter(place => place.embedded_type === 'stop_area').sort((a, b) => b.quality - a.quality)]))
@@ -155,6 +162,8 @@ export default {
         })
 
         notify({timetable:{station: stationName, departures: departuresV3.map(x => x.departureData)}})
+
+        const realTimeData = await realtimeMap(stationCoords)
 
         return Promise.resolve({station: stationName, departures: departuresV3.map(x => x.departureData)})
     }
