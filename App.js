@@ -46,7 +46,6 @@ export default class App extends React.Component {
                 webservice.nextDepartures(this.state.geo, this.state.apiToken, this.setState.bind(this))
                     .then((timetable) => this.setState({...this.state, timetable,
                         firstScrollY: 3, secondScrollY: 3,
-                        stopsListOfRow1Height: 0, stopsListOfRow2Height: 0,
                         displayNowColon:true}))
                     .then(() => setInterval(this.autoScroll, 3000))
                     .then(() => setInterval(this.updateTimetable, 54000))

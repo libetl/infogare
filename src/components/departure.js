@@ -53,6 +53,7 @@ export default class Departure extends React.Component {
                         </View>
                         {this.props.detailed &&
                         <ScrollView ref={(thisRef) => this.props.parent[`stopsListOfRow${this.props.detailsRow}`] = thisRef}
+                                    renderToHardwareTextureAndroid={true}
                                     contentContainerStyle={styles.stops} style={styles.scroll}>
                             <Text onLayout={(event) => this.props.parent.measureView(event, `stopsListOfRow${this.props.detailsRow}`)}>{!departure.stops ? '' :
                                 departure.stops.map(stop => (
