@@ -186,7 +186,7 @@ export default {
             return {...departure,
                 departureData: {
                     ...departure.departureData,
-                    status: minutesBeforeDeparture > thresholdBetweenTimeAndDistance ? undefined :
+                    status: Math.abs(minutesBeforeDeparture) > thresholdBetweenTimeAndDistance ? undefined :
                         realTimeTrain && realTimeTrain.names.includes('OnPlatform') && realTimeTrain.distance <= 0.4 ? 'à quai' :
                             realTimeTrain ? `< ${Math.ceil(realTimeTrain.distance)} km` :
                                 departure.departureData.mode.toLowerCase() === 'rer' ?  undefined :
