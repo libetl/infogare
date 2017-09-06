@@ -15,13 +15,27 @@ const vehicleJourneyUrl = (vehicleJourney) => `${sncfApiPrefix}vehicle_journeys/
 const placeUrl = (place) => `${sncfApiPrefix}places?q=${place}`
 const defaultEntity = (token) => {return {headers: {Authorization: token || null}}}
 
-const realtimeMap = ({lat, long}) => get(`http://sncf-maps.hafas.de/carto/livemaps?service=journeygeopos&rect=-190795,48614130,6488893,51453391&i=35000&is=5000&prod=27&date=${moment().format('YYYYMMDD')}&time=${moment().format('HHmm00')}&tpm=REPORT_ONLY&its=CT|INTERNATIONAL,CT|TGV,CT|INTERCITE,CT|TER,CT|TRANSILIEN&un=true&livemapCallback=`, {headers:{Referer:'http://www.sncf.com/fr/geolocalisation'}})
-    .then(({data:{svcResL:[{res:{common:{prodL,remL,locL},jnyL}}]}}) =>
-        Promise.resolve( jnyL
-            .filter(train => Math.pow(train.pos.x / 1E6 - long, 2) + Math.pow(train.pos.y / 1E6 - lat, 2) < 0.0001)
+const haversine = (coords1, coords2) => {
+    const degreesToRadian = Math.PI / 180;
+    const latDelta = (coords2.lat - coords1.lat) * degreesToRadian
+    const longDelta = (coords2.long - coords1.long) * degreesToRadian
+    const a = Math.sin(latDelta/2) * Math.sin(latDelta/2) +
+        Math.cos(coords1.lat * degreesToRadian) * Math.cos(coords2.lat * degreesToRadian) *
+        Math.sin(longDelta/2) * Math.sin(longDelta/2)
+    return 12742 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+}
+
+const maxDistanceInRealTimeMap = 50000
+const realtimeMap = ({lat, long}) => get(`http://sncf-maps.hafas.de/carto/livemaps?service=journeygeopos&rect=${Math.floor(long * 1E6) - maxDistanceInRealTimeMap},${Math.floor(lat * 1E6) - maxDistanceInRealTimeMap},${Math.floor(long * 1E6) + maxDistanceInRealTimeMap},${Math.floor(lat * 1E6) + maxDistanceInRealTimeMap}&i=35000&is=10000&prod=27&date=${moment().format('YYYYMMDD')}&time=${moment().format('HHmm00')}&tpm=REPORT_ONLY&its=CT|INTERNATIONAL,CT|TGV,CT|INTERCITE,CT|TER,CT|TRANSILIEN&un=true&livemapCallback=`, {headers:{Referer:'http://www.sncf.com/fr/geolocalisation'}})
+    .then(({data:{svcResL:[{res:{common:{prodL,remL,locL},jnyL}}]}}) => {
+        const data = jnyL
             .map(train => {return {...train, ...prodL[train.prodX], remarks:[...new Set(train.remL)].map(rem => {return {...rem, ...remL[rem.remX]}}),
                 lines:train.ani && [...new Set(train.ani.fLocX)].map(loc => locL[loc])}})
-            .map(train => {return {...train, names:train.remarks.filter(r => r.code = 'FD').map(r => r.txtN)}})))
+            .map(train => {return {...train, names:train.remarks.filter(r => r.code = 'FD').map(r => r.txtN)}})
+            .map(train => {return {...train, number:(train.names.map(name => name.match(/\s+[0-9]+$/) && parseInt(name.match(/\s+[0-9]+$/)[0])) || [])[0]}})
+            .map(train => {return {...train, distance:haversine({lat, long}, {lat:train.pos.y / 1E6, long:train.pos.x / 1E6})}})
+    return Promise.resolve(data)
+})
 const fetch = (url, entity) => entity && entity.headers && entity.headers.Authorization === null ? Promise.resolve() : get(url, entity)
 const places = (label, token) => fetch(placeUrl(label), defaultEntity(token))
     .then((result) => Promise.resolve([result.data.places.filter(place => place.embedded_type === 'stop_area').sort((a, b) => b.quality - a.quality)]))
@@ -118,6 +132,7 @@ export default {
         const departuresV2 = departuresV1.length > 0 ? departuresV1.map(departure => {
             return {
                 ...departure,
+                savedNumber: parseInt(departure.departureData.number),
                 departureData: {
                     ...departure.departureData,
                     number: idfMapping[departure.departureData.number] || departure.departureData.number,
@@ -165,6 +180,17 @@ export default {
 
         const realTimeData = await realtimeMap(stationCoords)
 
-        return Promise.resolve({station: stationName, departures: departuresV3.map(x => x.departureData)})
+        const departuresV4 = departuresV3.map(departure => {
+            const realTimeTrain = realTimeData.filter(train => train.number === departure.savedNumber) [0]
+            return {...departure,
+                departureData: {
+                    ...departure.departureData,
+                    time: realTimeTrain && realTimeTrain.names.includes('OnPlatform') ? 'à quai' :
+                            realTimeTrain ? `< ${Math.ceil(realTimeTrain.distance)} km` : departure.departureData.time
+                }
+            }
+        })
+
+        return Promise.resolve({station: stationName, departures: departuresV4.map(x => x.departureData)})
     }
 }
