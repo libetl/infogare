@@ -7,13 +7,13 @@ import {thresholdBetweenTimeAndDistance, realTimeMap} from './liveMap'
 import tchoutchou from './raildar'
 import {places, inverseGeocoding, departures, vehicleJourney, testApi} from './sncfApi'
 
-const updating = '(mise à jour...)'
-const sortedByDateTime = (departuresData) => [].concat.apply([], departuresData).sort((d1, d2) =>
-    d1.stop_date_time.base_departure_date_time.localeCompare(d2.stop_date_time.base_departure_date_time))
-
 export default {
     test: testApi,
     nextDepartures: async ({long, lat}, token, notify = () => {}) => {
+        const updating = '(mise à jour...)'
+        const sortedByDateTime = (departuresData) => [].concat.apply([], departuresData).sort((d1, d2) =>
+            d1.stop_date_time.base_departure_date_time.localeCompare(d2.stop_date_time.base_departure_date_time))
+
         const stations = closestStations({long, lat})
         const stationName = stations[0].fields.intitule_gare
         const stationCoords = {long: stations[0].geometry.coordinates[0], lat: stations[0].geometry.coordinates[1]}
