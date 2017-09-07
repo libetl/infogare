@@ -1,5 +1,6 @@
 import React from 'react'
 import {AsyncStorage, PixelRatio} from 'react-native'
+import moment from 'moment'
 import webservice from './src/core/webservice'
 import somePlaces from './src/core/somePlaces'
 import SignUp from './src/components/signup'
@@ -21,7 +22,7 @@ export default class App extends React.Component {
         this.stopsListOfRow1 = {}
         this.stopsListOfRow2 = {}
         this.autoScroll = this.autoScroll.bind(this)
-        this.updateNowTime = this.updateNowTime.bind(this)
+        this.refreshScreen = this.refreshScreen.bind(this)
         this.updateTimetable = this.updateTimetable.bind(this)
         this.updateLocation = this.updateLocation.bind(this)
         this.initNow = this.initNow.bind(this)
@@ -48,10 +49,9 @@ export default class App extends React.Component {
                         firstScrollY: 3, secondScrollY: 3,
                         displayNowColon:true}))
                     .then(() => setInterval(this.autoScroll, 3000))
-                    .then(() => setInterval(this.updateTimetable, 54000))
             },
             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
-        setInterval(this.updateNowTime, 500)
+        setInterval(this.refreshScreen, 500)
     }
     autoScroll() {
         const fromTop = 0
@@ -64,7 +64,10 @@ export default class App extends React.Component {
             secondScrollY: maybeNextScrollY2 >= this.state.stopsListOfRow2Height ? fromTop : maybeNextScrollY2
         })
     }
-    updateNowTime() {
+    refreshScreen() {
+        if (moment().second() === 2 && !this.state.displayNowColon) {
+            this.updateTimetable()
+        }
         this.setState({...this.state, displayNowColon: !this.state.displayNowColon})
     }
     updateTimetable(geo) {
@@ -102,7 +105,6 @@ export default class App extends React.Component {
         this.initNow(undefined)
     }
     viewOneDeparture(num) {
-        console.log(`selected: ${num}`)
         this.setState({...this.state, departureDetails: this.state.timetable.departures[num]})
     }
     hideDetails() {
