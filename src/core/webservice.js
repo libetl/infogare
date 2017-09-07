@@ -22,7 +22,7 @@ export default {
 
         const stationsAreas = await inverseGeocoding(stationCoords, token).catch(e => places(stationName, token))
         const openDataDepartures = token ? await Promise.all(stationsAreas.map(stationArea => departures(stationArea.id, 0, token))) :
-            tchoutchou.get({long, lat})
+            await tchoutchou.get({long, lat})
 
         const departuresV1 = sortedByDateTime(flatten(openDataDepartures)).map(departure => {
             return {
