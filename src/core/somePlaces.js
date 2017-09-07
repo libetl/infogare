@@ -6,5 +6,6 @@ export default {
     auber: { lat: 48.8729105, long: 2.3259732 },
     champagneSurSeine: { lat: 48.409371, long: 2.7915463 },
     parisGareDeLyon: {lat: 48.8442662, long: 2.3743691},
-    laDefense: {lat:48.8950328, long:2.2371217}
+    laDefense: {lat:48.8950328, long:2.2371217},
+    bibliothequeFrancoisMitterand: {lat:48.8329062, long:2.3757552}
 }
