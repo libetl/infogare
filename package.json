@@ -4,6 +4,7 @@
   "private": true,
   "devDependencies": {
     "babel-preset-expo": "^3.0.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-react-native-stage-0": "^1.0.1",
     "babel-register": "^6.26.0",
     "download": "6.2.5",
