@@ -9,15 +9,13 @@ const distanceBetween= (station1, station2) =>
         station2.geometry ? [station2.geometry.coordinates[1], station2.geometry.coordinates[0]] :
             [-station1.geometry.coordinates[1], -station1.geometry.coordinates[0]])
 
-
-export default {
-    idfMapping,
-    closestStations: ({long, lat}) => {
-        const thisPoint =  {geometry:{coordinates:[long, lat]}}
-        const closestStation = registeredStations.reduce((a, b) =>
-            distanceBetween(thisPoint, a) < distanceBetween(thisPoint, b) ? a : b, registeredStations[0])
-        return registeredStations.filter(station =>
-            station.geometry.coordinates[0] === closestStation.geometry.coordinates[0] &&
-            station.geometry.coordinates[1] === closestStation.geometry.coordinates[1])
-    }
+const closestStations = ({long, lat}) => {
+    const thisPoint =  {geometry:{coordinates:[long, lat]}}
+    const closestStation = registeredStations.reduce((a, b) =>
+        distanceBetween(thisPoint, a) < distanceBetween(thisPoint, b) ? a : b, registeredStations[0])
+    return registeredStations.filter(station =>
+        station.geometry.coordinates[0] === closestStation.geometry.coordinates[0] &&
+        station.geometry.coordinates[1] === closestStation.geometry.coordinates[1])
 }
+
+export { idfMapping, closestStations }

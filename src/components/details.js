@@ -211,8 +211,6 @@ const styles = StyleSheet.create({
         "borderColor": "#51134B",
         "borderRadius": 7,
         "marginLeft": "15%",
-        "fontSize": 8,
-        "fontWeight": "bold",
         "height":20,
         "width": "28%",
         "minWidth": 37
@@ -222,7 +220,6 @@ const styles = StyleSheet.create({
     },
     "platformValue": {
         "marginTop": "-10%",
-        "fontSize": 35,
         "paddingLeft": "40%"
     },
     "platformValueText": {
