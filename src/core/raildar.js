@@ -1,5 +1,6 @@
 import {get} from 'axios'
 import moment from 'moment'
+import {Html5Entities} from 'html-entities'
 
 const gares = ({lat, long}) => get(`http://www.raildar.fr/json/gares?lat=${lat}&lng=${long}&dist=20`).then(response => [response.data[0]])
 const departures = (idGare) => get(`http://www.raildar.fr/json/next_missions?id_gare=${idGare}`).then(response => response.data)
@@ -21,13 +22,14 @@ const normalize = (gare) => gare.departures.filter(departure => departure.termin
             color: '#000000',
             headsign: number,
             time: moment(departure.time_reel, 'YYYY-MM-DD HH:mm:ssZ').format('HH:mm'),
-            stops: allStops.slice(allStops.indexOf(gare.name_gare) + 1)
+            stops: allStops.slice(allStops.indexOf(gare.name_gare) + 1).map(stop => Html5Entities.decode(stop))
         }
     }})
 
 export default {
-     get: async ({lat, long}) => await gares(({lat, long})).then(gares => Promise.all(gares.map(async gare => {
+     gares,
+     get: gares => Promise.all(gares.map(async gare => {
         return {...gare, departures:(await (departures(gare.id_gare).then(departures => Promise.all(departures.map(async departure => {
-            return {...departure, train:(await train(departure.id_train)), mission:(await mission(departure.id_mission))}})))))}})))
+            return {...departure, train:(await train(departure.id_train)), mission:(await mission(departure.id_mission))}})))))}}))
         .then(gares => gares.map(gare => normalize(gare)))
 }

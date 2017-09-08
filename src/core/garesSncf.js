@@ -28,7 +28,7 @@ const combineTchoutchouAndGaresSncf = (tchoutchouData, garesSncf) => {
                     name: mixed.type && mixed.type.includes(' ') ? departure.type.split(' ')[1] : '',
                     color: '000000',
                     number: mixed.num,
-                    time: mixed.heure,
+                    time: heure,
                     platform: mixed.voie,
                     stops: mixed.dataToDisplay.stops || []
                 }

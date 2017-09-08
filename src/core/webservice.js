@@ -10,20 +10,23 @@ import {places, inverseGeocoding, departures, vehicleJourney, testApi} from './s
 export default {
     test: testApi,
     nextDepartures: async ({long, lat}, token, notify = () => {}) => {
-        const updating = '(mise à jour...)'
         const sortedByDateTime = (departuresData) => [].concat.apply([], departuresData).sort((d1, d2) =>
             d1.stop_date_time.base_departure_date_time.localeCompare(d2.stop_date_time.base_departure_date_time))
 
-        const stations = closestStations({long, lat})
-        const stationName = stations[0].fields.intitule_gare
-        const stationCoords = {long: stations[0].geometry.coordinates[0], lat: stations[0].geometry.coordinates[1]}
+        const guessedStations = token && closestStations({long, lat})
+        const guessedStationName = token && guessedStations[0].fields.intitule_gare
+        const guessedStationCoords = token && {long: guessedStations[0].geometry.coordinates[0], lat: guessedStations[0].geometry.coordinates[1]}
 
-        notify({timetable:{station: `${stationName}\n${updating}`, departures: new Array(10).fill({})}})
+        notify({timetable:{station: `${token ? guessedStationName : 'recherche...'}\n(mise à jour...)`, departures: new Array(10).fill({})}})
 
-        const stationsAreas = await inverseGeocoding(stationCoords, token).catch(e => places(stationName, token))
-        const openDataDepartures = token ? await Promise.all(stationsAreas.map(stationArea => departures(stationArea.id, 0, token))) :
-            await tchoutchou.get({long, lat})
+        const stationsAreas = token ? await inverseGeocoding(guessedStationCoords, token).catch(e => places(guessedStationName, token)) : await tchoutchou.gares({long, lat})
+        const stationName = stationsAreas[0].name_gare || guessedStationName
+        const stationCoords = guessedStationCoords || {lat: stationsAreas[0].lat, long: stationsAreas[0].lng}
+        const iataCodes = (guessedStations || closestStations(stationCoords)).map(station => (station.fields.tvs || '').split('|')[0])
 
+        notify({timetable:{station: `${stationName}\n(mise à jour...)`, departures: new Array(10).fill({})}})
+
+        const openDataDepartures = token ? await Promise.all(stationsAreas.map(stationArea => departures(stationArea.id, 0, token))) : await tchoutchou.get(stationsAreas)
         const departuresV1 = sortedByDateTime(flatten(openDataDepartures)).map(departure => {
             return {
                 links: departure.links,
@@ -39,9 +42,8 @@ export default {
             }
         })
 
-        notify({timetable:{station: `${stationName}\n${updating}`, departures: departuresV1.map(x => x.dataToDisplay)}})
+        notify({timetable:{station: `${stationName}\n(mise à jour...)`, departures: departuresV1.map(x => x.dataToDisplay)}})
 
-        const iataCodes = stations.map(station => (station.fields.tvs || '').split('|')[0])
         const garesSncfDepartures = await Promise.all(iataCodes.map(iataCode => getGaresSncfDepartures(iataCode)))
         const allPlatformsDepartures = flatten(garesSncfDepartures)
 
@@ -57,12 +59,12 @@ export default {
             }
         }) : sortedByDateTime(combineTchoutchouAndGaresSncf (departuresV1, allPlatformsDepartures))
 
-        notify({timetable:{station: `${stationName}\n${updating}`, departures: departuresV2.map(x => x.dataToDisplay)}})
+        notify({timetable:{station: `${stationName}\n(mise à jour...)`, departures: departuresV2.map(x => x.dataToDisplay)}})
 
         const journeys = await Promise.all(
             departuresV2.slice(0, 2).map(departure => departure.links &&
                 vehicleJourney(closestStations, departure.links.find(link => link.type === 'vehicle_journey').id,
-                    stations[0].geometry.coordinates, token)))
+                    stationCoords, token)))
 
         const departuresV3 = departuresV2.map(departure => {
             const journey = journeys.find(j => departure.links && departure.links.some(link => link.id === j.link))
@@ -80,7 +82,7 @@ export default {
             }
         })
 
-        notify({timetable:{station: `${stationName}\n${updating}`, departures: departuresV3.map(x => x.dataToDisplay)}})
+        notify({timetable:{station: `${stationName}\n(mise à jour...)`, departures: departuresV3.map(x => x.dataToDisplay)}})
 
         const realTimeData = await realTimeMap(stationCoords)
         const departuresV4 = departuresV3.map(departure => {
