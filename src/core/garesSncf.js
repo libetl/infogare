@@ -12,7 +12,7 @@ const getGaresSncfDepartures = (tvs) => get(garesSncfDeparturesUrl(tvs))
     })
 
 const combineTchoutchouAndGaresSncf = (tchoutchouData, garesSncf) => {
-    const now = moment().format('HH:mm')
+    const now = moment().add({minutes:-10}).format('HH:mm')
     const tchoutchouAndGares = tchoutchouData.map(oneTchoutchou => {return {...oneTchoutchou, ...garesSncf.find(gareSncf => parseInt(gareSncf.num) === oneTchoutchou.dataToDisplay.number)}})
         .map(mixed => {
             const heure = mixed.heure || mixed.dataToDisplay.time

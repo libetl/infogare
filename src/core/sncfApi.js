@@ -44,7 +44,7 @@ const vehicleJourney = (closestStations, link, fromCoords, token) => fetch(vehic
         const foundStationInJourney = closestStations({lat: fromCoords[1], long: fromCoords[0]}, allStopsCoords)[0].name
         const indexOfStop = allStops.indexOf(foundStationInJourney)
         const stops = allStops.slice(indexOfStop + 1)
-        return Promise.resolve({link, stops, missionCode})
+        return Promise.resolve({link, stops, missionCode, departureStation: indexOfStop === 0})
     })
 
 const testApi = (token) => fetch(sncfApiPrefix, defaultEntity(token))

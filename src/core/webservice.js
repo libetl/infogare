@@ -72,6 +72,7 @@ export default {
                 stops: journey.stops} : {}
             return {
                 ...departure,
+                departureStation: journey ? journey.departureStation : false,
                 dataToDisplay: {
                     ...departure.dataToDisplay,
                     ...addition
@@ -92,7 +93,8 @@ export default {
                         realTimeTrain && realTimeTrain.names.includes('OnPlatform') && realTimeTrain.distance <= 0.4 ? 'à quai' :
                             realTimeTrain ? `< ${Math.ceil(realTimeTrain.distance)} km` :
                                 departure.dataToDisplay.mode.toLowerCase() === 'rer' ?  undefined :
-                                    'retardé'
+                                    departure.departureStation ? undefined :
+                                        'retardé'
                 }
             }
         })
