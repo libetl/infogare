@@ -22,7 +22,8 @@ const normalize = (gare) => gare.departures.filter(departure => departure.termin
             color: '#000000',
             headsign: number,
             time: moment(departure.time_reel, 'YYYY-MM-DD HH:mm:ssZ').format('HH:mm'),
-            stops: allStops.slice(allStops.indexOf(gare.name_gare) + 1).map(stop => Html5Entities.decode(stop))
+            stops: allStops.slice(allStops.indexOf(gare.name_gare) + 1).map(stop =>
+                Html5Entities.decode(stop).replace(/ /g, '\u00a0').replace(/-/g, '\u2011').replace(/\//g, '\u00a0\u00a0\u00a0\u0338'))
         }
     }})
 
