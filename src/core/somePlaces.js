@@ -7,5 +7,6 @@ export default {
     champagneSurSeine: { lat: 48.409371, long: 2.7915463 },
     parisGareDeLyon: {lat: 48.8442662, long: 2.3743691},
     laDefense: {lat:48.8950328, long:2.2371217},
-    bibliothequeFrancoisMitterand: {lat:48.8329062, long:2.3757552}
+    bibliothequeFrancoisMitterand: {lat:48.8329062, long:2.3757552},
+    pontSurYonne: {lat:48.2832579, long:3.1809024}
 }
