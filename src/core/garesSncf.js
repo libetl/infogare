@@ -6,7 +6,7 @@ const garesSncfDeparturesUrl = (tvs) => `https://www.gares-sncf.com/fr/train-tim
 const getGaresSncfDepartures = (tvs) => get(garesSncfDeparturesUrl(tvs))
     .then((result) => {
         if (!Array.isArray(result.data.trains)) {
-            return Promise.resolve({})
+            return Promise.resolve([])
         }
         return Promise.resolve(result.data.trains)
     })
