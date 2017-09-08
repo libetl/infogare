@@ -41,7 +41,7 @@ const vehicleJourney = (closestStations, link, fromCoords, token) => fetch(vehic
         const missionCode = result.data.vehicle_journeys[0].name &&
         result.data.vehicle_journeys[0].name[0] >= 'A' &&  result.data.vehicle_journeys[0].name[0] <= 'Z'
             ? result.data.vehicle_journeys[0].name.substring(0, 4) : undefined
-        const foundStationInJourney = closestStations(allStopsCoords, {lat: fromCoords[1], long: fromCoords[0]})[0].name
+        const foundStationInJourney = closestStations({lat: fromCoords[1], long: fromCoords[0]}, allStopsCoords)[0].name
         const indexOfStop = allStops.indexOf(foundStationInJourney)
         const stops = allStops.slice(indexOfStop + 1)
         return Promise.resolve({link, stops, missionCode})

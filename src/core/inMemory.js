@@ -9,11 +9,11 @@ const distanceBetween= (station1, station2) =>
         station2.geometry ? [station2.geometry.coordinates[1], station2.geometry.coordinates[0]] :
             [-station1.geometry.coordinates[1], -station1.geometry.coordinates[0]])
 
-const closestStations = ({long, lat}) => {
+const closestStations = ({long, lat}, stationsList = registeredStations) => {
     const thisPoint =  {geometry:{coordinates:[long, lat]}}
-    const closestStation = registeredStations.reduce((a, b) =>
-        distanceBetween(thisPoint, a) < distanceBetween(thisPoint, b) ? a : b, registeredStations[0])
-    return registeredStations.filter(station =>
+    const closestStation = stationsList.reduce((a, b) =>
+        distanceBetween(thisPoint, a) < distanceBetween(thisPoint, b) ? a : b, stationsList[0])
+    return stationsList.filter(station =>
         station.geometry.coordinates[0] === closestStation.geometry.coordinates[0] &&
         station.geometry.coordinates[1] === closestStation.geometry.coordinates[1])
 }
