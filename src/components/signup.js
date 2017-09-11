@@ -20,7 +20,8 @@ export default class SignUp extends React.Component {
                 <View><Text>Token :</Text><TextInput onChangeText={(text) => this.setState({savedToken: text})}
                                                      id='apiToken' label='token sncf' style={styles.signIn}/></View>
                 <Text> </Text>
-                <Text>Vous pouvez ignorer cette étape, mais c'est dommage, car je ne pourrai pas tout afficher.</Text>
+                <Text>Vous pouvez ignorer cette étape, mais c'est risqué, car les sources de données hors API ne sont pas fiables.</Text>
+                <Text>Certaines sources peuvent s'arrêter de fonctionner unilatéralement.</Text>
                 <Text> </Text>
                 <Text>{this.props.loginError}</Text>
             </View>
