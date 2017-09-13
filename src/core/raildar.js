@@ -22,7 +22,7 @@ const normalize = (gare) => gare.departures.filter(departure => departure.termin
         },
         display_informations: {
             commercial_mode: mode,
-            direction: departure.terminus,
+            direction: Html5Entities.decode(departure.terminus),
             code: '',
             color: '#000000',
             headsign: number,
