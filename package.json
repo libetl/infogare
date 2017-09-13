@@ -30,7 +30,7 @@
   "dependencies": {
     "axios": "^0.16.2",
     "dom-parser": "^0.1.5",
-    "expo": "^19.0.0",
+    "expo": "^20.0.0",
     "html-entities": "^1.2.1",
     "moment": "^2.18.1",
     "prop-types": "^15.5.10",
