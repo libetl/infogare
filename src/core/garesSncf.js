@@ -30,6 +30,7 @@ const combineTchoutchouAndGaresSncf = (tchoutchouData, garesSncf) => {
                     number: mixed.num || mixed.dataToDisplay.number,
                     time: heure,
                     platform: mixed.voie,
+                    status: mixed.dataToDisplay.status,
                     stops: mixed.dataToDisplay.stops || []
                 }
             }

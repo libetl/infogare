@@ -36,6 +36,7 @@ export default {
                     name: departure.display_informations.code,
                     color: departure.display_informations.color,
                     number: departure.display_informations.headsign,
+                    status: departure.display_informations.status,
                     time: moment(departure.stop_date_time.departure_date_time, 'YYYYMMDDTHHmmss').format('HH:mm'),
                     stops: departure.display_informations.stops
                 }
@@ -57,7 +58,7 @@ export default {
                     platform: (allPlatformsDepartures.find(x => x.num === departure.dataToDisplay.number) || {voie: ''}).voie
                 }
             }
-        }) : sortedByDateTime(combineTchoutchouAndGaresSncf (departuresV1, allPlatformsDepartures))
+        }) : sortedByDateTime(combineTchoutchouAndGaresSncf(departuresV1, allPlatformsDepartures))
 
         notify({timetable:{station: `${stationName}\n(mise à jour...)`, departures: departuresV2.map(x => x.dataToDisplay)}})
 
@@ -96,7 +97,7 @@ export default {
                             realTimeTrain ? `< ${Math.ceil(realTimeTrain.distance)} km` :
                                 departure.dataToDisplay.mode.toLowerCase() === 'rer' ?  undefined :
                                     departure.departureStation ? undefined :
-                                        'retardé'
+                                        departure.dataToDisplay.status ? departure.dataToDisplay.status : 'retardé'
                 }
             }
         })

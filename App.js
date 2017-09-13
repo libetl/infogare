@@ -2,7 +2,7 @@ import React from 'react'
 import {AsyncStorage, PixelRatio} from 'react-native'
 import moment from 'moment'
 import webservice from './src/core/webservice'
-import somePlaces from './src/core/somePlaces'
+import places from './src/core/places'
 import SignUp from './src/components/signup'
 import Timetable from './src/components/timetable'
 
@@ -12,7 +12,7 @@ export default class App extends React.Component {
         super(props)
         this.state = {
             ...props,
-            geo: somePlaces.parisGareDeLyon,
+            geo: places.parisGaredeLyon,
             timetable: {
                 departures: new Array(10).fill({}), station: 'chargement...',
                 firstScrollY: 3, secondScrollY: 3, stopsListOfRow1Height: 0, stopsListOfRow2Height: 0,

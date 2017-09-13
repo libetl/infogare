@@ -429,7 +429,7 @@ export default class Details extends React.Component {
                                 <View><Text style={styles.time}>{(details.time || '').replace(':', 'h')}</Text></View>
                                 <View style={styles.status}><Text style={styles.ontime}>{details.status || `à l'heure`}</Text></View>
                             </View>
-                            <View style={styles.direction}><Text style={{fontSize : this.props.rowWidth / directionName.length, fontWeight: "bold", color: "#004494"}}>{directionName}</Text></View>
+                            <View style={styles.direction}><Text style={{fontSize : this.props.rowWidth / (directionName.length * 1.5), fontWeight: "bold", color: "#004494"}}>{directionName}</Text></View>
                             <View style={styles.train}>
                                 <View>{mode === 'transilien' ? <Image style={styles.modeIcon} source={require('../images/transilienB.png')} /> :
                                     mode === 'rer' ? <Image style={styles.modeIcon} source={require('../images/rerB.png')} /> :

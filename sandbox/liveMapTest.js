@@ -1,5 +1,5 @@
 import {realTimeMap} from '../src/core/liveMap'
-import somePlaces from "../src/core/somePlaces";
+import places from '../src/core/places'
 
-realTimeMap(somePlaces.laDefense)
+realTimeMap(places.laDefense)
     .then(geolocations => console.log(geolocations))
