@@ -13,7 +13,8 @@
     "download": "6.2.5",
     "event-stream": "^3.3.4",
     "exp": "^43.0.0",
-    "unzip2": "0.2.5"
+    "unzip2": "0.2.5",
+    "nock": "^9.0.14"
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {

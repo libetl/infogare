@@ -1,0 +1,235 @@
+{
+  "ver": "1.11",
+  "ext": "VBB.2",
+  "lang": "deu",
+  "id": "w42ccz984ag2x44c",
+  "svcResL": [
+    {
+      "id": "",
+      "meth": "JourneyGeoPos",
+      "err": "OK",
+      "res": {
+        "common": {
+          "locL": [
+            {
+              "lid": "A=1@O=Hainbuchenstr. (Berlin)@X=13274820@Y=52634250@U=86@L=9092202@",
+              "type": "S",
+              "name": "Hainbuchenstr. (Berlin)",
+              "icoX": 1,
+              "extId": "9092202",
+              "crd": {
+                "x": 13274820,
+                "y": 52634250,
+                "z": 0
+              },
+              "rRefL": [
+                0
+              ]
+            },
+            {
+              "lid": "A=1@O=U Reinickendorfer Str./Fennstr. (Berlin)@X=13369413@Y=52541527@U=86@L=9008104@",
+              "type": "S",
+              "name": "U Reinickendorfer Str./Fennstr. (Berlin)",
+              "icoX": 1,
+              "extId": "9008104",
+              "crd": {
+                "x": 13369413,
+                "y": 52541527,
+                "z": 0
+              },
+              "rRefL": [
+                0
+              ]
+            },
+            {
+              "lid": "A=1@O=U Reinickendorfer Str. (Berlin)@X=13370393@Y=52539891@U=86@L=9008102@",
+              "type": "S",
+              "name": "U Reinickendorfer Str. (Berlin)",
+              "icoX": 1,
+              "extId": "9008102",
+              "crd": {
+                "x": 13370393,
+                "y": 52539891,
+                "z": 0
+              },
+              "rRefL": [
+                1,
+                2,
+                3,
+                0
+              ]
+            },
+            {
+              "lid": "A=1@O=S+U Berlin Hauptbahnhof@X=13368928@Y=52525849@U=86@L=9003201@",
+              "type": "S",
+              "name": "S+U Berlin Hauptbahnhof",
+              "icoX": 1,
+              "extId": "9003201",
+              "crd": {
+                "x": 13368928,
+                "y": 52525849,
+                "z": 0
+              },
+              "rRefL": [
+                1,
+                2,
+                3,
+                0
+              ]
+            },
+            {
+              "lid": "A=1@U=86@L=9100035@",
+              "type": "S",
+              "icoX": 1,
+              "extId": "9100035",
+              "rRefL": [
+                0
+              ]
+            }
+          ],
+          "prodL": [
+            {
+              "name": "Bus N20",
+              "line": "N20",
+              "icoX": 0,
+              "cls": 8
+            }
+          ],
+          "opL": [],
+          "remL": [
+            {
+              "type": "A",
+              "code": "TT",
+              "prio": 999,
+              "icoX": 2,
+              "txtN": "Fahrt für Touch&Travel zugelassen"
+            },
+            {
+              "type": "A",
+              "code": "AT",
+              "prio": 300,
+              "icoX": 2,
+              "txtN": "Aufzug"
+            },
+            {
+              "type": "A",
+              "code": "BL",
+              "prio": 300,
+              "icoX": 2,
+              "txtN": "Blindenleitstreifen"
+            },
+            {
+              "type": "A",
+              "code": "FT",
+              "prio": 300,
+              "icoX": 2,
+              "txtN": "Rolltreppe"
+            }
+          ],
+          "icoL": [
+            {
+              "res": "PCL3"
+            },
+            {
+              "res": "STA"
+            },
+            {
+              "res": "INFO"
+            }
+          ]
+        },
+        "date": "20160812",
+        "time": "020400",
+        "jnyL": [
+          {
+            "jid": "1|20565|1|86|12082016",
+            "date": "20160811",
+            "prodX": 0,
+            "dirTxt": "S+U Hauptbahnhof",
+            "dirGeo": 25,
+            "stopL": [
+              {
+                "locX": 0,
+                "dInS": true,
+                "dTimeS": "01012100",
+                "dTimeR": "01012100"
+              },
+              {
+                "locX": 1,
+                "aOutS": true,
+                "aTimeS": "01020400",
+                "aTimeR": "01020400",
+                "dInS": true,
+                "dTimeS": "01020400",
+                "dTimeR": "01020400"
+              },
+              {
+                "locX": 2,
+                "aOutS": true,
+                "aTimeS": "01020400",
+                "aTimeR": "01020400",
+                "dInS": true,
+                "dTimeS": "01020400",
+                "dTimeR": "01020400"
+              },
+              {
+                "locX": 3,
+                "aOutS": true,
+                "aTimeS": "01021000",
+                "aTimeR": "01021000"
+              }
+            ],
+            "proc": 0,
+            "pos": {
+              "x": 13369413,
+              "y": 52541527,
+              "z": 0
+            },
+            "ani": {
+              "mSec": [
+                0,
+                10000,
+                20000,
+                30000
+              ],
+              "proc": [
+                0,
+                50,
+                0,
+                0
+              ],
+              "fLocX": [
+                1,
+                1,
+                2,
+                2
+              ],
+              "tLocX": [
+                2,
+                2,
+                4,
+                4
+              ],
+              "dirGeo": [
+                25,
+                25,
+                -1,
+                23
+              ],
+              "poly": {
+                "delta": true,
+                "dim": 2,
+                "crdEncYX": "o_u_IyerpA`DaBbDaB??",
+                "crdEncZ": "",
+                "crdEncS": "NNNN"
+              }
+            }
+          }
+        ],
+        "fpB": "20160811",
+        "fpE": "20161210"
+      },
+      "errTxt": ""
+    }
+  ]
+}
