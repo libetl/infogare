@@ -3,7 +3,7 @@ import moment from 'moment'
 import {Html5Entities} from 'html-entities'
 import haversine from './haversine'
 
-const gares = ({lat, long}) => get(`http://www.raildar.fr/json/gares?lat=${lat}&lng=${long}&dist=20`).then(response => [response.data[0]])
+const gares = ({lat, long}) => get(`http://www.raildar.fr/json/gares?lat=${lat}&lng=${long}&dist=20`).then(response => [{...response.data[0], name_gare: Html5Entities.decode(response.data[0].name_gare)}])
 const departures = (idGare) => get(`http://www.raildar.fr/json/next_missions?id_gare=${idGare}`).then(response => response.data)
 const mission = (idMission) => get(`http://www.raildar.fr/json/get_mission?id_mission=${idMission}`).then(response => response.data)
 const train = (idTrain) => get(`http://www.raildar.fr/json/get_train?id_train=${idTrain}`).then(response => response.data[0])
