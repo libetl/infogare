@@ -4,7 +4,7 @@
     "description": "Sncf le panneau",
     "slug": "sncf-le-panneau",
     "icon": "logo.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "sdkVersion": "20.0.0",
     "primaryColor": "#0d5da6",
     "nodeModulesPath": ".",
