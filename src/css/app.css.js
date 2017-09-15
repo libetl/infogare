@@ -79,9 +79,6 @@ export default styles = StyleSheet.create({
         color: '#dfc81f',
         fontSize:10
     },
-    statusbar: {
-        height: 23
-    },
     signIn: {
         backgroundColor: '#ededed',
         height: 60

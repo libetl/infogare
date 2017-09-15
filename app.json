@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "Sncf le panneau",
+    "description": "Sncf le panneau",
+    "slug": "sncf-le-panneau",
+    "icon": "logo.png",
+    "version": "1.0.0",
+    "sdkVersion": "20.0.0",
+    "primaryColor": "#0d5da6",
+    "nodeModulesPath": ".",
+    "loading": {
+      "icon": "logo.png",
+      "hideExponentText": false,
+      "backgroundColor": "#0d5da6",
+      "backgroundImage": "background.png",
+      "splash": {
+        "backgroundColor": "#0d5da6"
+      }
+    },
+    "androidStatusBarColor": "#ffffff",
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#808080"
+    },
+    "ios": {
+      "bundleIdentifier": "org.toilelibre.libe.trains"
+    },
+    "android": {
+      "package": "org.toilelibre.libe.trains"
+    },
+    "scheme": "exp",
+    "privacy": "public"
+  }
+}

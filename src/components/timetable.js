@@ -15,7 +15,6 @@ export default class Timetable extends React.Component {
         return (
             <View style={styles.container}>
                 <Details rowWidth={this.props.rowWidth} displayNowColon={this.props.displayNowColon} details={this.props.parent.state.departureDetails} onClose={this.props.parent.hideDetails}/>
-                <View style={styles.statusbar}/>
                 <ScrollView style={styles.scrollView} contentContainerStyle={{height: `${this.props.timetable.departures.length * 15}%`}}
                             refreshControl={ <RefreshControl refreshing={this.props.parent.state.currentlyUpdating || false} onRefresh={this.props.parent.updateLocation} /> }>
                 {(!this.props.timetable.departures ? new Array(10) : this.props.timetable.departures).map((departure, i) =>
