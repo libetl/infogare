@@ -29,6 +29,7 @@
       "package": "org.toilelibre.libe.trains"
     },
     "scheme": "exp",
-    "privacy": "public"
+    "privacy": "public",
+    "versionCode": 2
   }
 }
