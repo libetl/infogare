@@ -2,7 +2,7 @@ import {get, post} from 'axios'
 import moment from 'moment'
 import haversine from './haversine'
 
-const maxDistanceInRealTimeMap = 50000
+const maxDistanceInRealTimeMap = 500000
 const thresholdBetweenTimeAndDistance = 5 /*minutes before departure*/
 
 const read = (jnyL, prodL, remL, locL, {lat, long}) => jnyL
