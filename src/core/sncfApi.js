@@ -32,7 +32,7 @@ const departures = (stationId, page = 0, token) => fetch(stationUrl(stationId, m
 
 
 const vehicleJourney = (closestStations, link, fromCoords, token) => fetch(vehicleJourneyUrl(link), defaultEntity(token))
-    .then((result) => {
+    .then(result => {
         const allStops = result.data.vehicle_journeys[0].stop_times.map(
             stop_time => stop_time.stop_point.name.replace(/ /g, '\u00a0').replace(/-/g, '\u2011').replace(/\//g, '\u00a0\u00a0\u00a0\u0338'))
         const allStopsCoords = result.data.vehicle_journeys[0].stop_times.map(stop_time => { return {
@@ -44,7 +44,9 @@ const vehicleJourney = (closestStations, link, fromCoords, token) => fetch(vehic
         const foundStationInJourney = closestStations(fromCoords, allStopsCoords)[0].name
         const indexOfStop = allStops.indexOf(foundStationInJourney)
         const stops = allStops.slice(indexOfStop + 1)
-        return Promise.resolve({link, stops, missionCode, departureStation: indexOfStop === 0})
+        return Promise.resolve({link, stops, missionCode,
+            departureStation: indexOfStop === 0,
+            longMissionCode: result.data.vehicle_journeys[0].name})
     })
 
 const testApi = (token) => fetch(sncfApiPrefix, defaultEntity(token))

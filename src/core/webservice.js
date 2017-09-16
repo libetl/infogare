@@ -76,6 +76,7 @@ export default {
             return {
                 ...departure,
                 departureStation: journey ? journey.departureStation : false,
+                longMissionCode: journey && journey.longMissionCode,
                 dataToDisplay: {
                     ...departure.dataToDisplay,
                     ...addition
@@ -87,7 +88,8 @@ export default {
 
         const realTimeData = await realTimeMap(stationCoords)
         const departuresV4 = departuresV3.map(departure => {
-            const realTimeTrain = realTimeData.filter(train => train.number === departure.savedNumber) [0]
+            const realTimeTrain = realTimeData.find(train => train.number === departure.savedNumber) ||
+                realTimeData.find(train => train.number === departure.longMissionCode)
             const minutesBeforeDeparture = moment(departure.dataToDisplay.time, 'HH:mm').diff(moment(), 'minutes')
             return {...departure,
                 dataToDisplay: {
