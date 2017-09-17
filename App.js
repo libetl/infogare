@@ -83,7 +83,7 @@ export default class App extends React.Component {
         this.setState({displayLocationPrompt: false})
     }
     changeLocation(geo) {
-        this.setState({displayLocationPrompt: false, currentlyUpdating:true})
+        this.setState({geo, displayLocationPrompt: false, currentlyUpdating:true})
         webservice.nextDepartures(geo, this.state.apiToken, this.setState.bind(this))
             .then((timetable) => this.setState({currentlyUpdating:false, timetable}))
     }
