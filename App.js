@@ -25,6 +25,9 @@ export default class App extends React.Component {
         this.refreshScreen = this.refreshScreen.bind(this)
         this.updateTimetable = this.updateTimetable.bind(this)
         this.updateLocation = this.updateLocation.bind(this)
+        this.abortChangeLocation = this.abortChangeLocation.bind(this)
+        this.askForALocation = this.askForALocation.bind(this)
+        this.changeLocation = this.changeLocation.bind(this)
         this.initNow = this.initNow.bind(this)
         this.validateToken = this.validateToken.bind(this)
         this.skip = this.skip.bind(this)
@@ -37,15 +40,14 @@ export default class App extends React.Component {
                 throw new Error('Pas connecté à data.sncf.com/api')
             }
             this.initNow(apiToken)
-        }).catch((e) => this.setState({...this.state, apiToken: null}))
+        }).catch((e) => this.setState({apiToken: null}))
     }
     initNow(apiToken) {
-        this.setState({...this.state, apiToken})
+        this.setState({apiToken})
         navigator.geolocation.getCurrentPosition((position) => {
-                this.setState({...this.state,
-                    geo:{long: position.coords.longitude, lat: position.coords.latitude}})
+                this.setState({geo:{long: position.coords.longitude, lat: position.coords.latitude}})
                 webservice.nextDepartures(this.state.geo, this.state.apiToken, this.setState.bind(this))
-                    .then((timetable) => this.setState({...this.state, timetable,
+                    .then((timetable) => this.setState({timetable,
                         firstScrollY: 3, secondScrollY: 3,
                         displayNowColon:true}))
                     .then(() => setInterval(this.autoScroll, 3000))
@@ -68,19 +70,29 @@ export default class App extends React.Component {
         if (moment().second() === 2 && !this.state.displayNowColon) {
             this.updateTimetable()
         }
-        this.setState({...this.state, displayNowColon: !this.state.displayNowColon})
+        this.setState({displayNowColon: !this.state.displayNowColon})
     }
     updateTimetable(geo) {
-        webservice.nextDepartures(geo || this.state.geo, this.state.apiToken)
-            .then((timetable) => this.setState({...this.state, timetable}))
+        return webservice.nextDepartures(geo || this.state.geo, this.state.apiToken)
+            .then((timetable) => this.setState({timetable}))
+    }
+    askForALocation() {
+        this.setState({displayLocationPrompt: !this.state.displayLocationPrompt})
+    }
+    abortChangeLocation() {
+        this.setState({displayLocationPrompt: false})
+    }
+    changeLocation(geo) {
+        this.setState({displayLocationPrompt: false, currentlyUpdating:true})
+        webservice.nextDepartures(geo, this.state.apiToken, this.setState.bind(this))
+            .then((timetable) => this.setState({currentlyUpdating:false, timetable}))
     }
     updateLocation() {
         this.setState({currentlyUpdating:true})
         navigator.geolocation.getCurrentPosition((position) => {
-            this.setState({...this.state,
-                geo:{long: position.coords.longitude, lat: position.coords.latitude}})
+            this.setState({geo:{long: position.coords.longitude, lat: position.coords.latitude}})
             webservice.nextDepartures(this.state.geo, this.state.apiToken, this.setState.bind(this))
-                .then((timetable) => this.setState({...this.state, currentlyUpdating:false, timetable}))})
+                .then((timetable) => this.setState({currentlyUpdating:false, timetable}))})
     }
     measureView(event, rowName) {
         this.setState({...this.state,
@@ -98,23 +110,26 @@ export default class App extends React.Component {
         webservice.test(newValue)
             .then(() => AsyncStorage.setItem('@store:apiToken', newValue))
             .then(() => this.initNow(newValue))
-            .catch((e) => this.setState({...this.state, loginError:e.message}))
+            .catch((e) => this.setState({loginError:e.message}))
     }
     skip() {
         this.setState({...this.state, apiToken: undefined})
         this.initNow(undefined)
     }
     viewOneDeparture(num) {
-        this.setState({...this.state, departureDetails: this.state.timetable.departures[num]})
+        this.setState({departureDetails: this.state.timetable.departures[num]})
     }
     hideDetails() {
-        this.setState({...this.state, departureDetails: undefined})
+        this.setState({departureDetails: undefined})
     }
     render() {
         if (this.state.apiToken === null) {
             return (<SignUp validateToken={this.validateToken} skip={this.skip} loginError={this.state.loginError}/>)
         }
-        return (<Timetable rowHeight={this.state.row1Height || 60} rowWidth={320} timetable={this.state.timetable}
-                           parent={this} displayNowColon={this.state.displayNowColon}/>)
+        return (<Timetable suggestStations={webservice.suggestStations}
+                           displayLocationPrompt={this.state.displayLocationPrompt}
+                           rowHeight={this.state.row1Height || 60} rowWidth={320}
+                           timetable={this.state.timetable} parent={this}
+                           displayNowColon={this.state.displayNowColon}/>)
     }
 }

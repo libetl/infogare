@@ -1,7 +1,7 @@
 import {get} from 'axios'
 import moment from 'moment'
 import flatten from 'arr-flatten'
-import {closestStations, idfMapping} from './inMemory'
+import {stationsMatching, closestStations, idfMapping} from './inMemory'
 import {getGaresSncfDepartures, combineTchoutchouAndGaresSncf} from './garesSncf'
 import {thresholdBetweenTimeAndDistance, realTimeMap} from './liveMap'
 import tchoutchou from './raildar'
@@ -9,6 +9,7 @@ import {places, inverseGeocoding, departures, vehicleJourney, testApi} from './s
 
 export default {
     test: testApi,
+    suggestStations: (text) => stationsMatching(text),
     nextDepartures: async ({long, lat}, token, notify = () => {}) => {
         const sortedByDateTime = (departuresData) => [].concat.apply([], departuresData).sort((d1, d2) =>
             d1.stop_date_time.base_departure_date_time.localeCompare(d2.stop_date_time.base_departure_date_time))

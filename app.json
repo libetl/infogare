@@ -20,7 +20,7 @@
     "androidStatusBarColor": "#ffffff",
     "androidStatusBar": {
       "barStyle": "light-content",
-      "backgroundColor": "#808080"
+      "backgroundColor": "#ddc15d"
     },
     "ios": {
       "bundleIdentifier": "org.toilelibre.libe.trains"

@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native'
+import { StyleSheet } from 'react-native'
 
 export default styles = StyleSheet.create({
     container: {
@@ -60,10 +60,10 @@ export default styles = StyleSheet.create({
     },
     now: {
         backgroundColor: '#04396d',
-        width:72,
-        height:50,
-        marginTop:20,
-        paddingLeft:10,
+        width: 72,
+        height: 50,
+        marginTop: 20,
+        paddingLeft: 10,
         paddingTop: 5,
         borderStyle: 'solid',
         borderWidth: 1,
@@ -77,10 +77,18 @@ export default styles = StyleSheet.create({
     },
     seconds: {
         color: '#dfc81f',
-        fontSize:10
+        fontSize: 10
     },
     signIn: {
         backgroundColor: '#ededed',
         height: 60
+    },
+    button: {
+        alignItems: 'center',
+        backgroundColor: '#841584',
+        minWidth: 25
+    },
+    buttonText: {
+        color: 'white'
     }
 })
