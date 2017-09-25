@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Platform, Text, TouchableNativeFeedback, View } from 'react-native'
+import {Platform, Text, TouchableHighlight, TouchableNativeFeedback, View} from 'react-native'
 import styles from '../css/app.css'
 import moment from 'moment'
 
@@ -10,13 +10,21 @@ export default class Footer extends React.Component {
     render() {
         return (
             <View style={styles.footer}>
-                <TouchableNativeFeedback
-                    onLongPress={this.props.askForALocation} onPress={this.props.updateLocation} 
-                    background={Platform.OS === 'android' ? TouchableNativeFeedback.SelectableBackground() : ''}>
-                    <View style={styles.button}>
-                        <Text style={styles.buttonText}>↻</Text>
-                    </View>
-                </TouchableNativeFeedback>
+                {Platform.OS === 'android' ?
+                    <TouchableNativeFeedback
+                        onLongPress={this.props.askForALocation} onPress={this.props.updateLocation}
+                        background={TouchableNativeFeedback.SelectableBackground()}>
+                        <View style={styles.button}>
+                            <Text style={styles.buttonText}>↻</Text>
+                        </View>
+                    </TouchableNativeFeedback> :
+                    <TouchableHighlight
+                        onLongPress={this.props.askForALocation} onPress={this.props.updateLocation}>
+                        <View style={styles.button}>
+                            <Text style={styles.buttonText}>↻</Text>
+                        </View>
+                    </TouchableHighlight>
+                }
                 <Text style={styles.footerFont}>Gare trouvée : {this.props.station}</Text>
                 <Text style={styles.now}>
                     <Text style={styles.hoursMinutes}>{
