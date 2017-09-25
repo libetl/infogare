@@ -1,5 +1,5 @@
 import React from 'react'
-import {AsyncStorage, PixelRatio} from 'react-native'
+import {AsyncStorage} from 'react-native'
 import moment from 'moment'
 import webservice from './src/core/webservice'
 import places from './src/core/places'

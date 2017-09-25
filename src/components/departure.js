@@ -1,5 +1,5 @@
 import React from 'react'
-import {Image, PixelRatio, ScrollView, Text, TouchableHighlight, View} from 'react-native'
+import {Image, ScrollView, Text, TouchableHighlight, View} from 'react-native'
 import styles from '../css/app.css'
 import PropTypes from 'prop-types'
 

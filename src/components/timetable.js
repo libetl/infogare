@@ -3,9 +3,10 @@ import Departure from './departure'
 import Footer from './footer'
 import LocationPrompt from './locationPrompt'
 import Details from './details'
-import React from 'react'
-import {RefreshControl, ScrollView, Text, View} from 'react-native'
+import { Constants } from 'expo'
 import PropTypes from 'prop-types'
+import React from 'react'
+import {Platform, RefreshControl, ScrollView, StyleSheet, View} from 'react-native'
 
 export default class Timetable extends React.Component {
     constructor(props) {
@@ -14,6 +15,7 @@ export default class Timetable extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <View style={StyleSheet.create({statusBar: {backgroundColor: '#ddc15d',height: Platform.OS === 'ios' ? Constants.statusBarHeight : 0}}).statusBar} />
                 <LocationPrompt displayLocationPrompt={this.props.displayLocationPrompt} suggestStations={this.props.suggestStations} done={this.props.parent.changeLocation} abortChangeLocation={this.props.parent.abortChangeLocation}/>
                 <Details rowWidth={this.props.rowWidth} displayNowColon={this.props.displayNowColon} details={this.props.parent.state.departureDetails} onClose={this.props.parent.hideDetails}/>
                 <ScrollView style={styles.scrollView} contentContainerStyle={{height: `${this.props.timetable.departures.length * 15}%`}}
