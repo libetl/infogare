@@ -12,7 +12,7 @@ const trafic = ({lat, long}) => get(`http://raildar.fr/json/get_circulation?id_s
 
 const normalize = (gare) => gare.departures.filter(departure => departure.terminus !== gare.name_gare).map(departure => {
     const allStops = departure.mission.arrets.map(arret => arret.name_gare)
-    const number = parseInt(departure.num)
+    const number = parseInt(departure.mission.num) || departure.mission.num
     const radar = gare.trafic.find(train => train.properties.id_train === departure.id_train)
     const trainCoords = radar && radar.geometry.coordinates
     const mode = number < 6000 ? 'Intercités' : number < 10000 ? 'TGV' : number < 153000 ? 'Transilien' : 'TER'
