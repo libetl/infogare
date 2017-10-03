@@ -15,29 +15,31 @@ const normalize = (gare) => gare.departures.filter(departure => departure.termin
     const radar = gare.trafic.find(train => train.properties.id_train === departure.id_train)
     const trainCoords = radar && radar.geometry.coordinates
     const mode = number < 6000 ? 'Intercités' : number < 10000 ? 'TGV' : number < 153000 ? 'Transilien' : 'TER'
+    const now = moment().add({minutes:-10}).format('HH:mm')
+    const heure = moment(departure.time_reel, 'YYYY-MM-DD HH:mm:ssZ').format('HH:mm')
     return {
+        links: departure.links,
         stop_date_time: {
-            base_departure_date_time: moment(departure.time_reel, 'YYYY-MM-DD HH:mm:ssZ').format('YYYYMMDDTHHmmss'),
-            departure_date_time: moment(departure.time_reel, 'YYYY-MM-DD HH:mm:ssZ').format('YYYYMMDDTHHmmss'),
+            base_departure_date_time: heure.localeCompare(now) < 0 ? `${parseInt(heure.split(':')[0]) + 24}:${heure.split(':')[1]}` : heure,
+            departure_date_time: moment(departure.time_reel, 'YYYY-MM-DD HH:mm:ssZ').format('YYYYMMDDTHHmmss')
         },
-        display_informations: {
-            commercial_mode: mode,
+        dataToDisplay: {
+            mode: mode,
             direction: Html5Entities.decode(departure.terminus),
-            code: '',
+            name: '',
             color: '#000000',
-            headsign: number,
+            number: number,
             status: radar && `< ${Math.ceil(haversine({lat: gare.lat, long: gare.lng}, {lat: trainCoords[1], long: trainCoords[0]}))}km`,
             time: moment(departure.time_reel, 'YYYY-MM-DD HH:mm:ssZ').format('HH:mm'),
             stops: allStops.slice(allStops.indexOf(gare.name_gare) + 1).map(stop =>
                 Html5Entities.decode(stop).replace(/ /g, '\u00a0').replace(/-/g, '\u2011').replace(/\//g, '\u00a0\u00a0\u00a0\u0338'))
-        }
-    }})
+        }}})
 
 export default {
-     gares,
-     get: gares => Promise.all(gares.map(async gare => {
+    gares,
+    get: gares => Promise.all(gares.map(async gare => {
         return {...gare, trafic: (await trafic({lat: gare.lat, long: gare.lng})),
-                departures:(await (departures(gare.id_gare).then(departures => Promise.all(departures.map(async departure => {
-            return {...departure, train:(await train(departure.id_train)), mission:(await mission(departure.id_mission))}})))))}}))
+            departures:(await (departures(gare.id_gare).then(departures => Promise.all(departures.map(async departure => {
+                return {...departure, train:(await train(departure.id_train)), mission:(await mission(departure.id_mission))}})))))}}))
         .then(gares => gares.map(gare => normalize(gare)))
 }
