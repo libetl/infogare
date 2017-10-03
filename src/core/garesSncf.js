@@ -1,8 +1,9 @@
 import {get} from 'axios'
+import flatten from 'arr-flatten'
 
 const garesSncfDeparturesUrl = (tvs) => `https://www.gares-sncf.com/fr/train-times/${tvs.toUpperCase()}/departure`
 
-const getGaresSncfDepartures = (tvs) => get(garesSncfDeparturesUrl(tvs))
+const getGareSncfDepartures = (tvs) => get(garesSncfDeparturesUrl(tvs))
     .then(result => {
         if (!Array.isArray(result.data.trains)) {
             return Promise.resolve([])
@@ -18,5 +19,7 @@ const getGaresSncfDepartures = (tvs) => get(garesSncfDeparturesUrl(tvs))
         }
     }))
 
+const getGaresSncfDepartures = (tvsList) => Promise.all(tvsList.map(tvs => getGareSncfDepartures(tvs)))
+    .then(departuresArrays => flatten(departuresArrays))
 
 export {getGaresSncfDepartures}

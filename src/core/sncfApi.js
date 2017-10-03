@@ -1,5 +1,6 @@
 import {get} from 'axios'
 import moment from 'moment'
+import flatten from 'arr-flatten'
 
 const sncfApiPrefix = 'https://api.sncf.com/v1/coverage/sncf/'
 const stationUrlPrefix = `${sncfApiPrefix}stop_areas/`
@@ -24,6 +25,10 @@ const inverseGeocoding = (coords, token) => fetch(inverseGeocodingUrl(coords), d
         }
         return Promise.resolve(result.data.places_nearby)
     }).catch((error) => {console.log(`${inverseGeocodingUrl(coords)}: ${error}`);throw error})
+
+const stationsDepartures = (stationsAreas, token) => token ?
+    Promise.all(stationsAreas.map(stationArea => departures(stationArea.id, 0, token))).then(departuresArrays => flatten(departuresArrays)) :
+    Promise.resolve([])
 
 const departures = (stationId, page = 0, token) => fetch(stationUrl(stationId, moment(), page), defaultEntity(token))
     .then(result => Promise.resolve([...result.data.departures]))
@@ -72,4 +77,9 @@ const vehicleJourney = (closestStations, link, fromCoords, token) => fetch(vehic
 
 const testApi = (token) => fetch(sncfApiPrefix, defaultEntity(token))
 
-export {places, inverseGeocoding, departures, vehicleJourney, testApi}
+const twoClosestJourneys = (departures, closestStations, stationCoords, token) => token ? Promise.all(
+    departures.slice(0, 2).map(departure => departure.links &&
+        vehicleJourney(closestStations, departure.links.find(link => link.type === 'vehicle_journey').id,
+            stationCoords, token))) : Promise.resolve([])
+
+export {places, inverseGeocoding, stationsDepartures, vehicleJourney, testApi, twoClosestJourneys}

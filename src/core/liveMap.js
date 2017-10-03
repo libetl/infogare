@@ -3,7 +3,6 @@ import moment from 'moment'
 import haversine from './haversine'
 
 const maxDistanceInRealTimeMap = 500000
-const thresholdBetweenTimeAndDistance = 5 /*minutes before departure*/
 
 const read = (jnyL, prodL, remL, locL, {lat, long}) => jnyL
     .map(train => {return {...train, ...prodL[train.prodX], remarks:[...new Set(train.remL)].map(rem => {return {...rem, ...remL[rem.remX]}}),
@@ -20,5 +19,14 @@ const realTimeRER = ({lat, long}) => get(`http://sncf-maps.hafas.de/carto/livema
 
 const realTimeMap = ({lat, long}) => Promise.all([realTimeTrains({lat, long}), realTimeRER({lat, long})])
     .then(([trains, rer]) => trains.concat(rer))
+    .then(trains => trains.map(train => {
+        return {
+            savedNumber: train.number,
+            dataToDisplay: {
+                status: train.names.includes('OnPlatform') && train.distance <= 0.4 ? 'à quai' :
+                    train ? `< ${Math.ceil(train.distance)} km` : 'retardé'
+            }
+        }
+    }))
 
-export {thresholdBetweenTimeAndDistance, realTimeMap}
+export {realTimeMap}

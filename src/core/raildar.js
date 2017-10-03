@@ -2,6 +2,7 @@ import {get} from 'axios'
 import moment from 'moment'
 import {Html5Entities} from 'html-entities'
 import haversine from './haversine'
+import flatten from 'arr-flatten'
 
 const gares = ({lat, long}) => get(`http://www.raildar.fr/json/gares?lat=${lat}&lng=${long}&dist=20`).then(response => [{...response.data[0], name_gare: Html5Entities.decode(response.data[0].name_gare)}])
 const departures = (idGare) => get(`http://www.raildar.fr/json/next_missions?id_gare=${idGare}`).then(response => response.data)
@@ -42,4 +43,5 @@ export default {
             departures:(await (departures(gare.id_gare).then(departures => Promise.all(departures.map(async departure => {
                 return {...departure, train:(await train(departure.id_train)), mission:(await mission(departure.id_mission))}})))))}}))
         .then(gares => gares.map(gare => normalize(gare)))
+        .then(garesArrays => flatten(garesArrays))
 }
