@@ -11,4 +11,6 @@ const merged = (existingData, newData) => existingData.map(existingRow => {
 
 const combineAll = (departures, allAdditions) => allAdditions.reduce((partiallyMerged, additions) => merged(partiallyMerged, additions), departures)
 
-export {combineAll, sortByTime}
+const removeDuplicates = (departures) => departures.filter(departure => departures.find(departure2 => departure2.savedNumber === departure.savedNumber) === departure )
+
+export {combineAll, sortByTime, removeDuplicates}

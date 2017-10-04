@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import {Modal, Text, StyleSheet, TextInput, View} from 'react-native'
+import {Modal, Platform, Text, StyleSheet, TextInput, View} from 'react-native'
 
 export default class LocationPrompt extends React.Component {
     constructor(props) {
@@ -21,6 +21,7 @@ export default class LocationPrompt extends React.Component {
     render() {
         return (
             <Modal isOpen={this.state.displayLocationPrompt === true} visible={this.state.displayLocationPrompt === true} onRequestClose={this.state.abortChangeLocation} position={'center'} animationType={'slide'} contentLabel='Change location'>
+                <View style={StyleSheet.create({statusBar: {backgroundColor: '#ddc15d',height: Platform.OS === 'ios' ? Constants.statusBarHeight : 0}}).statusBar} />
                 <View style={StyleSheet.create({screen:{backgroundColor:'#f4ecf4',display:'flex',flexDirection:'column',flexWrap:'nowrap',height:'100%',width:'100%'}}).screen}>
                     <Text>Nom de la gare :</Text>
                     <TextInput value={this.state.newStationName} onChangeText={this.handleTextChange} style={{ width: 200, height: 44, padding: 8 }} />

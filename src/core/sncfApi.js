@@ -30,7 +30,7 @@ const stationsDepartures = (stationsAreas, token) => token ?
     Promise.all(stationsAreas.map(stationArea => departures(stationArea.id, 0, token))).then(departuresArrays => flatten(departuresArrays)) :
     Promise.resolve([])
 
-const departures = (stationId, page = 0, token) => fetch(stationUrl(stationId, moment(), page), defaultEntity(token))
+const departures = (stationId, page = 0, token) => fetch(stationUrl(stationId, moment().subtract(-1, 'minutes'), page), defaultEntity(token))
     .then(result => Promise.resolve([...result.data.departures]))
     .then(result => result.map(departure => {return {
     links: departure.links,
@@ -82,4 +82,6 @@ const twoClosestJourneys = (departures, closestStations, stationCoords, token) =
         vehicleJourney(closestStations, departure.links.find(link => link.type === 'vehicle_journey').id,
             stationCoords, token))) : Promise.resolve([])
 
-export {places, inverseGeocoding, stationsDepartures, vehicleJourney, testApi, twoClosestJourneys}
+const findStations = (stationCoords, stationName, token) => inverseGeocoding(stationCoords, token).catch(e => places(stationName, token))
+
+export {findStations, stationsDepartures, vehicleJourney, testApi, twoClosestJourneys}

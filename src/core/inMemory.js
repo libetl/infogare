@@ -21,4 +21,7 @@ const closestStations = ({long, lat}, stationsList = registeredStations) => {
 const stationsMatching = (text, stationsList = registeredStations) => text.length < 1 ? [] :
     stationsList.filter(station => station.fields.intitule_gare.toLowerCase().includes(text.toLowerCase()))
 
-export { stationsMatching, idfMapping, closestStations }
+const findIdfMapping = departures => departures.map(departure => {return {savedNumber:departure.savedNumber,
+    dataToDisplay:{number:idfMapping[departure.savedNumber] || departure.dataToDisplay.number}}})
+
+export { stationsMatching, findIdfMapping, closestStations }
