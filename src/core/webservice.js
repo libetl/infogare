@@ -1,10 +1,10 @@
-import {sortByTime, combineAll, removeDuplicates, feedWithSources} from './combine'
+import {sortByTime, combineAll, removeDuplicates, feedWithSources} from './operations/combine'
 import {get} from 'axios'
-import inMemory from './inMemory'
-import garesSncf from './garesSncf'
-import liveMap from './liveMap'
-import raildar from './raildar'
-import sncfApi from './sncfApi'
+import inMemory from './sources/inMemory'
+import garesSncf from './sources/garesSncf'
+import liveMap from './sources/liveMap'
+import raildar from './sources/raildar'
+import sncfApi from './sources/sncfApi'
 
 export default {
     test: sncfApi.testApi,

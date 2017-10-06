@@ -2,8 +2,7 @@ node_modules/
 .expo/
 npm-debug.*
 .idea
-src/core/*.json
-src/core/places.js
+src/core/data/*
 .vscode
 jsconfig.json
 package-lock.json

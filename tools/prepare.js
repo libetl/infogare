@@ -48,10 +48,10 @@ writeMappingEmitter.on('endOfFile', (data) => {
     }
 })
 
-getSingleFileFromWebZips(idfUrls, 'trips.txt', './src/core/idfMapping.json')
+getSingleFileFromWebZips(idfUrls, 'trips.txt', './src/core/data/idfMapping.json')
 get(gares).then((result) => {
-    fs.writeFileSync('./src/core/stations.json', JSON.stringify(result.data))
-    fs.writeFileSync('./src/core/places.js',
+    fs.writeFileSync('./src/core/data/stations.json', JSON.stringify(result.data))
+    fs.writeFileSync('./src/core/data/places.js',
             'export default ' + JSON.stringify(result.data.filter(station => station.geometry).map(station => {return {name:station.fields.intitule_gare
                 .replace(/[àâ]/g, 'a').replace(/[éèêë]/g, 'e').replace(/î/g, 'i').replace(/ô/g, 'o').replace(/[ùûü]/g, 'u')
                 .replace(/[^a-zA-Z]/g, '').replace(/^./, station.fields.intitule_gare[0].toLowerCase()),

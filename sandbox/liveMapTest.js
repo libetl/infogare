@@ -1,6 +1,6 @@
 //import fs from 'fs'
-import {realTimeMap} from '../src/core/liveMap'
-import places from '../src/core/places'
+import {realTimeMap} from '../src/core/sources/liveMap'
+import places from '../src/core/data/places'
 import coloredStringifiedJson from './coloredStringifiedJson'
 //import nock from 'nock'
 

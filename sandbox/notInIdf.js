@@ -1,5 +1,5 @@
 import webservice from '../src/core/webservice'
-import places from '../src/core/places'
+import places from '../src/core/data/places'
 import coloredStringifiedJson from './coloredStringifiedJson'
 
 webservice.nextDepartures(places.antibes, process.env.TOKEN)

@@ -2,7 +2,6 @@ import React from 'react'
 import {AsyncStorage} from 'react-native'
 import moment from 'moment'
 import webservice from './src/core/webservice'
-import places from './src/core/places'
 import SignUp from './src/components/signup'
 import Timetable from './src/components/timetable'
 
@@ -12,7 +11,7 @@ export default class App extends React.Component {
         super(props)
         this.state = {
             ...props,
-            geo: places.parisGaredeLyon,
+            geo: {lat:48.880185,long:2.355151},
             timetable: {
                 departures: new Array(10).fill({}), station: 'chargement...',
                 firstScrollY: 3, secondScrollY: 3, stopsListOfRow1Height: 0, stopsListOfRow2Height: 0,

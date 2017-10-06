@@ -1,7 +1,7 @@
 import {get} from 'axios'
 import moment from 'moment'
 import {Html5Entities} from 'html-entities'
-import haversine from './haversine'
+import haversine from '../operations/haversine'
 import flatten from 'arr-flatten'
 
 const stationSearch = ({lat, long}) => get(`http://www.raildar.fr/json/gares?lat=${lat}&lng=${long}&dist=20`).then(response => [{...response.data[0], name_gare: Html5Entities.decode(response.data[0].name_gare)}])

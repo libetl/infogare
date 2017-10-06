@@ -1,5 +1,5 @@
-import stations from './stations'
-import idfMapping from './idfMapping.json'
+import stations from '../data/stations'
+import idfMapping from '../data/idfMapping.json'
 
 const registeredStations = stations.filter (e => e.fields.tvs)
 
