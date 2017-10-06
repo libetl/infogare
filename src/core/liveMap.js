@@ -17,7 +17,7 @@ const realTimeTrains = ({lat, long}) => get(`http://sncf-maps.hafas.de/carto/liv
 const realTimeRER = ({lat, long}) => get(`http://sncf-maps.hafas.de/carto/livemaps?service=journeygeopos&rect=${Math.floor(long * 1E6) - maxDistanceInRealTimeMap},${Math.floor(lat * 1E6) - maxDistanceInRealTimeMap},${Math.floor(long * 1E6) + maxDistanceInRealTimeMap},${Math.floor(lat * 1E6) + maxDistanceInRealTimeMap}&i=35000&is=10000&prod=27&date=${moment().format('YYYYMMDD')}&time=${moment().format('HHmm00')}&livemapCallback=`, {headers:{Referer:'http://www.sncf.com/fr/geolocalisation'}})
     .then(({data:{svcResL:[{res:{common:{prodL,remL,locL},jnyL}}]}}) => read(jnyL, prodL, remL, locL, {lat, long}))
 
-const realTimeMap = ({lat, long}) => Promise.all([realTimeTrains({lat, long}), realTimeRER({lat, long})])
+const realTimeMap = ({stationCoords:{lat, long}}) => Promise.all([realTimeTrains({lat, long}), realTimeRER({lat, long})])
     .then(([trains, rer]) => trains.concat(rer))
     .then(trains => trains.map(train => {
         return {
@@ -29,4 +29,4 @@ const realTimeMap = ({lat, long}) => Promise.all([realTimeTrains({lat, long}), r
         }
     }))
 
-export {realTimeMap}
+export default {feed:[realTimeMap]}

@@ -19,10 +19,11 @@ const read = (stationName) =>
                             .filter(subSubChildNode => !subSubChildNode.text || !subSubChildNode.text.match(/^\s+$/)))])
                     .map(childNodes => {
                         return {
+                            number: parseInt(childNodes["1"]["1"].attributes["2"].value),
                             dataToDisplay: {
                                 mode: childNodes["2"]["0"].innerText["0"],
                                 direction: (childNodes["1"]["0"].text || childNodes["1"]["0"].innerText["0"]).trim(),
-                                number: parseInt(childNodes["1"]["1"].attributes["2"].value),
+                                number: childNodes["1"]["1"].attributes["2"].value,
                                 time: (childNodes["0"]["0"].innerText["0"]||'').replace('h', ':'),
                                 platform: childNodes["3"]["0"].text === '--' ? undefined : childNodes["3"]["0"].text,
                                 stops: []}}}))

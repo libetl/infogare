@@ -16,7 +16,7 @@ const places = (label, token) => fetch(placeUrl(label), defaultEntity(token))
     .then((result) => Promise.resolve([result.data.places.filter(place => place.embedded_type === 'stop_area').sort((a, b) => b.quality - a.quality)]))
 
 const inverseGeocoding = (coords, token) => fetch(inverseGeocodingUrl(coords), defaultEntity(token))
-    .then((result) => {
+    .then(result => {
         if (!result) {
             return Promise.resolve([])
         }
@@ -26,7 +26,7 @@ const inverseGeocoding = (coords, token) => fetch(inverseGeocodingUrl(coords), d
         return Promise.resolve(result.data.places_nearby)
     }).catch((error) => {console.log(`${inverseGeocodingUrl(coords)}: ${error}`);throw error})
 
-const stationsDepartures = (stationsAreas, token) => token ?
+const baseDepartures = (stationsAreas, token) => token ?
     Promise.all(stationsAreas.map(stationArea => departures(stationArea.id, 0, token))).then(departuresArrays => flatten(departuresArrays)) :
     Promise.resolve([])
 
@@ -77,11 +77,11 @@ const vehicleJourney = (closestStations, link, fromCoords, token) => fetch(vehic
 
 const testApi = (token) => fetch(sncfApiPrefix, defaultEntity(token))
 
-const twoClosestJourneys = (departures, closestStations, stationCoords, token) => token ? Promise.all(
-    departures.slice(0, 2).map(departure => departure.links &&
+const twoClosestJourneys = ({baseDepartures, closestStations, stationCoords, token}) => token ? Promise.all(
+    baseDepartures.slice(0, 2).map(departure => departure.links &&
         vehicleJourney(closestStations, departure.links.find(link => link.type === 'vehicle_journey').id,
             stationCoords, token))) : Promise.resolve([])
 
-const findStations = (stationCoords, stationName, token) => inverseGeocoding(stationCoords, token).catch(e => places(stationName, token))
+const stationSearch = (stationCoords, stationName, token) => inverseGeocoding(stationCoords, token).catch(e => places(stationName, token))
 
-export {findStations, stationsDepartures, vehicleJourney, testApi, twoClosestJourneys}
+export default {testApi, stationSearch, baseDepartures, feed:[twoClosestJourneys]}

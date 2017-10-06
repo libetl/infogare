@@ -13,4 +13,8 @@ const combineAll = (departures, allAdditions) => allAdditions.reduce((partiallyM
 
 const removeDuplicates = (departures) => departures.filter(departure => departures.find(departure2 => departure2.savedNumber === departure.savedNumber) === departure )
 
-export {combineAll, sortByTime, removeDuplicates}
+const feedWithSources = (sources, context) => sources.map(source => source.feed)
+                                                     .reduce((acc, value) => acc.concat(value), [])
+                                                     .map(method => method.call(null, context))
+
+export {combineAll, sortByTime, removeDuplicates, feedWithSources}

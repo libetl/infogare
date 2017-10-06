@@ -4,7 +4,7 @@ import {Html5Entities} from 'html-entities'
 import haversine from './haversine'
 import flatten from 'arr-flatten'
 
-const gares = ({lat, long}) => get(`http://www.raildar.fr/json/gares?lat=${lat}&lng=${long}&dist=20`).then(response => [{...response.data[0], name_gare: Html5Entities.decode(response.data[0].name_gare)}])
+const stationSearch = ({lat, long}) => get(`http://www.raildar.fr/json/gares?lat=${lat}&lng=${long}&dist=20`).then(response => [{...response.data[0], name_gare: Html5Entities.decode(response.data[0].name_gare)}])
 const departures = (idGare) => get(`http://www.raildar.fr/json/next_missions?id_gare=${idGare}`).then(response => response.data)
 const mission = (idMission) => get(`http://www.raildar.fr/json/get_mission?id_mission=${idMission}`).then(response => response.data)
 const train = (idTrain) => get(`http://www.raildar.fr/json/get_train?id_train=${idTrain}`).then(response => response.data[0])
@@ -38,8 +38,8 @@ const normalize = (gare) => gare.departures.filter(departure => departure.termin
         }}})
 
 export default {
-    gares,
-    get: gares => Promise.all(gares.map(async gare => {
+    stationSearch,
+    baseDepartures: gares => Promise.all(gares.map(async gare => {
         return {...gare, trafic: (await trafic({lat: gare.lat, long: gare.lng})),
             departures:(await (departures(gare.id_gare).then(departures => Promise.all(departures.map(async departure => {
                 return {...departure, train:(await train(departure.id_train)), mission:(await mission(departure.id_mission))}})))))}}))
