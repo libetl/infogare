@@ -1,4 +1,5 @@
 import {get, post} from 'axios'
+import moment from 'moment'
 import DomParser from 'dom-parser'
 import inMemory from './inMemory'
 import capitalize from '../operations/capitalize'
@@ -31,10 +32,12 @@ const baseDepartures = stationAreas => get('http://www.sncf.com/fr/horaires-info
                             .map(subSubChildNode => {return {text: subSubChildNode.text, attributes: subSubChildNode.attributes, innerText: (subSubChildNode.childNodes||[]).map(subSubSubChildNode => subSubSubChildNode.text)}})
                             .filter(subSubChildNode => !subSubChildNode.text || !subSubChildNode.text.match(/^\s+$/)))])
                     .map(childNodes => {
+                        const now = moment().add({minutes:-10}).format('HH:mm')
+                        const hour = (childNodes["0"]["0"].innerText["0"]||'').replace('h', ':')
                         return {
                             savedNumber: parseInt(childNodes["1"]["1"].attributes["2"].value),
                             stop_date_time: {
-                                base_departure_date_time: (childNodes["0"]["0"].innerText["0"]||'').replace('h', ':')
+                                base_departure_date_time: hour.localeCompare(now) < 0 ? `${parseInt(hour.split(':')[0]) + 24}:${hour.split(':')[1]}` : hour,
                             },
                             dataToDisplay: {
                                 mode: childNodes["2"]["0"].innerText["0"],
