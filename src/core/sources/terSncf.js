@@ -42,6 +42,7 @@ const findTerJourney = ({baseDepartures, stationsAreas, stationName}) => Promise
         get(journeyUrl(parseInt(stationsAreas[0].fields.uic), stationsAreas[0].fields.intitule_gare,
             stationsAreas[0].fields.region, moment(), departure.savedNumber))
             .then(html => {
+                if (html.data === '') return {savedNumber: departure.savedNumber, dataToDisplay: {stops:['Desserte\u00a0non\u00a0dispo']}}
                 const table = new DomParser().parseFromString(html.data).getElementsByClassName('train_depart_table')[0].childNodes.find(node => node.nodeName === 'tbody')
                     .getElementsByTagName('a').map(a => Html5Entities.decode(a.childNodes[0].text.trim()))
                 const stops = (table.indexOf(stationName) !== -1 ? table.slice(table.indexOf(stationName) + 1) : table)
