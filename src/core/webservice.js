@@ -5,7 +5,7 @@ import sources from './sources'
 export default {
     test: sources.sncfApi.testApi,
     suggestStations: (text) => sources.inMemory.stationsMatching(text),
-    nextDepartures: async ({long, lat}, {token, notify = () => {}, mode = token ? 'sncfApi' : 'raildar'} = {}) => {
+    nextDepartures: async ({long, lat}, {token, notify = () => {}, mode = token ? 'sncfApi' : 'terSncf'} = {}) => {
         const preferredSource = sources[mode]
         const guessedStations = sources.inMemory.closestStations({long, lat})
         const guessedStationName = guessedStations[0].fields.intitule_gare
@@ -13,7 +13,8 @@ export default {
 
         notify({timetable:{station: `${mode === 'raildar' ? 'recherche raildar...' : guessedStationName}\n(mise à jour...)`, departures: new Array(10).fill({})}})
 
-        const stationsAreas = await preferredSource.stationSearch(guessedStationCoords, {guessedStationName, token})
+        const stationsAreas = preferredSource.stationSearch ?
+            await preferredSource.stationSearch(guessedStationCoords, {guessedStationName, token}) : guessedStations
         const stationName = stationsAreas[0].name_gare || guessedStationName
         const stationCoords = guessedStationCoords || {lat: stationsAreas[0].lat, long: stationsAreas[0].lng}
         const iataCodes = (guessedStations || sources.inMemory.closestStations(stationCoords)).map(station => (station.fields.tvs || '').split('|')[0])

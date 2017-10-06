@@ -1,7 +1,6 @@
 import {get, post} from 'axios'
 import moment from 'moment'
 import DomParser from 'dom-parser'
-import inMemory from './inMemory'
 import capitalize from '../operations/capitalize'
 
 const readCookie = (response, name) => response.headers['set-cookie'].find(x => x.includes(name)).replace(/; HttpOnly/ig, '').replace(/; path=\//ig, '').replace(/; Domain=\.sncf\.com/ig, '')
@@ -49,6 +48,4 @@ const baseDepartures = stationAreas => get('http://www.sncf.com/fr/horaires-info
                                 platform: childNodes["3"]["0"].text === '--' ? undefined : childNodes["3"]["0"].text,
                                 stops: []}}})))
 
-const stationSearch = (coords) => Promise.resolve(inMemory.closestStations(coords))
-
-export default {stationSearch, baseDepartures, feed:[]}
+export default {baseDepartures, feed:[]}

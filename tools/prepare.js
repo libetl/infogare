@@ -20,35 +20,48 @@ const asStream = (data) => {
     return passThrough
 }
 
-const getSingleFileFromWebZips = (urls, singleFile, dest) => {
-    const resultData = {filesRead : 0, mappings:{}, urls, dest}
-    urls.map(url => download(url).then(data =>
-        asStream(data).pipe(unzip.Parse()).on('entry', (entry) =>
-            entry.path === singleFile ?
-                zipEntryEmitter.emit('fileFound', entry, resultData) : entry.autodrain())))}
+const getSingleFileFromWebZips = (urls, files, dests) => {
+    const resultData = new Array(files.length).fill(0).map(() => {return {filesRead : 0, mappings:{}, lineMappings:{}, urls, dest:''}})
+    urls.map(url => download(url).then(data => asStream(data).pipe(unzip.Parse()).on('entry', entry => {
+            if(files.indexOf(entry.path) !== -1) resultData[files.indexOf(entry.path)].dest = dests[files.indexOf(entry.path)]
+            files.indexOf(entry.path) !== -1 ? zipEntryEmitter.emit('fileFound', entry, resultData[files.indexOf(entry.path)]) :
+                entry.autodrain()})))}
 
 zipEntryEmitter.on('fileFound', (entry, resultData) =>
     entry.pipe(es.split())
         .pipe(es.map((data, callback) => {
-            const result = data.match(/DUA[0-9]+,[0-9]+,DUASN([0-9]{6})F[0-9]{5}-[0-9]_[0-9]{6},"([A-Z]{4})",[01],/)
+            const result = data.match(/(DUA[0-9]+),[0-9]+,DUASN([0-9]{6})F[0-9]{5}-[0-9]_[0-9]{6},"([A-Z]{4})",[01],/)
             if (result) {
-                writeMappingEmitter.emit('mapping', resultData, {number:result[1], mission: result[2]})
+                writeMappingEmitter.emit('trainMapping', resultData, {code: result[1], number:result[2], mission: result[3]})
+            }
+            const lineResult =
+                data.match(/(DUA[0-9]+),DUA[0-9]+,"([^"]+)","[^"]+","",[^,]*,,([0-9a-fA-F]{6}),[0-9a-fA-F]{6}/)
+            if (lineResult) {
+                writeMappingEmitter.emit('lineMapping', resultData, {code: lineResult[1], line:lineResult[2], color:lineResult[3]})
             }
             callback()
         })).on('end', () =>
         writeMappingEmitter.emit('endOfFile', resultData)))
 
-writeMappingEmitter.on('mapping', (data, oneMapping) =>
-    data.mappings[oneMapping.number] = oneMapping.mission)
+writeMappingEmitter.on('trainMapping', (data, oneMapping) => {
+    data.mappings[oneMapping.number] = oneMapping.mission
+    data.lineMappings[oneMapping.number] = oneMapping.code
+})
 
-writeMappingEmitter.on('endOfFile', (data) => {
-    data.filesRead++;
+writeMappingEmitter.on('lineMapping', (data, oneMapping) => {
+    data.mappings[oneMapping.line] = oneMapping.color
+    data.lineMappings[oneMapping.code] = oneMapping.line
+})
+
+writeMappingEmitter.on('endOfFile', data => {
+    data.filesRead++
     if (data.filesRead === data.urls.length) {
         fs.writeFile(data.dest, JSON.stringify(data.mappings), () => {})
+        fs.writeFile(data.dest.replace('.json', '-lines.json'), JSON.stringify(data.lineMappings), () => {})
     }
 })
 
-getSingleFileFromWebZips(idfUrls, 'trips.txt', './src/core/data/idfMapping.json')
+getSingleFileFromWebZips(idfUrls, ['trips.txt', 'routes.txt'], ['./src/core/data/idfMapping.json', './src/core/data/routes.json'])
 get(gares).then((result) => {
     fs.writeFileSync('./src/core/data/stations.json', JSON.stringify(result.data))
     fs.writeFileSync('./src/core/data/places.js',
