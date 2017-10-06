@@ -22,7 +22,7 @@ export default {
 
         notify({timetable:{station: `${stationName}\n(mise à jour...)`, departures: baseDepartures.map(x => x.dataToDisplay)}})
 
-        const context = {baseDepartures, stationCoords, token, iataCodes, closestStations: sources.inMemory.closestStations}
+        const context = {baseDepartures, stationName, stationsAreas, stationCoords, token, iataCodes, closestStations: sources.inMemory.closestStations}
         const departures = combineAll(baseDepartures, await Promise.all(feedWith(sources, context)))
 
         return Promise.resolve({station: stationName, departures: departures.map(x => x.dataToDisplay)})

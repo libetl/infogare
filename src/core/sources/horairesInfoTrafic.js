@@ -21,10 +21,12 @@ const promiseWhile = (condition, execute, oldResponse) => iterate(condition, old
     () => execute().then(newResponse => promiseWhile(condition, execute, newResponse)))
 
 const baseDepartures = stationAreas => get('http://www.sncf.com/fr/horaires-info-trafic').then(infoRequest =>
-        promiseWhile(response => new DomParser().parseFromString(response.data).getElementsByClassName('tab-depart').length === 0,
+        promiseWhile(response => !response.data.includes('Error 404 - Page not found') &&
+            new DomParser().parseFromString(response.data).getElementsByClassName('tab-depart').length === 0,
             () => post(`http://www.sncf.com/sncf/gare`, `libelleGare=${stationAreas[0].fields.intitule_gare.toLowerCase().replace(/[^a-z]/g, '-')}`, {maxRedirects: 0}).catch(redirect =>
                 get(`http://www.sncf.com${redirect.response.headers.location.replace('/sncf/..', '')}`, headersFrom(infoRequest, redirect))))
-                .then(response => new DomParser().parseFromString(response().data).getElementsByClassName('tab-depart')
+                .then(response => response().data.includes('Error 404 - Page not found') ? [] :
+                    new DomParser().parseFromString(response().data).getElementsByClassName('tab-depart')
                     .find(element => element.nodeName === 'ul').childNodes
                     .filter(childNode => childNode.nodeName !== '#text')
                     .map(childNode => [...childNode.childNodes.filter(subChildNode => subChildNode.nodeName !== '#text')
