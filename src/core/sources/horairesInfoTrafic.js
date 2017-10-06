@@ -6,7 +6,7 @@ const readCookie = (response, name) => response.headers['set-cookie'].find(x => 
 const headersFrom = (infoRequest, redirect) => {return {headers:{
     Cookie: [readCookie(infoRequest, 'SNCCACHE'), readCookie(infoRequest, 'SNC_city'), readCookie(redirect.response, 'JSESSIONID'), readCookie(redirect.response, 'SNCSESSION')].join('; ')}}}
 
-const read = (stationName) =>
+const baseDepartures = (stationName) =>
     get('http://www.sncf.com/fr/horaires-info-trafic').then(infoRequest =>
         post(`http://www.sncf.com/sncf/gare`, `libelleGare=${stationName}`, {maxRedirects: 0}).catch(redirect =>
             get(`http://www.sncf.com${redirect.response.headers.location.replace('/sncf/..', '')}`, headersFrom(infoRequest, redirect))
@@ -36,4 +36,4 @@ const read = (stationName) =>
                             stops:new DomParser().parseFromString(train2Html.data).getElementsByTagName('li')}},
                             ...partialData.slice(2)]))))
 
-export {read}
+export default {baseDepartures, feed:[]}

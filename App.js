@@ -45,7 +45,7 @@ export default class App extends React.Component {
         this.setState({apiToken})
         navigator.geolocation.getCurrentPosition((position) => {
                 this.setState({geo:{long: position.coords.longitude, lat: position.coords.latitude}})
-                webservice.nextDepartures(this.state.geo, this.state.apiToken, this.setState.bind(this))
+                webservice.nextDepartures(this.state.geo, {token: this.state.apiToken, notify: this.setState.bind(this)})
                     .then((timetable) => this.setState({timetable,
                         firstScrollY: 3, secondScrollY: 3,
                         displayNowColon:true}))
@@ -72,7 +72,7 @@ export default class App extends React.Component {
         this.setState({displayNowColon: !this.state.displayNowColon})
     }
     updateTimetable(geo) {
-        return webservice.nextDepartures(geo || this.state.geo, this.state.apiToken)
+        return webservice.nextDepartures(geo || this.state.geo, {token: this.state.apiToken})
             .then((timetable) => this.setState({timetable}))
     }
     askForALocation() {
@@ -83,14 +83,14 @@ export default class App extends React.Component {
     }
     changeLocation(geo) {
         this.setState({geo, displayLocationPrompt: false, currentlyUpdating:true})
-        webservice.nextDepartures(geo, this.state.apiToken, this.setState.bind(this))
+        webservice.nextDepartures(geo, {token: this.state.apiToken, notify:this.setState.bind(this)})
             .then((timetable) => this.setState({currentlyUpdating:false, timetable}))
     }
     updateLocation() {
         this.setState({currentlyUpdating:true})
         navigator.geolocation.getCurrentPosition((position) => {
             this.setState({geo:{long: position.coords.longitude, lat: position.coords.latitude}})
-            webservice.nextDepartures(this.state.geo, this.state.apiToken, this.setState.bind(this))
+            webservice.nextDepartures(this.state.geo, {token: this.state.apiToken, notify:this.setState.bind(this)})
                 .then((timetable) => this.setState({currentlyUpdating:false, timetable}))})
     }
     measureView(event, rowName) {

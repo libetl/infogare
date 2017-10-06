@@ -82,6 +82,6 @@ const twoClosestJourneys = ({baseDepartures, closestStations, stationCoords, tok
         vehicleJourney(closestStations, departure.links.find(link => link.type === 'vehicle_journey').id,
             stationCoords, token))) : Promise.resolve([])
 
-const stationSearch = (stationCoords, stationName, token) => inverseGeocoding(stationCoords, token).catch(e => places(stationName, token))
+const stationSearch = (stationCoords, {stationName, token}) => inverseGeocoding(stationCoords, token).catch(e => places(stationName, token))
 
 export default {testApi, stationSearch, baseDepartures, feed:[twoClosestJourneys]}
