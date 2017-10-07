@@ -1,6 +1,6 @@
 {
   "name": "sncf-le-panneau",
-  "version": "0.1.0",
+  "version": "1.0.2",
   "private": true,
   "devDependencies": {
     "react-native-scripts": "1.5.0",
@@ -12,7 +12,7 @@
     "babel-register": "^6.26.0",
     "download": "6.2.5",
     "event-stream": "^3.3.4",
-    "exp": "^43.0.0",
+    "exp": "^44.0.0",
     "unzip2": "0.2.5",
     "nock": "^9.0.14"
   },
