@@ -38,7 +38,7 @@ const baseDepartures = (stationsAreas) =>
                 }}).filter(departure => departure))
 
 const findTerJourney = ({baseDepartures, stationsAreas, stationName}) => Promise.all(baseDepartures.map(departure =>
-    baseDepartures.indexOf(departure) > 1 ? Promise.resolve({}) :
+    baseDepartures.indexOf(departure) > 1 || !stationsAreas[0].fields ? Promise.resolve({}) :
         get(journeyUrl(parseInt(stationsAreas[0].fields.uic), stationsAreas[0].fields.intitule_gare,
             stationsAreas[0].fields.region, moment(), departure.savedNumber))
             .then(html => {
