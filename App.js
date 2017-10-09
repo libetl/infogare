@@ -2,7 +2,6 @@ import React from 'react'
 import {AsyncStorage} from 'react-native'
 import moment from 'moment'
 import webservice from './src/core/webservice'
-import SignUp from './src/components/signup'
 import Timetable from './src/components/timetable'
 
 console.disableYellowBox = true
@@ -10,7 +9,7 @@ export default class App extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            ...props,
+            ...props, settingsOpened: false,
             geo: {lat:48.880185,long:2.355151},
             timetable: {
                 departures: new Array(10).fill({}), station: 'chargement...',
@@ -32,6 +31,8 @@ export default class App extends React.Component {
         this.skip = this.skip.bind(this)
         this.viewOneDeparture = this.viewOneDeparture.bind(this)
         this.hideDetails = this.hideDetails.bind(this)
+        this.openSettings = this.openSettings.bind(this)
+        this.closeSettings = this.closeSettings.bind(this)
     }
     componentDidMount() {
         AsyncStorage.getItem('@store:apiToken').then((apiToken) => {
@@ -52,7 +53,7 @@ export default class App extends React.Component {
                     .then(() => setInterval(this.autoScroll, 3000))
             },
             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
-        setInterval(this.refreshScreen, 500)
+        //setInterval(this.refreshScreen, 500)
     }
     autoScroll() {
         const fromTop = 0
@@ -121,10 +122,13 @@ export default class App extends React.Component {
     hideDetails() {
         this.setState({departureDetails: undefined})
     }
+    openSettings() {
+        this.setState({settingsOpened: true})
+    }
+    closeSettings() {
+        this.setState({settingsOpened: false})
+    }
     render() {
-        if (this.state.apiToken === null) {
-            return (<SignUp validateToken={this.validateToken} skip={this.skip} loginError={this.state.loginError}/>)
-        }
         return (<Timetable suggestStations={webservice.suggestStations}
                            displayLocationPrompt={this.state.displayLocationPrompt}
                            rowHeight={this.state.row1Height || 60} rowWidth={320}

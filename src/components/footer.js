@@ -11,19 +11,35 @@ export default class Footer extends React.Component {
         return (
             <View style={styles.footer}>
                 {Platform.OS === 'android' ?
-                    <TouchableNativeFeedback
-                        onLongPress={this.props.askForALocation} onPress={this.props.updateLocation}
-                        background={TouchableNativeFeedback.SelectableBackground()}>
-                        <View style={styles.button}>
-                            <Text style={styles.buttonText}>↻</Text>
-                        </View>
-                    </TouchableNativeFeedback> :
-                    <TouchableHighlight
-                        onLongPress={this.props.askForALocation} onPress={this.props.updateLocation}>
-                        <View style={styles.button}>
-                            <Text style={styles.buttonText}>↻</Text>
-                        </View>
-                    </TouchableHighlight>
+                    <View style={{flexDirection:'column'}}>
+                        <TouchableNativeFeedback
+                            onLongPress={this.props.askForALocation} onPress={this.props.updateLocation}
+                            background={TouchableNativeFeedback.SelectableBackground()}>
+                            <View style={styles.button}>
+                                <Text style={styles.buttonText}>↻</Text>
+                            </View>
+                        </TouchableNativeFeedback>
+                        <TouchableNativeFeedback
+                            onPress={this.props.openSettings}
+                            background={TouchableNativeFeedback.SelectableBackground()}>
+                            <View style={styles.button}>
+                                <Text style={styles.buttonText}>⚙</Text>
+                            </View>
+                        </TouchableNativeFeedback>
+                    </View> : <View>
+                        <TouchableHighlight
+                            onLongPress={this.props.askForALocation} onPress={this.props.updateLocation}>
+                            <View style={styles.button}>
+                                <Text style={styles.buttonText}>↻</Text>
+                            </View>
+                        </TouchableHighlight>
+                        <TouchableHighlight
+                            onPress={this.props.openSettings}>
+                            <View style={styles.button}>
+                                <Text style={styles.buttonText}>⚙</Text>
+                            </View>
+                        </TouchableHighlight>
+                    </View>
                 }
                 <Text style={styles.footerFont}>Gare trouvée : {this.props.station}</Text>
                 <Text style={styles.now}>

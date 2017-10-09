@@ -2,6 +2,7 @@ import styles from '../css/app.css'
 import Departure from './departure'
 import Footer from './footer'
 import LocationPrompt from './locationPrompt'
+import Settings from './settings'
 import Details from './details'
 import { Constants } from 'expo'
 import PropTypes from 'prop-types'
@@ -17,6 +18,7 @@ export default class Timetable extends React.Component {
             <View style={styles.container}>
                 <View style={StyleSheet.create({statusBar: {backgroundColor: '#ddc15d',height: Platform.OS === 'ios' ? Constants.statusBarHeight : 0}}).statusBar} />
                 <LocationPrompt displayLocationPrompt={this.props.displayLocationPrompt} suggestStations={this.props.suggestStations} done={this.props.parent.changeLocation} abortChangeLocation={this.props.parent.abortChangeLocation}/>
+                <Settings settingsOpened={this.props.parent.state.settingsOpened} closeSettings={this.props.parent.closeSettings}/>
                 <Details rowWidth={this.props.rowWidth} displayNowColon={this.props.displayNowColon} details={this.props.parent.state.departureDetails} onClose={this.props.parent.hideDetails}/>
                 <ScrollView style={styles.scrollView} contentContainerStyle={{height: `${this.props.timetable.departures.length * 15}%`}}
                             refreshControl={ <RefreshControl refreshing={this.props.parent.state.currentlyUpdating || false} onRefresh={this.props.parent.updateLocation} /> }>
@@ -26,7 +28,7 @@ export default class Timetable extends React.Component {
                                rowHeight={this.props.rowHeight} rowWidth={this.props.rowWidth}/>)}
                     <View style={styles.bottomPaddingAfterScrolldown}/>
                 </ScrollView>
-                <Footer station={this.props.timetable.station} displayNowColon={this.props.displayNowColon} askForALocation={this.props.parent.askForALocation} updateLocation={this.props.parent.updateLocation}/>
+                <Footer station={this.props.timetable.station} openSettings={this.props.parent.openSettings} displayNowColon={this.props.displayNowColon} askForALocation={this.props.parent.askForALocation} updateLocation={this.props.parent.updateLocation}/>
             </View>
         )
     }

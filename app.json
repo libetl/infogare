@@ -12,10 +12,7 @@
       "icon": "logo.png",
       "hideExponentText": false,
       "backgroundColor": "#0d5da6",
-      "backgroundImage": "background.png",
-      "splash": {
-        "backgroundColor": "#0d5da6"
-      }
+      "backgroundImage": "background.png"
     },
     "androidStatusBarColor": "#ffffff",
     "androidStatusBar": {
