@@ -10,6 +10,7 @@ export default class App extends React.Component {
         super(props)
         this.state = {
             ...props, settingsOpened: false,
+            dataSources: ['terSncf', 'inMemory', 'liveMap'],
             geo: {lat:48.880185,long:2.355151},
             timetable: {
                 departures: new Array(10).fill({}), station: 'chargement...',
@@ -33,6 +34,7 @@ export default class App extends React.Component {
         this.hideDetails = this.hideDetails.bind(this)
         this.openSettings = this.openSettings.bind(this)
         this.closeSettings = this.closeSettings.bind(this)
+        this.onDataSourceListChange = this.onDataSourceListChange.bind(this)
     }
     componentDidMount() {
         AsyncStorage.getItem('@store:apiToken').then((apiToken) => {
@@ -53,7 +55,7 @@ export default class App extends React.Component {
                     .then(() => setInterval(this.autoScroll, 3000))
             },
             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
-        //setInterval(this.refreshScreen, 500)
+        setInterval(this.refreshScreen, 500)
     }
     autoScroll() {
         const fromTop = 0
@@ -127,6 +129,13 @@ export default class App extends React.Component {
     }
     closeSettings() {
         this.setState({settingsOpened: false})
+    }
+    onDataSourceListChange(dataSource, added) {
+        if (added) {
+            this.setState({dataSources:[...this.state.dataSources, dataSource]})
+        }else {
+            this.setState({dataSources:this.state.dataSources.filter(dataSource1 => dataSource1 !== dataSource)})
+        }
     }
     render() {
         return (<Timetable suggestStations={webservice.suggestStations}
