@@ -37,12 +37,7 @@ export default class App extends React.Component {
         this.onDataSourceListChange = this.onDataSourceListChange.bind(this)
     }
     componentDidMount() {
-        AsyncStorage.getItem('@store:apiToken').then((apiToken) => {
-            if (apiToken === null) {
-                throw new Error('Pas connecté à data.sncf.com/api')
-            }
-            this.initNow(apiToken)
-        }).catch((e) => this.setState({apiToken: null}))
+        AsyncStorage.getItem('@store:apiToken').then(apiToken => this.initNow(apiToken))
     }
     initNow(apiToken) {
         this.setState({apiToken})
