@@ -84,4 +84,6 @@ const twoClosestJourneys = ({baseDepartures, closestStations, stationCoords, tok
 
 const stationSearch = (stationCoords, {stationName, token}) => inverseGeocoding(stationCoords, token).catch(e => places(stationName, token))
 
-export default {testApi, stationSearch, baseDepartures, feed:[twoClosestJourneys]}
+export default {testApi, stationSearch, baseDepartures, feed:[twoClosestJourneys],
+                metadata: {features:['stations', 'departures', 'journeys'], everywhere: true,
+                    ratings:{relevancy: 3, reliability: 5, sustainability: 4}}}

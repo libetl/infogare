@@ -33,4 +33,6 @@ const findColor = ({baseDepartures}) => baseDepartures.map(departure => departur
 const findName = ({baseDepartures}) => baseDepartures.map(departure => departure.dataToDisplay.name ? {} :
     {savedNumber:departure.savedNumber, dataToDisplay:{name:  codeToLine[numberToCode[departure.savedNumber]]}})
 
-export default { stationsMatching, feed:[findIdfMapping, findColor, findName], closestStations }
+export default { stationsMatching, feed:[findIdfMapping, findColor, findName], closestStations,
+    metadata: {features:['stations', 'colors', 'codes'], everywhere: true,
+    ratings:{relevancy: 3, reliability: 2, sustainability: 1}}}

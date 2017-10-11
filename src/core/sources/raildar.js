@@ -44,5 +44,6 @@ export default {
             departures:(await (departures(gare.id_gare).then(departures => Promise.all(departures.map(async departure => {
                 return {...departure, train:(await train(departure.id_train)), mission:(await mission(departure.id_mission))}})))))}}))
         .then(gares => gares.map(gare => normalize(gare)))
-        .then(garesArrays => flatten(garesArrays))
-}
+        .then(garesArrays => flatten(garesArrays)),
+    metadata: {features:['stations', 'departures', 'journeys', 'geolocation'], everywhere: false,
+        ratings:{relevancy: 2, reliability: 4, sustainability: 4}}}

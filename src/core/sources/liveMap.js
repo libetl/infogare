@@ -29,4 +29,5 @@ const realTimeMap = ({stationCoords:{lat, long}}) => Promise.all([realTimeTrains
         }
     }))
 
-export default {feed:[realTimeMap]}
+export default {feed:[realTimeMap], metadata: {features: ['geolocation'], everywhere: true,
+    ratings:{relevancy: 4, reliability: 1, sustainability: 2}}}

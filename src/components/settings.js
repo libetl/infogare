@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import {Constants} from 'expo'
 import React from 'react'
 import {Button, Modal, Platform, ScrollView, StyleSheet, Switch, Text, TextInput, View} from 'react-native'
+import webservice from '../core/webservice'
 
 export default class Settings extends React.Component {
     constructor(props) {
@@ -54,6 +55,15 @@ export default class Settings extends React.Component {
         const ratingText = {
             fontSize: 12
         }
+        const featuresTranslations = {
+            platforms: 'quais',
+            departures: 'départs',
+            stations: 'gares',
+            colors: 'couleurs',
+            codes: 'codes',
+            journeys: 'dessertes',
+            geolocation: 'géolocalisation'
+        }
         return (
             <Modal isOpen={this.props.settingsOpened === true} visible={this.props.settingsOpened === true} onRequestClose={this.props.closeSettings} position={'center'} animationType={'slide'} contentLabel='Settings'>
                 <View style={StyleSheet.create({statusBar: {backgroundColor: '#ddc15d',height: Platform.OS === 'ios' ? Constants.statusBarHeight : 0}}).statusBar} />
@@ -67,13 +77,9 @@ export default class Settings extends React.Component {
                         <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>Perennité</Text></View><Text style={settingName}>le service peut il être supprimé définitivement du jour au lendemain ?</Text></View>
                         <View style={oneSetting}><View><Text>Attention : la source 'sncf api' nécessite d'être enregistré sur http://data.sncf.com/api</Text></View></View>
                         <Text style={titleInGreen}>Activer les sources suivantes :</Text>
-                        <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>garesSncf</Text><Text style={settingDescription}>Quais (grandes gares)</Text></View><Switch style={smallInput} id="garesSncf" label="garesSncf" value={this.props.dataSources.includes('garesSncf')} onValueChange={(value) => this.props.onDataSourceListChange('garesSncf', value)}/><View style={ratings}><View style={oneRating}><Text style={ratingText}>Pertinence★★★☆☆</Text></View><View style={oneRating}><Text style={ratingText}>Fiabilité★★★★☆</Text></View><View style={oneRating}><Text style={ratingText}>Perennité★★☆☆☆</Text></View></View></View>
-                        <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>horairesInfoTrafic</Text><Text style={settingDescription}>Départs (grandes gares)</Text></View><Switch style={smallInput} id="horairesInfoTrafic" label="horairesInfoTrafic" value={this.props.dataSources.includes('horairesInfoTrafic')} onValueChange={(value) => this.props.onDataSourceListChange('horairesInfoTrafic', value)}/><View style={ratings}><View style={oneRating}><Text style={ratingText}>Pertinence★★★☆☆</Text></View><View style={oneRating}><Text style={ratingText}>Fiabilité★★★★☆</Text></View><View style={oneRating}><Text style={ratingText}>Perennité★☆☆☆☆</Text></View></View></View>
-                        <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>inMemory</Text><Text style={settingDescription}>Gares, Couleurs et codes</Text></View><Switch style={smallInput} id="inMemory" label="inMemory" value={this.props.dataSources.includes('inMemory')} onValueChange={(value) => this.props.onDataSourceListChange('inMemory', value)}/><View style={ratings}><View style={oneRating}><Text style={ratingText}>Pertinence★★★☆☆</Text></View><View style={oneRating}><Text style={ratingText}>Fiabilité★★★★★</Text></View><View style={oneRating}><Text style={ratingText}>Perennité★★★★★</Text></View></View></View>
-                        <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>liveMap</Text><Text style={settingDescription}>Géolocalisation</Text></View><Switch style={smallInput} id="liveMap" label="liveMap" value={this.props.dataSources.includes('liveMap')} onValueChange={(value) =>this.props.onDataSourceListChange('liveMap', value)}/><View style={ratings}><View style={oneRating}><Text style={ratingText}>Pertinence★★★★☆</Text></View><View style={oneRating}><Text style={ratingText}>Fiabilité★☆☆☆☆</Text></View><View style={oneRating}><Text style={ratingText}>Perennité★★☆☆☆</Text></View></View></View>
-                        <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>raildar</Text><Text style={settingDescription}>Gares + Départs + Dessertes + Géolocalisation (grandes gares)</Text></View><Switch style={smallInput} id="raildar" label="raildar" value={this.props.dataSources.includes('raildar')} onValueChange={(value) => this.props.onDataSourceListChange('raildar', value)}/><View style={ratings}><View style={oneRating}><Text style={ratingText}>Pertinence★★☆☆☆</Text></View><View style={oneRating}><Text style={ratingText}>Fiabilité★★★★☆</Text></View><View style={oneRating}><Text style={ratingText}>Perennité★★★★☆</Text></View></View></View>
-                        <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>sncf api</Text><Text style={settingDescription}>Gares + Départs + Dessertes</Text></View><Switch style={smallInput} id="sncfApi" label="sncfApi" value={this.props.dataSources.includes('sncfApi')} onValueChange={(value) => this.props.onDataSourceListChange('sncfApi', value)}/><View style={ratings}><View style={oneRating}><Text style={ratingText}>Pertinence★★★☆☆</Text></View><View style={oneRating}><Text style={ratingText}>Fiabilité★★★★★</Text></View><View style={oneRating}><Text style={ratingText}>Perennité★★★★☆</Text></View></View></View>
-                        <View style={oneSetting}><View style={settingTitle}><Text style={settingName}>ter sncf</Text><Text style={settingDescription}>Gares + Départs + Quais + Dessertes</Text></View><Switch style={smallInput} id="terSncf" label="terSncf" value={this.props.dataSources.includes('terSncf')} onValueChange={(value) => this.props.onDataSourceListChange('terSncf', value)}/><View style={ratings}><View style={oneRating}><Text style={ratingText}>Pertinence★★★★★</Text></View><View style={oneRating}><Text style={ratingText}>Fiabilité★★☆☆☆</Text></View><View style={oneRating}><Text style={ratingText}>Perennité★☆☆☆☆</Text></View></View></View>
+                        {Object.entries(webservice.dataSources).map(([name, metadata]) =>
+                            <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>{name}</Text><Text style={settingDescription}>{metadata.features.map(feature => featuresTranslations[feature]).join('+\n')}{metadata.everywhere ? '' : ' (grandes gares)'}</Text></View><Switch style={smallInput} id={name} label={name} value={this.props.dataSources.includes(name)} onValueChange={(value) => this.props.onDataSourceListChange(name, value)}/><View style={ratings}><View style={oneRating}><Text style={ratingText}>Pertinence{new Array(metadata.ratings.relevancy).fill('★')}{new Array(5 - metadata.ratings.relevancy).fill('☆')}</Text></View><View style={oneRating}><Text style={ratingText}>Fiabilité{new Array(metadata.ratings.reliability).fill('★')}{new Array(5 - metadata.ratings.reliability).fill('☆')}</Text></View><View style={oneRating}><Text style={ratingText}>Perennité{new Array(metadata.ratings.sustainability).fill('★')}{new Array(5 - metadata.ratings.sustainability).fill('☆')}</Text></View></View></View>
+                        )}
                         <Text style={titleInGreen}>Autorisation pour api sncf</Text>
                         <View style={oneSetting}><View style={settingTitle}><Text style={settingDescription}>Si le token est valide, l'accès à la source 'sncf api' est possible</Text></View><TextInput style={freeField} id="token" label="token" value={this.props.token}/></View>
                     </View>

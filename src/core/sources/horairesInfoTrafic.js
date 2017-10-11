@@ -48,4 +48,5 @@ const baseDepartures = stationAreas => get('http://www.sncf.com/fr/horaires-info
                                 platform: childNodes["3"]["0"].text === '--' ? undefined : childNodes["3"]["0"].text,
                                 stops: []}}})))
 
-export default {baseDepartures, feed:[]}
+export default {baseDepartures, feed:[], metadata: {features: ['departures'], everywhere: false,
+    ratings:{relevancy: 3, reliability: 2, sustainability: 1}}}

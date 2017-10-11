@@ -49,4 +49,6 @@ const findTerJourney = ({baseDepartures, stationsAreas, stationName}) => Promise
                     .map(name => name.replace(/ /g, '\u00a0').replace(/-/g, '\u2011').replace(/\//g, '\u00a0\u00a0\u00a0\u0338'))
                 return {savedNumber: departure.savedNumber, dataToDisplay: {stops}}})))
 
-export default {baseDepartures, feed:[findTerJourney]}
+export default {baseDepartures, feed:[findTerJourney],
+    metadata: {features:['departures', 'journeys','platforms','journeys'], everywhere: true,
+        ratings:{relevancy: 5, reliability: 2, sustainability: 1}}}

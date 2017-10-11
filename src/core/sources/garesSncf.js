@@ -22,4 +22,5 @@ const getGareSncfDepartures = (tvs) => get(garesSncfDeparturesUrl(tvs))
 const getGaresSncfDepartures = ({iataCodes:tvsList}) => Promise.all(tvsList.map(tvs => getGareSncfDepartures(tvs)))
     .then(departuresArrays => flatten(departuresArrays))
 
-export default {feed:[getGaresSncfDepartures]}
+export default {feed:[getGaresSncfDepartures],
+    metadata:{features:['platforms'], everywhere: false, ratings:{relevancy: 3, reliability: 4, sustainability: 2}}}

@@ -12,6 +12,7 @@ export default class App extends React.Component {
             ...props, settingsOpened: false,
             dataSources: ['terSncf', 'inMemory', 'liveMap'],
             geo: {lat:48.880185,long:2.355151},
+            dataSourceByFeature: {platforms: 'terSncf', departures: 'terSncf', stations: 'inMemory', colors: 'inMemory', codes: 'inMemory', journeys: 'terSncf', geolocation: 'liveMap'},
             timetable: {
                 departures: new Array(10).fill({}), station: 'chargement...',
                 firstScrollY: 3, secondScrollY: 3, stopsListOfRow1Height: 0, stopsListOfRow2Height: 0,
@@ -43,7 +44,7 @@ export default class App extends React.Component {
         this.setState({apiToken})
         navigator.geolocation.getCurrentPosition((position) => {
                 this.setState({geo:{long: position.coords.longitude, lat: position.coords.latitude}})
-                webservice.nextDepartures(this.state.geo, {token: this.state.apiToken, notify: this.setState.bind(this)})
+                webservice.nextDepartures(this.state.geo, {token: this.state.apiToken, notify: this.setState.bind(this), dataSourceByFeature:this.state.dataSourceByFeature})
                     .then((timetable) => this.setState({timetable,
                         firstScrollY: 3, secondScrollY: 3,
                         displayNowColon:true}))
@@ -70,7 +71,7 @@ export default class App extends React.Component {
         this.setState({displayNowColon: !this.state.displayNowColon})
     }
     updateTimetable(geo) {
-        return webservice.nextDepartures(geo || this.state.geo, {token: this.state.apiToken})
+        return webservice.nextDepartures(geo || this.state.geo, {token: this.state.apiToken, dataSourceByFeature:this.state.dataSourceByFeature})
             .then((timetable) => this.setState({timetable}))
     }
     askForALocation() {
@@ -81,14 +82,14 @@ export default class App extends React.Component {
     }
     changeLocation(geo) {
         this.setState({geo, displayLocationPrompt: false, currentlyUpdating:true})
-        webservice.nextDepartures(geo, {token: this.state.apiToken, notify:this.setState.bind(this)})
+        webservice.nextDepartures(geo, {token: this.state.apiToken, notify:this.setState.bind(this), dataSourceByFeature:this.state.dataSourceByFeature})
             .then((timetable) => this.setState({currentlyUpdating:false, timetable}))
     }
     updateLocation() {
         this.setState({currentlyUpdating:true})
         navigator.geolocation.getCurrentPosition((position) => {
             this.setState({geo:{long: position.coords.longitude, lat: position.coords.latitude}})
-            webservice.nextDepartures(this.state.geo, {token: this.state.apiToken, notify:this.setState.bind(this)})
+            webservice.nextDepartures(this.state.geo, {token: this.state.apiToken, notify:this.setState.bind(this), dataSourceByFeature:this.state.dataSourceByFeature})
                 .then((timetable) => this.setState({currentlyUpdating:false, timetable}))})
     }
     measureView(event, rowName) {
@@ -126,11 +127,10 @@ export default class App extends React.Component {
         this.setState({settingsOpened: false})
     }
     onDataSourceListChange(dataSource, added) {
-        if (added) {
-            this.setState({dataSources:[...this.state.dataSources, dataSource]})
-        }else {
-            this.setState({dataSources:this.state.dataSources.filter(dataSource1 => dataSource1 !== dataSource)})
-        }
+        const dataSources = added ? [...this.state.dataSources, dataSource] :
+            this.state.dataSources.filter(dataSource1 => dataSource1 !== dataSource)
+        const minimalMapping = webservice.minimalMappingFor(webservice.dataSources, dataSources)
+        this.setState({dataSources, dataSourceByFeature: minimalMapping})
     }
     render() {
         return (<Timetable suggestStations={webservice.suggestStations}
