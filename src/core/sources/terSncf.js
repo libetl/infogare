@@ -24,7 +24,7 @@ const baseDepartures = ({inMemoryData:{stations}}) =>
                         base_departure_date_time: hour.localeCompare(now) < 0 ? `${parseInt(hour.split(':')[0]) + 24}:${hour.split(':')[1]}` : hour,
                     },
                     dataToDisplay: {
-                        mode: oneRow.getElementsByClassName('mode')[0].childNodes[0].text.replace('Train ', '').replace(/^RER .*/, 'RER'),
+                        mode: Html5Entities.decode(oneRow.getElementsByClassName('mode')[0].childNodes[0].text.replace('Train ', '').replace(/^RER .*/, 'RER')),
                         name: oneRow.getElementsByClassName('mode')[0].childNodes[0].text.replace('Train ', '').split(' ')[1],
                         direction: Html5Entities.decode(capitalize(oneRow.getElementsByClassName('destination')[0].getElementsByTagName('a')[0] ?
                             oneRow.getElementsByClassName('destination')[0].getElementsByTagName('a')[0].childNodes[0].text :

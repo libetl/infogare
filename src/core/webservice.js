@@ -14,7 +14,7 @@ export default {
 
         const allowedCombinedSources = Array.from(new Set(Object.values(dataSourceByFeature))).map(sourceName => sources[sourceName])
 
-        const stationsAreas = await sources[dataSourceByFeature.stations].stationSearch(coords, {token, nestedStationSearch:sources.inMemory.stationSearch})
+        const stationsAreas = await sources[dataSourceByFeature.stations || 'inMemory'].stationSearch(coords, {token, nestedStationSearch:sources.inMemory.stationSearch})
         notify({timetable:{station: `${dataSourceByFeature.departures === 'raildar' ? 'recherche raildar...' : stationsAreas.inMemoryData.stationName}\n(mise à jour...)`, departures: new Array(10).fill({})}})
 
         const stationName = stationsAreas.apiData ? stationsAreas.apiData[0].stationName : stationsAreas.inMemoryData.stationName
