@@ -20,7 +20,7 @@ export default {
         const stationName = stationsAreas.apiData ? stationsAreas.apiData[0].stationName : stationsAreas.inMemoryData.stationName
         const stationCoords = stationsAreas.inMemoryData.stationCoords
         const iataCodes = stationsAreas.inMemoryData.stations.map(station => (station.fields.tvs || '').split('|')[0])
-        const baseDepartures = removeDuplicates(sortByTime(await sources[dataSourceByFeature.departures].baseDepartures(stationsAreas, token)))
+        const baseDepartures = !sources[dataSourceByFeature.departures] ? [] :  removeDuplicates(sortByTime(await sources[dataSourceByFeature.departures].baseDepartures(stationsAreas, token)))
         notify({timetable:{station: `${stationName}\n(mise à jour...)`, departures: baseDepartures.map(x => x.dataToDisplay)}})
 
         const context = {baseDepartures, stationName, stationsAreas, stationCoords, token, iataCodes, closestStations: sources.inMemory.closestStations}
