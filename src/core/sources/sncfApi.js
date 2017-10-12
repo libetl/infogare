@@ -27,7 +27,7 @@ const inverseGeocoding = (coords, token) => fetch(inverseGeocodingUrl(coords), d
     }).catch((error) => {console.log(`${inverseGeocodingUrl(coords)}: ${error}`);throw error})
 
 const baseDepartures = (stationsAreas, token) => token ?
-    Promise.all(stationsAreas.map(stationArea => departures(stationArea.id, 0, token))).then(departuresArrays => flatten(departuresArrays)) :
+    Promise.all(stationsAreas.apiData.map(row => departures(row.id, 0, token))).then(departuresArrays => flatten(departuresArrays)) :
     Promise.resolve([])
 
 const departures = (stationId, page = 0, token) => fetch(stationUrl(stationId, moment().subtract(-1, 'minutes'), page), defaultEntity(token))
@@ -82,7 +82,11 @@ const twoClosestJourneys = ({baseDepartures, closestStations, stationCoords, tok
         vehicleJourney(closestStations, departure.links.find(link => link.type === 'vehicle_journey').id,
             stationCoords, token))) : Promise.resolve([])
 
-const stationSearch = (stationCoords, {stationName, token}) => inverseGeocoding(stationCoords, token).catch(e => places(stationName, token))
+const stationSearch = (coords, {token, nestedStationSearch}) => {
+    const stationsAreas = nestedStationSearch(coords, {token})
+    const {stationCoords, stationName} = Object.values(stationsAreas)[0]
+    return inverseGeocoding(stationCoords, token).catch(e => places(stationName, token)).then(apiData => {return {apiData, ...stationsAreas}})
+}
 
 export default {testApi, stationSearch, baseDepartures, feed:[twoClosestJourneys],
                 metadata: {features:['stations', 'departures', 'journeys'], everywhere: true,
