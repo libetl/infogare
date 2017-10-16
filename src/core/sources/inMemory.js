@@ -35,8 +35,11 @@ const findName = ({baseDepartures}) => baseDepartures.map(departure => departure
 
 const stationSearch = (coords) => {
     const foundStations = closestStations(coords)
-    return {inMemoryData:{stations:foundStations, stationName: foundStations[0].fields.intitule_gare,
-        stationCoords: {long: foundStations[0].geometry.coordinates[0], lat: foundStations[0].geometry.coordinates[1]}}}}
+    const stationName = foundStations[0].fields.intitule_gare
+    const stationCoords = {long: foundStations[0].geometry.coordinates[0], lat: foundStations[0].geometry.coordinates[1]}
+    return {stationName, stationCoords, stations:foundStations,
+        iataCodes: foundStations.map(station => (station.fields.tvs || '').split('|')[0]),
+        nestedSearchData:{stations:foundStations, stationName, stationCoords}}}
 
 export default { stationSearch, stationsMatching, feed:[findIdfMapping, findColor, findName], closestStations,
     metadata: {features:['stations', 'colors', 'codes'], everywhere: true,

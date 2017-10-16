@@ -19,7 +19,7 @@ const iterate = (condition, oldResponse, promiseGenerator) => {
 const promiseWhile = (condition, execute, oldResponse) => iterate(condition, oldResponse,
     () => execute().then(newResponse => promiseWhile(condition, execute, newResponse)))
 
-const baseDepartures = ({inMemoryData:{stations}}) => get('http://www.sncf.com/fr/horaires-info-trafic').then(infoRequest =>
+const baseDepartures = ({nestedSearchData:{stations}}) => get('http://www.sncf.com/fr/horaires-info-trafic').then(infoRequest =>
         promiseWhile(response => !response.data.includes('Error 404 - Page not found') &&
             new DomParser().parseFromString(response.data).getElementsByClassName('tab-depart').length === 0,
             () => post(`http://www.sncf.com/sncf/gare`, `libelleGare=${stations[0].fields.intitule_gare.toLowerCase().replace(/[^a-z]/g, '-')}`, {maxRedirects: 0}).catch(redirect =>

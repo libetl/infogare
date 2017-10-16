@@ -15,17 +15,14 @@ export default {
         const allowedCombinedSources = Array.from(new Set(Object.values(dataSourceByFeature))).map(sourceName => sources[sourceName])
 
         const stationsAreas = await sources[dataSourceByFeature.stations || 'inMemory'].stationSearch(coords, {token, nestedStationSearch:sources.inMemory.stationSearch})
-        notify({timetable:{station: `${dataSourceByFeature.departures === 'raildar' ? 'recherche raildar...' : stationsAreas.inMemoryData.stationName}\n(mise à jour...)`, departures: new Array(10).fill({})}})
+        notify({timetable:{station: `${dataSourceByFeature.departures === 'raildar' ? 'recherche raildar...' : stationsAreas.stationName}\n(mise à jour...)`, departures: new Array(10).fill({})}})
 
-        const stationName = stationsAreas.apiData ? stationsAreas.apiData[0].stationName : stationsAreas.inMemoryData.stationName
-        const stationCoords = stationsAreas.inMemoryData.stationCoords
-        const iataCodes = stationsAreas.inMemoryData.stations.map(station => (station.fields.tvs || '').split('|')[0])
-        const baseDepartures = !sources[dataSourceByFeature.departures] ? [] :  removeDuplicates(sortByTime(await sources[dataSourceByFeature.departures].baseDepartures(stationsAreas, token)))
-        notify({timetable:{station: `${stationName}\n(mise à jour...)`, departures: baseDepartures.map(x => x.dataToDisplay)}})
+        const baseDepartures = !sources[dataSourceByFeature.departures] ? [] : removeDuplicates(sortByTime(await sources[dataSourceByFeature.departures].baseDepartures(stationsAreas, token)))
+        notify({timetable:{station: `${stationsAreas.stationName}\n(mise à jour...)`, departures: baseDepartures.map(x => x.dataToDisplay)}})
 
-        const context = {baseDepartures, stationName, stationsAreas, stationCoords, token, iataCodes, closestStations: sources.inMemory.closestStations}
+        const context = {baseDepartures, stationsAreas, token, closestStations: sources.inMemory.closestStations}
         const departures = combineAll(baseDepartures, await Promise.all(feedWith(allowedCombinedSources, context)))
 
-        return Promise.resolve({station: stationName, departures: departures.map(x => x.dataToDisplay)})
+        return Promise.resolve({station: stationsAreas.stationName, departures: departures.map(x => x.dataToDisplay)})
     }
 }

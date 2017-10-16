@@ -1,6 +1,5 @@
 import {get} from 'axios'
 import moment from 'moment'
-import flatten from 'arr-flatten'
 
 const sncfApiPrefix = 'https://api.sncf.com/v1/coverage/sncf/'
 const stationUrlPrefix = `${sncfApiPrefix}stop_areas/`
@@ -27,25 +26,25 @@ const inverseGeocoding = (coords, token) => fetch(inverseGeocodingUrl(coords), d
     }).catch((error) => {console.log(`${inverseGeocodingUrl(coords)}: ${error}`);throw error})
 
 const baseDepartures = (stationsAreas, token) => token ?
-    Promise.all(stationsAreas.apiData.map(row => departures(row.id, 0, token))).then(departuresArrays => flatten(departuresArrays)) :
-    Promise.resolve([])
+    Promise.all(stationsAreas.apiData.map(row => departures(row.id, 0, token))).then(departuresArrays =>
+        departuresArrays.reduce((acc, value) => acc.concat(value), [])) : Promise.resolve([])
 
 const departures = (stationId, page = 0, token) => fetch(stationUrl(stationId, moment().subtract(-1, 'minutes'), page), defaultEntity(token))
     .then(result => Promise.resolve([...result.data.departures]))
     .then(result => result.map(departure => {return {
-    links: departure.links,
-    stop_date_time: departure.stop_date_time,
-    savedNumber: parseInt(departure.display_informations.headsign),
-    dataToDisplay: {
-        mode: departure.display_informations.commercial_mode,
-        direction: departure.display_informations.direction.replace(/ \([^)]+\)$/, ''),
-        name: departure.display_informations.code,
-        color: departure.display_informations.color,
-        number: departure.display_informations.headsign,
-        status: departure.display_informations.status,
-        time: moment(departure.stop_date_time.departure_date_time, 'YYYYMMDDTHHmmss').format('HH:mm'),
-        stops: departure.display_informations.stops
-    }}})).catch((error) => {console.log(`${stationUrl(stationId, moment(), page)}: ${error}`);Promise.resolve([])})
+        links: departure.links,
+        stop_date_time: departure.stop_date_time,
+        savedNumber: parseInt(departure.display_informations.headsign),
+        dataToDisplay: {
+            mode: departure.display_informations.commercial_mode,
+            direction: departure.display_informations.direction.replace(/ \([^)]+\)$/, ''),
+            name: departure.display_informations.code,
+            color: departure.display_informations.color,
+            number: departure.display_informations.headsign,
+            status: departure.display_informations.status,
+            time: moment(departure.stop_date_time.departure_date_time, 'YYYYMMDDTHHmmss').format('HH:mm'),
+            stops: departure.display_informations.stops
+        }}})).catch((error) => {console.log(`${stationUrl(stationId, moment(), page)}: ${error}`);Promise.resolve([])})
 
 
 
@@ -66,9 +65,9 @@ const vehicleJourney = (closestStations, link, fromCoords, token) => fetch(vehic
         return Promise.resolve({
             savedNumber: parseInt(number),
             dataToDisplay: {
-            direction: stops[stops.length - 1],
-            number: missionCode,
-            stops},
+                direction: stops[stops.length - 1],
+                number: missionCode,
+                stops},
             link,
             missionCode,
             departureStation: indexOfStop === 0,
@@ -77,17 +76,19 @@ const vehicleJourney = (closestStations, link, fromCoords, token) => fetch(vehic
 
 const testApi = (token) => fetch(sncfApiPrefix, defaultEntity(token))
 
-const twoClosestJourneys = ({baseDepartures, closestStations, stationCoords, token}) => token ? Promise.all(
-    baseDepartures.slice(0, 2).map(departure => departure.links &&
-        vehicleJourney(closestStations, departure.links.find(link => link.type === 'vehicle_journey').id,
-            stationCoords, token))) : Promise.resolve([])
+const twoClosestJourneys = ({baseDepartures, closestStations, stationsAreas:{stationCoords}, token}) => !token ? Promise.resolve([]) :
+    Promise.all(
+        baseDepartures.slice(0, 2).map(departure => departure.links &&
+            vehicleJourney(closestStations, departure.links.find(link => link.type === 'vehicle_journey').id,
+                stationCoords, token)))
 
 const stationSearch = (coords, {token, nestedStationSearch}) => {
     const stationsAreas = nestedStationSearch(coords, {token})
-    const {stationCoords, stationName} = Object.values(stationsAreas)[0]
-    return inverseGeocoding(stationCoords, token).catch(e => places(stationName, token)).then(apiData => {return {apiData, ...stationsAreas}})
+    const {stationCoords, stationName, stations} = stationsAreas['nestedSearchData']
+    return inverseGeocoding(stationCoords, token).catch(e => places(stationName, token))
+        .then(apiData => {return {apiData, stations, ...stationsAreas, stationCoords, stationName:apiData[0].stop_area.name}})
 }
 
 export default {testApi, stationSearch, baseDepartures, feed:[twoClosestJourneys],
-                metadata: {features:['stations', 'departures', 'journeys'], everywhere: true,
-                    ratings:{relevancy: 3, reliability: 5, sustainability: 4}}}
+    metadata: {features:['stations', 'departures', 'journeys'], everywhere: true,
+        ratings:{relevancy: 3, reliability: 5, sustainability: 4}}}

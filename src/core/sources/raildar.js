@@ -4,7 +4,10 @@ import {Html5Entities} from 'html-entities'
 import haversine from '../operations/haversine'
 
 const stationSearch = ({lat, long}, {nestedStationSearch}) => get(`http://www.raildar.fr/json/gares?lat=${lat}&lng=${long}&dist=20`).then(response => {
-    return {...nestedStationSearch({lat, long}), apiData:response.data.map(row => {return {...row, stationName: Html5Entities.decode(row.name_gare)}})}})
+    return !response.data.length ? {stations:[], apiData:[]} : {...nestedStationSearch({lat, long}),
+        apiData:response.data.filter(row => row.distance === response.data[0].distance).map(row => {
+            const stationName = Html5Entities.decode(row.name_gare)
+            return {...row, stationName}}), stationName:response.data.length && Html5Entities.decode(response.data[0].name_gare)}})
 const departures = (idGare) => get(`http://www.raildar.fr/json/next_missions?id_gare=${idGare}`).then(response => response.data)
 const mission = (idMission) => get(`http://www.raildar.fr/json/get_mission?id_mission=${idMission}`).then(response => response.data)
 const train = (idTrain) => get(`http://www.raildar.fr/json/get_train?id_train=${idTrain}`).then(response => response.data[0])
@@ -24,13 +27,13 @@ const normalize = (gare) => gare.departures.filter(departure => departure.termin
             base_departure_date_time: heure.localeCompare(now) < 0 ? `${parseInt(heure.split(':')[0]) + 24}:${heure.split(':')[1]}` : heure,
             departure_date_time: moment(departure.time_reel, 'YYYY-MM-DD HH:mm:ssZ').format('YYYYMMDDTHHmmss')
         },
-        savedNumber: departure.num,
+        savedNumber: number,
         dataToDisplay: {
             mode: mode,
             direction: Html5Entities.decode(departure.terminus),
             name: '',
-            color: '#000000',
-            number: isNaN(number) && number ? number.substring(0, 4) : number,
+            color: '000000',
+            number: isNaN(number) && number ? number.substring(0, 4) : departure.num,
             status: radar && `< ${Math.ceil(haversine({lat: gare.lat, long: gare.lng}, {lat: trainCoords[1], long: trainCoords[0]}))}km`,
             time: moment(departure.time_reel, 'YYYY-MM-DD HH:mm:ssZ').format('HH:mm'),
             stops: allStops.slice(allStops.indexOf(gare.name_gare) + 1).map(stop =>
