@@ -7,6 +7,12 @@ import webservice from '../core/webservice'
 export default class Settings extends React.Component {
     constructor(props) {
         super(props)
+        this.testToken = this.testToken.bind(this)
+    }
+    testToken(value) {
+        if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value)) {
+            this.props.validateToken(value)
+        }
     }
     render() {
         const titleInGreen = {
@@ -81,7 +87,8 @@ export default class Settings extends React.Component {
                             <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>{name}</Text><Text style={settingDescription}>{metadata.features.map(feature => featuresTranslations[feature]).join('+\n')}{metadata.everywhere ? '' : ' (grandes gares)'}</Text></View><Switch style={smallInput} id={name} label={name} value={this.props.dataSources.includes(name)} onValueChange={(value) => this.props.onDataSourceListChange(name, value)}/><View style={ratings}><View style={oneRating}><Text style={ratingText}>Pertinence{new Array(metadata.ratings.relevancy).fill('★')}{new Array(5 - metadata.ratings.relevancy).fill('☆')}</Text></View><View style={oneRating}><Text style={ratingText}>Fiabilité{new Array(metadata.ratings.reliability).fill('★')}{new Array(5 - metadata.ratings.reliability).fill('☆')}</Text></View><View style={oneRating}><Text style={ratingText}>Perennité{new Array(metadata.ratings.sustainability).fill('★')}{new Array(5 - metadata.ratings.sustainability).fill('☆')}</Text></View></View></View>
                         )}
                         <Text style={titleInGreen}>Autorisation pour api sncf</Text>
-                        <View style={oneSetting}><View style={settingTitle}><Text style={settingDescription}>Si le token est valide, l'accès à la source 'sncf api' est possible</Text></View><TextInput style={freeField} id="token" label="token" value={this.props.token}/></View>
+                        <View style={oneSettingNoBottomRow}><Text>Si le token est valide, l'accès à la source 'sncf api' devient possible</Text></View>
+                        <View style={oneSetting}><View style={settingTitle}><Text style={settingName}>token</Text></View><TextInput style={freeField} id="token" label="token" onChangeText={value => this.testToken(value)} defaultValue={this.props.token}/></View>
                     </View>
                 </ScrollView>
             </Modal>
@@ -94,5 +101,6 @@ Settings.propTypes = {
     closeSettings: PropTypes.func,
     dataSources: PropTypes.array,
     token: PropTypes.string,
-    onDataSourceListChange:PropTypes.func
+    onDataSourceListChange:PropTypes.func,
+    validateToken:PropTypes.func
 }

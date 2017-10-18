@@ -2,16 +2,19 @@ import {get} from 'axios'
 import {sortByTime, combineAll, removeDuplicates, feedWith} from './operations/combine'
 import sources from './sources'
 
+const allDataSources = Object.entries(sources).reduce((acc, [name, {metadata}]) => {return {...acc, [name]: metadata}}, {})
+
 export default {
-    dataSources: Object.entries(sources).reduce((acc, [name, {metadata}]) => {return {...acc, [name]: metadata}}, {}),
+    dataSources: allDataSources,
     test: sources.sncfApi.testApi,
-    minimalMappingFor: (allDataSources, wantedDataSources) => wantedDataSources.sort((a, b) => allDataSources[a].features.length < allDataSources[b].features.length)
-           .reduce((acc, value) => {return {...allDataSources[value].features
-               .map(feature => {return {[feature]: value}}).reduce((acc1, value1) => {return {...acc1, ...value1}}, {}), ...acc}}, {}),
+    minimalMappingFor: (wantedDataSources, listOfDataSources = allDataSources) => {
+        const guess = wantedDataSources.sort((a, b) => listOfDataSources[a].features.length < listOfDataSources[b].features.length)
+           .reduce((acc, value) => {return {...listOfDataSources[value].features
+               .map(feature => {return {[feature]: value}}).reduce((acc1, value1) => {return {...acc1, ...value1}}, {}), ...acc}}, {})
+        return {...guess, stations:(allDataSources[guess.departures]||{}).stationSearch ? guess.departures : guess.stations}},
     suggestStations: (text) => sources.inMemory.stationsMatching(text),
     nextDepartures: async (coords, {token, notify = () => {},
         dataSourceByFeature = {platforms: 'terSncf', departures: 'terSncf', stations: 'inMemory', colors: 'inMemory', codes: 'inMemory', journeys: 'terSncf', geolocation: 'liveMap'}} = {}) => {
-
         const allowedCombinedSources = Array.from(new Set(Object.values(dataSourceByFeature))).map(sourceName => sources[sourceName])
 
         const stationsAreas = await sources[dataSourceByFeature.stations || 'inMemory'].stationSearch(coords, {token, nestedStationSearch:sources.inMemory.stationSearch})
