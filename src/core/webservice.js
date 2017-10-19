@@ -11,10 +11,12 @@ export default {
         const guess = wantedDataSources.sort((a, b) => listOfDataSources[a].features.length < listOfDataSources[b].features.length)
            .reduce((acc, value) => {return {...listOfDataSources[value].features
                .map(feature => {return {[feature]: value}}).reduce((acc1, value1) => {return {...acc1, ...value1}}, {}), ...acc}}, {})
-        return {...guess, stations:(allDataSources[guess.departures]||{}).stationSearch ? guess.departures : guess.stations}},
+        console.log(dataSourceByFeature)
+        return {...guess, stations:(allDataSources[guess.departures]||{}).stationSearch ? guess.departures : guess.stations || 'inMemory'}},
     suggestStations: (text) => sources.inMemory.stationsMatching(text),
     nextDepartures: async (coords, {token, notify = () => {},
         dataSourceByFeature = {platforms: 'terSncf', departures: 'terSncf', stations: 'inMemory', colors: 'inMemory', codes: 'inMemory', journeys: 'terSncf', geolocation: 'liveMap'}} = {}) => {
+        console.log(dataSourceByFeature)
         const allowedCombinedSources = Array.from(new Set(Object.values(dataSourceByFeature))).map(sourceName => sources[sourceName])
 
         const stationsAreas = await sources[dataSourceByFeature.stations || 'inMemory'].stationSearch(coords, {token, nestedStationSearch:sources.inMemory.stationSearch})
