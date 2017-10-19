@@ -24,7 +24,7 @@
     },
     "android": {
       "package": "org.toilelibre.libe.trains",
-      "versionCode": 6
+      "versionCode": 7 
     },
     "scheme": "exp",
     "privacy": "public"
