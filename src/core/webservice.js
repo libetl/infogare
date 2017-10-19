@@ -15,7 +15,7 @@ export default {
     suggestStations: (text) => sources.inMemory.stationsMatching(text),
     nextDepartures: async (coords, {token, notify = () => {},
         dataSourceByFeature = {platforms: 'terSncf', departures: 'terSncf', stations: 'inMemory', colors: 'inMemory', codes: 'inMemory', journeys: 'terSncf', geolocation: 'liveMap'}} = {}) => {
-        console.log(dataSourceByFeature)
+
         const allowedCombinedSources = Array.from(new Set(Object.values(dataSourceByFeature))).map(sourceName => sources[sourceName])
 
         const stationsAreas = await sources[dataSourceByFeature.stations || 'inMemory'].stationSearch(coords, {token, nestedStationSearch:sources.inMemory.stationSearch})
