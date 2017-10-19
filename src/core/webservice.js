@@ -11,7 +11,6 @@ export default {
         const guess = wantedDataSources.sort((a, b) => listOfDataSources[a].features.length < listOfDataSources[b].features.length)
            .reduce((acc, value) => {return {...listOfDataSources[value].features
                .map(feature => {return {[feature]: value}}).reduce((acc1, value1) => {return {...acc1, ...value1}}, {}), ...acc}}, {})
-        console.log(dataSourceByFeature)
         return {...guess, stations:(allDataSources[guess.departures]||{}).stationSearch ? guess.departures : guess.stations || 'inMemory'}},
     suggestStations: (text) => sources.inMemory.stationsMatching(text),
     nextDepartures: async (coords, {token, notify = () => {},
