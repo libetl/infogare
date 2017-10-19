@@ -12,8 +12,7 @@ const bigFetch = s => post(stationUrl(parseInt(s.fields.uic), s.fields.intitule_
     'Filters%5B0%5D.IsUsed=true&Filters%5B0%5D.IsUsed=false&Filters%5B0%5D.Key=TGV_IC&Filters%5B0%5D.Value=TGV&Filters%5B1%5D.IsUsed=true&Filters%5B1%5D.IsUsed=false&Filters%5B1%5D.Key=TRAIN_TER&Filters%5B1%5D.Value=TER+TRAIN&Filters%5B2%5D.IsUsed=true&Filters%5B2%5D.IsUsed=false&Filters%5B2%5D.Key=CAR_TER&Filters%5B2%5D.Value=TER+CAR&Filters%5B3%5D.IsUsed=true&Filters%5B3%5D.IsUsed=false&Filters%5B3%5D.Key=AUTRES&Filters%5B3%5D.Value=AUTRES&NbDeparturesToDisplay=5&reload=voir+%2B+de+r%C3%A9sultats')
 
 const baseDepartures = ({nestedSearchData:{stations}}) =>
-    bigFetch(stations[0])
-        .then(html => new DomParser().parseFromString(html.data)
+    Promise.all(stations.map(station => bigFetch(station).then(html => new DomParser().parseFromString(html.data)
             .getElementsByClassName('tableresultats')[0]
             .getElementsByTagName('tbody')[0]
             .getElementsByTagName('tr')
@@ -39,7 +38,7 @@ const baseDepartures = ({nestedSearchData:{stations}}) =>
                         stops: []
 
                     }
-                }}).filter(departure => departure))
+                }}).filter(departure => departure)))).then(departuresArray => departuresArray.reduce((acc, value) => acc.concat(value), []))
 
 const findTerJourney = ({baseDepartures, stationsAreas:{nestedSearchData:{stations}, stationName}}) => Promise.all(baseDepartures.map(departure =>
     baseDepartures.indexOf(departure) > 1 || !stations[0].fields ? Promise.resolve({}) :
