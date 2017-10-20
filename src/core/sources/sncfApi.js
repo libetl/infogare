@@ -44,7 +44,7 @@ const departures = (stationId, page = 0, token) => fetch(stationUrl(stationId, m
             number: departure.display_informations.headsign,
             status: departure.display_informations.status,
             time: moment(departure.stop_date_time.departure_date_time, 'YYYYMMDDTHHmmss').format('HH:mm'),
-            stops: departure.display_informations.stops
+            stops: departure.display_informations.stops || []
         }}})).catch((error) => {console.log(`${stationUrl(stationId, moment(), page)}: ${error}`);Promise.resolve([])})
 
 
