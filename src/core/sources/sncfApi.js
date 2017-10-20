@@ -27,7 +27,8 @@ const inverseGeocoding = (coords, token) => fetch(inverseGeocodingUrl(coords), d
 
 const baseDepartures = (stationsAreas, token) => token ?
     Promise.all(stationsAreas.apiData.map(row => departures(row.id, 0, token))).then(departuresArrays =>
-        departuresArrays.reduce((acc, value) => acc.concat(value), [])) : Promise.resolve([])
+        departuresArrays.reduce((acc, value) => acc.concat(value), [])) :
+    Promise.resolve([{links: [], stop_date_time: '00:00', savedNumber: 1,dataToDisplay: {direction:'Token nécessaire'}}])
 
 const departures = (stationId, page = 0, token) => fetch(stationUrl(stationId, moment().subtract(-1, 'minutes'), page), defaultEntity(token))
     .then(result => Promise.resolve([...result.data.departures]))
