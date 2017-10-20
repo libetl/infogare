@@ -86,7 +86,7 @@ const stationSearch = (coords, {token, nestedStationSearch}) => {
     const stationsAreas = nestedStationSearch(coords, {token})
     const {stationCoords, stationName, stations} = stationsAreas['nestedSearchData']
     return inverseGeocoding(stationCoords, token).catch(e => places(stationName, token))
-        .then(apiData => {return {apiData, stations, ...stationsAreas, stationCoords, stationName:apiData[0].stop_area.name}})
+        .then(apiData => {return {apiData, stations, ...stationsAreas, stationCoords, stationName:apiData.length ? apiData[0].stop_area.name : stationsAreas.stationName}})
 }
 
 export default {testApi, stationSearch, baseDepartures, feed:[twoClosestJourneys],
