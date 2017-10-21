@@ -48,7 +48,7 @@ export default class Departure extends React.Component {
                                             <Text style={modeText}>{mode.toUpperCase()}</Text>}
                             {departure.name ? <Text style={lineColorStyle}>{departure.name}</Text> : <Text>{departure.name}</Text>}
                             <Text style={number}>{departure.number}</Text>
-                            <View style={timeAndStatus}><Text style={time}>{departure.time}</Text>{departure.status && (<Text style={status}>{departure.status}</Text>)}</View>
+                            <View style={timeAndStatus}><Text style={time}>{departure.time}</Text>{departure.status ? (<Text style={status}>{departure.status}</Text>) : <Text/>}</View>
                             <Text style={direction}>{directionName}</Text>
                             <Text style={departure.platform && departure.platform.length > 0 ?
                                 platform : styles.noPlatformYet}>{departure.platform}</Text>
