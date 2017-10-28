@@ -7,3 +7,5 @@ src/core/data/*
 jsconfig.json
 package-lock.json
 yarn.lock
+android/
+
