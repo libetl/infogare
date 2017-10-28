@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from '../wrapper.js'
 
-export default styles = StyleSheet.create({
+export default StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#000',

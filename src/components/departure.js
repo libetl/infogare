@@ -1,7 +1,7 @@
 import React from 'react'
-import {Image, ScrollView, Text, TouchableHighlight, View} from 'react-native'
 import styles from '../css/app.css'
 import PropTypes from 'prop-types'
+import {Image, ScrollView, Text, TouchableHighlight, View} from '../wrapper'
 
 export default class Departure extends React.Component {
     constructor(props) {

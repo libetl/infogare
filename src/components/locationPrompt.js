@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { Constants } from 'expo'
-import {Modal, Platform, Text, StyleSheet, TextInput, View} from 'react-native'
+import {Constants, Modal, Platform, Text, StyleSheet, TextInput, View} from '../wrapper'
 
 export default class LocationPrompt extends React.Component {
     constructor(props) {

@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types'
-import {Constants} from 'expo'
 import React from 'react'
-import {Button, Modal, Platform, ScrollView, StyleSheet, Switch, Text, TextInput, View} from 'react-native'
 import webservice from '../core/webservice'
+import {Constants, Button, Modal, Platform, ScrollView, StyleSheet, Switch, Text, TextInput, View} from '../wrapper'
 
 export default class Settings extends React.Component {
     constructor(props) {

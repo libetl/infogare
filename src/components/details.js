@@ -1,6 +1,6 @@
 import React from 'react'
-import {Button, Image, Modal, ScrollView, StyleSheet, Text, View} from 'react-native'
 import moment from 'moment'
+import {Button, Image, Modal, ScrollView, StyleSheet, Text, View} from '../wrapper'
 
 const styles = StyleSheet.create({
     "View": {

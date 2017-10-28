@@ -4,10 +4,9 @@ import Footer from './footer'
 import LocationPrompt from './locationPrompt'
 import Settings from './settings'
 import Details from './details'
-import { Constants } from 'expo'
 import PropTypes from 'prop-types'
 import React from 'react'
-import {Platform, RefreshControl, ScrollView, StyleSheet, View} from 'react-native'
+import {Constants, Platform, RefreshControl, ScrollView, StyleSheet, View} from '../wrapper'
 
 export default class Timetable extends React.Component {
     constructor(props) {
