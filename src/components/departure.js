@@ -42,10 +42,10 @@ export default class Departure extends React.Component {
                 <TouchableHighlight style={{width: '100%', height:'100%'}} onPress={() => this.props.parent.viewOneDeparture(this.props.num)} underlayColor='white'>
                     <View>
                         <View style={this.props.detailed ? split : styles.dontsplit} >
-                            {mode === 'transilien' ? <Image style={modeIcon} source={LoadPicture('../images/transilien.png')} /> :
-                                mode === 'rer' ? <Image style={modeIcon} source={LoadPicture('../images/rer.png')} /> :
-                                    mode === 'intercités' ? <Image style={bigModeIcon} source={LoadPicture('../images/intercites.png')} /> :
-                                        mode === 'intercités de nuit' ? <Image style={bigModeIcon} source={LoadPicture('../images/intercites.png')} /> :
+                            {mode === 'transilien' ? <Image style={modeIcon} source={LoadPicture('transilien')} /> :
+                                mode === 'rer' ? <Image style={modeIcon} source={LoadPicture('rer')} /> :
+                                    mode === 'intercités' ? <Image style={bigModeIcon} source={LoadPicture('intercites')} /> :
+                                        mode === 'intercités de nuit' ? <Image style={bigModeIcon} source={LoadPicture('intercites')} /> :
                                             <Text style={modeText}>{mode.toUpperCase()}</Text>}
                             {departure.name ? <Text style={lineColorStyle}>{departure.name}</Text> : <Text>{departure.name}</Text>}
                             <Text style={number}>{departure.number}</Text>
