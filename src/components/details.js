@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import {Button, Image, Modal, ScrollView, StyleSheet, Text, View} from '../wrapper'
+import {Button, Image, Modal, ScrollView, StyleSheet, Text, View, LoadPicture} from '../wrapper'
 
 const styles = StyleSheet.create({
     "View": {
@@ -419,22 +419,22 @@ export default class Details extends React.Component {
         const stops = details.stops || [{}]
         const finalStop = typeof stops.slice(-1)[0] === 'object' ? '?' : stops.slice(-1)[0]
         return (
-            <Modal animationType={"slide"} visible={this.props.details !== undefined} onRequestClose={this.props.onClose} contentLabel="Details">
+            <Modal  style={{display: this.props.details !== undefined ? 'block' : 'none'}} animationType={"slide"} visible={this.props.details !== undefined} onRequestClose={this.props.onClose} contentLabel="Details">
                 <View style={styles.screen}>
                     <View style={styles.journey}>
                         <View style={styles.description}>
                             <View style={styles.type}><Text style={styles.typeText}>départ</Text></View>
-                            <View style={styles.brand}><Image style={styles.logo} source={require('../images/logo.png')} /></View>
+                            <View style={styles.brand}><Image style={styles.logo} source={LoadPicture('../images/logo.png')} /></View>
                             <View style={styles.punctuality}>
                                 <View><Text style={styles.time}>{(details.time || '').replace(':', 'h')}</Text></View>
                                 <View style={styles.status}><Text style={styles.ontime}>{details.status || `à l'heure`}</Text></View>
                             </View>
                             <View style={styles.direction}><Text style={{fontSize : this.props.rowWidth / (directionName.length * 1.76), fontWeight: "bold", color: "#004494"}}>{directionName}</Text></View>
                             <View style={styles.train}>
-                                <View>{mode === 'transilien' ? <Image style={styles.modeIcon} source={require('../images/transilienB.png')} /> :
-                                    mode === 'rer' ? <Image style={styles.modeIcon} source={require('../images/rerB.png')} /> :
-                                        mode === 'intercités' ? <Image style={styles.modeIcon} source={require('../images/intercitesB.png')} /> :
-                                            mode === 'intercités de nuit' ? <Image style={styles.modeIcon} source={require('../images/intercitesB.png')} /> :
+                                <View>{mode === 'transilien' ? <Image style={styles.modeIcon} source={LoadPicture('../images/transilienB.png')} /> :
+                                    mode === 'rer' ? <Image style={styles.modeIcon} source={LoadPicture('../images/rerB.png')} /> :
+                                        mode === 'intercités' ? <Image style={styles.modeIcon} source={LoadPicture('../images/intercitesB.png')} /> :
+                                            mode === 'intercités de nuit' ? <Image style={styles.modeIcon} source={LoadPicture('../images/intercitesB.png')} /> :
                                                 <Text style={styles.mode}>{mode.toUpperCase()}</Text>}</View>
                                 <View style={styles.number}>
                                     {!details.name ? <Text style={{'display': 'none'}}/> :
@@ -470,7 +470,7 @@ export default class Details extends React.Component {
                         <View style={styles.ground}>
                             <View style={styles.trainDrawing}>
                                 <View style={styles.carriagesList}>
-                                    <View style={styles.front}><Text style={styles.carriageNumber}>&nbsp;</Text><Image style={styles.carriageFront} source={require('../images/rear.png')}/></View>
+                                    <View style={styles.front}><Text style={styles.carriageNumber}>&nbsp;</Text><Image style={styles.carriageFront} source={LoadPicture('../images/rear.png')}/></View>
                                     <View style={styles.carriage}><Text style={styles.carriageNumber}>18</Text><View style={styles.carriageDrawing}/></View>
                                     <View style={styles.carriage}><Text style={styles.carriageNumber}>17</Text><View style={styles.carriageDrawing}/></View>
                                     <View style={styles.carriage}><Text style={styles.carriageNumber}>16</Text><View style={styles.carriageDrawing}/></View>
@@ -479,7 +479,7 @@ export default class Details extends React.Component {
                                     <View style={styles.carriage}><Text style={styles.carriageNumber}>13</Text><View style={styles.carriageDrawing}/></View>
                                     <View style={styles.carriage}><Text style={styles.carriageNumber}>12</Text><View style={styles.carriageDrawing}/></View>
                                     <View style={styles.carriage}><Text style={styles.carriageNumber}>11</Text><View style={styles.carriageDrawing}/></View>
-                                    <View style={styles.rear}><Text style={styles.carriageNumber}>&nbsp;</Text><Image style={styles.carriageRear} source={require('../images/rear.png')}/></View>
+                                    <View style={styles.rear}><Text style={styles.carriageNumber}>&nbsp;</Text><Image style={styles.carriageRear} source={LoadPicture('../images/rear.png')}/></View>
                                 </View>
                             </View>
                             <View style={styles.landmarks}>

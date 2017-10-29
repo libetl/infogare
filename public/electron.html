@@ -10,6 +10,7 @@
     <div id="root"></div>
     <script>
         require('babel-register')
+        global.nativeLibrary = require('react-native-web')
         require('../src/index')
     </script>
   </body>

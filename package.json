@@ -18,14 +18,13 @@
     "unzip2": "^0.2.5",
     "nock": "^9.0.25",
     "npm-run-all": "latest",
-    "react-scripts": "latest"
-
+    "react-scripts": "latest",
+    "electron-packager": "latest"
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {
-    "chrome": "npm-run-all --parallel start-web open-web",
-    "open-web": "node tools/chrome",
-    "start-web": "cross-env BROWSER='none' react-scripts start",
+    "start-desktop": "node node_modules/electron/cli.js -r babel-register ./electron.js",
+    "windows-exe": "electron-packager . \"sncf-le-panneau\" --out=windows --platform=win32 --arch=ia32 --icon=public/favicon.ico",
     "start": "react-native-scripts start",
     "eject": "react-native-scripts eject",
     "eject-web": "react-scripts eject",
@@ -38,8 +37,11 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "react-native-web": "^0.1.12",
     "expo": "^22.0.0",
+    "electron": "^1.7.9",
     "react": "^16.0.0-beta.5",
+    "react-dom": "^16.0.0",
     "react-native": "^0.49.5",
     "axios": "^0.17",
     "dom-parser": "^0.1.5",

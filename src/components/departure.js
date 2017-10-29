@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from '../css/app.css'
 import PropTypes from 'prop-types'
-import {Image, ScrollView, Text, TouchableHighlight, View} from '../wrapper'
+import {Image, ScrollView, Text, TouchableHighlight, View, LoadPicture, IsNative} from '../wrapper'
 
 export default class Departure extends React.Component {
     constructor(props) {
@@ -28,7 +28,7 @@ export default class Departure extends React.Component {
             {color: '#fff', minWidth: this.props.rowWidth * 0.25, fontSize: Math.min(this.props.rowHeight * 0.45, this.props.rowWidth  * 0.20 / mode.length), fontWeight: 'bold', width: 60} :
             {color: '#fff', minWidth: this.props.rowWidth * 0.25, fontSize: Math.min(this.props.rowHeight * 0.23, this.props.rowWidth  * 0.20 / mode.length), fontWeight: 'bold', width: 60}
         const lineHeight = Math.ceil(stopsFontSize + 4)
-        const oneStop = {color: '#fff', fontSize: stopsFontSize, lineHeight, includeFontPadding:false}
+        const oneStop = IsNative ? {color: '#fff', fontSize: stopsFontSize, lineHeight, includeFontPadding:false} : {color: '#fff', fontSize: stopsFontSize, lineHeight}
         const direction = {color: '#fff', fontSize: directionFontSize, overflow: 'hidden', flexGrow: 1}
         const split = {marginBottom: -lineHeight, height: '100%', width: '100%', flexDirection: 'row'}
         const number = {color: '#fff', width: '15%', fontSize: numberFontSize}
@@ -36,15 +36,16 @@ export default class Departure extends React.Component {
         const time = {color: '#dfc81f', fontSize: numberFontSize, fontWeight: 'bold'}
         const status = {color: '#f5a665', fontSize: numberFontSize, fontWeight: 'bold'}
         const platform = {color: '#fff', borderStyle: 'solid', borderWidth: 1, borderColor: '#fff', minWidth: 30, minHeight: 30, borderRadius: 6, width: numberFontSize, height: numberFontSize, textAlign: 'center', flexShrink: 1}
+        const androidSpecialAttributes = IsNative ? {renderToHardwareTextureAndroid: true} : {}
         return (
             <View style={style} onLayout={(event) => this.props.parent.measureView(event, `row${this.props.num}`)}>
                 <TouchableHighlight style={{width: '100%', height:'100%'}} onPress={() => this.props.parent.viewOneDeparture(this.props.num)} underlayColor='white'>
                     <View>
                         <View style={this.props.detailed ? split : styles.dontsplit} >
-                            {mode === 'transilien' ? <Image style={modeIcon} source={require('../images/transilien.png')} /> :
-                                mode === 'rer' ? <Image style={modeIcon} source={require('../images/rer.png')} /> :
-                                    mode === 'intercités' ? <Image style={bigModeIcon} source={require('../images/intercites.png')} /> :
-                                        mode === 'intercités de nuit' ? <Image style={bigModeIcon} source={require('../images/intercites.png')} /> :
+                            {mode === 'transilien' ? <Image style={modeIcon} source={LoadPicture('../images/transilien.png')} /> :
+                                mode === 'rer' ? <Image style={modeIcon} source={LoadPicture('../images/rer.png')} /> :
+                                    mode === 'intercités' ? <Image style={bigModeIcon} source={LoadPicture('../images/intercites.png')} /> :
+                                        mode === 'intercités de nuit' ? <Image style={bigModeIcon} source={LoadPicture('../images/intercites.png')} /> :
                                             <Text style={modeText}>{mode.toUpperCase()}</Text>}
                             {departure.name ? <Text style={lineColorStyle}>{departure.name}</Text> : <Text>{departure.name}</Text>}
                             <Text style={number}>{departure.number}</Text>
@@ -55,7 +56,7 @@ export default class Departure extends React.Component {
                         </View>
                         {this.props.detailed &&
                         <ScrollView ref={(thisRef) => this.props.parent[`stopsListOfRow${this.props.detailsRow}`] = thisRef}
-                                    renderToHardwareTextureAndroid={true}
+                                    {...androidSpecialAttributes}
                                     contentContainerStyle={styles.stops} style={styles.scroll}>
                             <Text onLayout={(event) => this.props.parent.measureView(event, `stopsListOfRow${this.props.detailsRow}`)}>{!departure.stops ? '' :
                                 departure.stops.map(stop => (

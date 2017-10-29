@@ -3,6 +3,62 @@ import React from 'react'
 import webservice from '../core/webservice'
 import {Constants, Button, Modal, Platform, ScrollView, StyleSheet, Switch, Text, TextInput, View} from '../wrapper'
 
+const titleInGreen = {
+    color: '#009586',
+    fontWeight: 'bold',
+    margin: 10
+}
+const oneSetting = {
+    width:'100%',
+    display: 'flex',
+    flex:1,
+    flexDirection: 'row',
+    borderBottomColor: '#CCC',
+    borderBottomWidth: 1,
+    alignItems: 'center'
+}
+const oneSettingNoBottomRow = {
+    width:'100%',
+    display: 'flex',
+    flex:1,
+    flexDirection: 'row',
+    alignItems: 'center'
+}
+const settingTitle = {
+    width: '30%',
+    margin: 20
+}
+const settingName = {
+    color: '#000',
+    fontSize: 15,
+    flex: 1,
+    flexDirection: 'column'
+}
+const settingDescription = {
+    width: '100%'
+}
+const smallInput = {}
+const freeField = {minWidth: 120}
+const ratings = {
+    flexDirection: 'column'
+}
+const oneRating = {
+    alignSelf: 'flex-end',
+    flexDirection: 'row'
+}
+const ratingText = {
+    fontSize: 12
+}
+const featuresTranslations = {
+    platforms: 'quais',
+    departures: 'départs',
+    stations: 'gares',
+    colors: 'couleurs',
+    codes: 'codes',
+    journeys: 'dessertes',
+    geolocation: 'géolocalisation'
+}
+
 export default class Settings extends React.Component {
     constructor(props) {
         super(props)
@@ -14,63 +70,8 @@ export default class Settings extends React.Component {
         }
     }
     render() {
-        const titleInGreen = {
-            color: '#009586',
-            fontWeight: 'bold',
-            margin: 10
-        }
-        const oneSetting = {
-            width:'100%',
-            display: 'flex',
-            flex:1,
-            flexDirection: 'row',
-            borderBottomColor: '#CCC',
-            borderBottomWidth: 1,
-            alignItems: 'center'
-        }
-        const oneSettingNoBottomRow = {
-            width:'100%',
-            display: 'flex',
-            flex:1,
-            flexDirection: 'row',
-            alignItems: 'center'
-        }
-        const settingTitle = {
-            width: '30%',
-            margin: 20
-        }
-        const settingName = {
-            color: '#000',
-            fontSize: 15,
-            flex: 1,
-            flexDirection: 'column'
-        }
-        const settingDescription = {
-            width: '100%'
-        }
-        const smallInput = {}
-        const freeField = {minWidth: 120}
-        const ratings = {
-            flexDirection: 'column'
-        }
-        const oneRating = {
-            alignSelf: 'flex-end',
-            flexDirection: 'row'
-        }
-        const ratingText = {
-            fontSize: 12
-        }
-        const featuresTranslations = {
-            platforms: 'quais',
-            departures: 'départs',
-            stations: 'gares',
-            colors: 'couleurs',
-            codes: 'codes',
-            journeys: 'dessertes',
-            geolocation: 'géolocalisation'
-        }
         return (
-            <Modal isOpen={this.props.settingsOpened === true} visible={this.props.settingsOpened === true} onRequestClose={this.props.closeSettings} position={'center'} animationType={'slide'} contentLabel='Settings'>
+            <Modal style={{display: this.props.settingsOpened === true ? 'block' : 'none'}} animationType='slide' isOpen={this.props.settingsOpened === true} visible={this.props.settingsOpened === true} onRequestClose={this.props.closeSettings} position={'center'} animationType={'slide'} contentLabel='Settings'>
                 <View style={StyleSheet.create({statusBar: {backgroundColor: '#ddc15d',height: Platform.OS === 'ios' ? Constants.statusBarHeight : 0}}).statusBar} />
                 <ScrollView style={{height:'100%', width:'100%'}}>
                     <View style={StyleSheet.create({screen:{backgroundColor:'#f4ecf4',display:'flex',flexDirection:'column',flexWrap:'nowrap',height:'100%',width:'100%'}}).screen}>

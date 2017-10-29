@@ -20,7 +20,7 @@ export default class LocationPrompt extends React.Component {
     }
     render() {
         return (
-            <Modal isOpen={this.state.displayLocationPrompt === true} visible={this.state.displayLocationPrompt === true} onRequestClose={this.state.abortChangeLocation} position={'center'} animationType={'slide'} contentLabel='Change location'>
+            <Modal style={{display: this.state.displayLocationPrompt === true ? 'block' : 'none'}} animationType='slide' isOpen={this.state.displayLocationPrompt === true} visible={this.state.displayLocationPrompt === true} onRequestClose={this.state.abortChangeLocation} position={'center'} animationType={'slide'} contentLabel='Change location'>
                 <View style={StyleSheet.create({statusBar: {backgroundColor: '#ddc15d',height: Platform.OS === 'ios' ? Constants.statusBarHeight : 0}}).statusBar} />
                 <View style={StyleSheet.create({screen:{backgroundColor:'#f4ecf4',display:'flex',flexDirection:'column',flexWrap:'nowrap',height:'100%',width:'100%'}}).screen}>
                     <Text>Nom de la gare :</Text>
