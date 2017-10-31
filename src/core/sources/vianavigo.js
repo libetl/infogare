@@ -11,12 +11,12 @@ const stationSearch = (coords, {nestedStationSearch}) => Promise.resolve({coords
         promiseWhile(response => (!response.data || response.data.type === 'Line' || !response.data.type) && lookAroundIndex < lookAround.length,
             () => get(`https://api.vianavigo.com/identify?x=${projection[0] + lookAround[lookAroundIndex][0]}&y=${projection[1] + lookAround[lookAroundIndex++][1]}&zoom=5&mapType=2&pixelValue=1.3229193125052918`, {headers: {'X-Host-Override':'vgo-api'}})
                 .catch(e => Promise.resolve({data:[]})))
-        .then(identification => Promise.resolve({coords, projection, identification:identification().data.data.map(oneIdentification => {return {...oneIdentification, id:oneIdentification.id, label:oneIdentification.labelNavitia||oneIdentification.streetName||inMemoryData.stationName}})})))
+        .then(identification => Promise.resolve({coords, nestedSearchData:inMemoryData, iataCodes: inMemoryData.iataCodes, projection, identification:identification().data.data.map(oneIdentification => {return {...oneIdentification, type:identification().data.type, id:oneIdentification.id, label:oneIdentification.labelNavitia||oneIdentification.streetName||inMemoryData.stationName}})})))
 
 
 const baseDepartures = ({projection, identification}) => Promise.all(identification.map(oneIdentification =>
-        get(`https://api.vianavigo.com/proximity?x=${projection[0]}&y=${projection[1]}&type=StopArea${oneIdentification.zipCode ? `&zipCode=${oneIdentification.zipCode}` : ''}${oneIdentification.id ? `&id=${oneIdentification.id}` : ''}&name=${oneIdentification.label}&nextPassages=true`, {headers: {'X-Host-Override':'vgo-api'}})
-            .catch(e => {debugger;})))
+        get(`https://api.vianavigo.com/proximity?x=${projection[0]}&y=${projection[1]}&type=${oneIdentification.type === 'Stoparea' ? 'StopArea' : oneIdentification.type || 'StopArea'}${oneIdentification.zipCode ? `&zipCode=${oneIdentification.zipCode}` : ''}${oneIdentification.id ? `&id=${oneIdentification.id}` : ''}&name=${oneIdentification.label}&nextPassages=true`, {headers: {'X-Host-Override':'vgo-api'}})
+            .catch(({response:{data:{ambiguityRemoval:{points:[suggestion]}}}}) => get(`https://api.vianavigo.com/proximity?x=${suggestion.x}&y=${suggestion.y}&type=${suggestion.type}&zipCode=${suggestion.zipCode}&id=${suggestion.id}&name=${suggestion.label}&nextPassages=true`, {headers: {'X-Host-Override':'vgo-api'}}))))
         .then(values => values.map(value => value.data).map(value => value.proximityPoints.reduce((acc, value) =>
             acc.concat((value.nextPassages||[]).map(passage => {return {...value, ...(passage||{}), nextPassages:undefined}})), [])).reduce((acc, value) => acc.concat(value), []))
         .then(denormalizedDepartures => denormalizedDepartures.map(denormalizedDeparture => {

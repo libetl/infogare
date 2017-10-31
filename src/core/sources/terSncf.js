@@ -42,11 +42,14 @@ const baseDepartures = ({nestedSearchData:{stations}}) =>
 
 const findTerJourney = ({baseDepartures, stationsAreas:{nestedSearchData:{stations}, stationName}}) => Promise.all(baseDepartures.map(departure =>
     baseDepartures.indexOf(departure) > 1 || !stations[0].fields ? Promise.resolve({}) :
+        ['metro', 'bus', 'tramway'].includes((departure.dataToDisplay.mode || '').toLowerCase()) ? Promise.resolve(departure) :
         get(journeyUrl(parseInt(stations[0].fields.uic), stations[0].fields.intitule_gare,
             stations[0].fields.region, moment(), departure.savedNumber))
             .then(html => {
                 if (html.data === '') return {savedNumber: departure.savedNumber, dataToDisplay: {stops:['Desserte\u00a0non\u00a0dispo']}}
-                const table = new DomParser().parseFromString(html.data).getElementsByClassName('train_depart_table')[0].childNodes.find(node => node.nodeName === 'tbody')
+                const table = (((new DomParser().parseFromString(html.data).getElementsByClassName('train_depart_table')[0]
+                    ||new DomParser().parseFromString('<tbody></tbody>')).childNodes||[]).find(node => node.nodeName === 'tbody')||
+                    new DomParser().parseFromString('<tbody></tbody>'))
                     .getElementsByTagName('a').map(a => Html5Entities.decode(a.childNodes[0].text.trim()))
                 const stops = (table.indexOf(stationName) !== -1 ? table.slice(table.indexOf(stationName) + 1) : table)
                     .map(name => name.replace(/ /g, '\u00a0').replace(/-/g, '\u2011').replace(/\//g, '\u00a0\u00a0\u00a0\u0338'))
