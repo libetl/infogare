@@ -2,22 +2,12 @@ import {get, post} from 'axios'
 import moment from 'moment'
 import DomParser from 'dom-parser'
 import capitalize from '../operations/capitalize'
+import promiseWhile from '../operations/promiseWhile'
 
 const readCookie = (response, name) => response.headers['set-cookie'].find(x => x.includes(name)).replace(/; HttpOnly/ig, '').replace(/; path=\//ig, '').replace(/; Domain=\.sncf\.com/ig, '')
 
 const headersFrom = (infoRequest, redirect) => {return {headers:{
     Cookie: [readCookie(infoRequest, 'SNCCACHE'), readCookie(infoRequest, 'SNC_city'), readCookie(redirect.response, 'JSESSIONID'), readCookie(redirect.response, 'SNCSESSION')].join('; ')}}}
-
-const iterate = (condition, oldResponse, promiseGenerator) => {
-    const forcedResponseAsFunction = typeof oldResponse === 'function' ? oldResponse : () => oldResponse
-    if (oldResponse && !condition(forcedResponseAsFunction())) {
-        return forcedResponseAsFunction
-    }
-    return promiseGenerator().then(newResponse => iterate(condition, newResponse, promiseGenerator))
-}
-
-const promiseWhile = (condition, execute, oldResponse) => iterate(condition, oldResponse,
-    () => execute().then(newResponse => promiseWhile(condition, execute, newResponse)))
 
 const baseDepartures = ({nestedSearchData:{stations}}) => get('http://www.sncf.com/fr/horaires-info-trafic').then(infoRequest =>
         promiseWhile(response => !response.data.includes('Error 404 - Page not found') &&
