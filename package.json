@@ -37,6 +37,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "proj4": "^2.4.4",
     "react-native-web": "^0.1.12",
     "expo": "^22.0.0",
     "electron": "^1.7.9",
