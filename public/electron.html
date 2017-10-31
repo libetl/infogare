@@ -6,9 +6,13 @@
     <link rel="shortcut icon" href="./favicon.ico">
     <title>Sncf le panneau (infogare)</title>
   </head>
-  <body style="background-color: black">
-    <div id="root"></div>
+  <body>
+    <div id="root" style="overflow: hidden;background-color: #0d5da6;height:600px;width:800px;overflow-y: auto"></div>
     <script>
+        window.onresize = () => {
+            document.querySelector('#root').style.width = `${window.innerWidth}px`
+            document.querySelector('#root').style.height = `${window.innerHeight}px`
+        }
         require('babel-register')
         global.nativeLibrary = require('react-native-web')
         require('../src/index')

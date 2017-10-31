@@ -3,12 +3,11 @@ import DomParser from 'dom-parser'
 import capitalize from '../operations/capitalize'
 
 const idfStationUrl = 'https://www.transilien.com/fr/horaires/prochains-departs'
-const fetchTransilien = s => post(idfStationUrl, `departure=${encodeURIComponent(s.fields.intitule_gare)}&uicDestination=&destination=&uicDeparture=${s.fields.uic.replace(/^0+/, '').slice(0, -1)}`, {headers:{'Content-Type':'application/x-www-form-urlencoded', Referer:'https://www.transilien.com/fr/horaires/prochains-departs'}})
+const fetchTransilien = s => post(idfStationUrl, `departure=${encodeURIComponent(s.fields.intitule_gare)}&uicDestination=&destination=&uicDeparture=${s.fields.uic.replace(/^0+/, '').slice(0, -1)}`, {headers:{'Content-Type':'application/x-www-form-urlencoded'}})
 
 const flatten = data => data.childNodes.filter(x=>!x.text||!x.text.match(/^\s*$/)).map(x=>x.text?x.text.trim():flatten(x)).reduce((acc, value)=>acc.concat(value),[])
 const transilien = html => new DomParser().parseFromString(html.data)
     .getElementsByClassName('next-departure-result').map(result => flatten(result).filter(x=>!['Destination', 'Voir les arrêts', 'Gares Desservies', 'FERMER'].includes(x)))
-    .map(r=>{debugger;return r})
     .map(result=>result[0].toUpperCase() === 'TRAIN' ? ['Transilien',...result.slice(1)] : result)
     .map(result=>result[5] === 'Voie --' ? [...result.slice(0, 5), '', ...result.slice(5)] : result)
     .map(result=>[result[0].toUpperCase(), result[1].substring(result[1].indexOf('-')+1).toUpperCase(), ...result.slice(2)])

@@ -20,7 +20,7 @@ export default class Departure extends React.Component {
         const lineColorStyle = {fontSize:this.props.rowHeight * (this.props.detailed ? 0.11 : 0.11),
             width: '10%', height:this.props.detailed ? '23%' : '45%', textAlign: 'center',
             fontWeight: 'bold', borderStyle: 'solid', borderWidth: 3, borderRadius: mode === 'rer' ? 30 : 3,
-            borderColor: `#${departure.color}`, color:`#${departure.color}`,
+            borderColor: `#${departure.color || 'FFFFFF'}`, color:`#${departure.color || 'FFFFFF'}`,
             marginTop: this.props.detailed ? 0 : 7}
         const modeIcon = this.props.detailed ? {height: '23%', width:'10%'} : {marginTop: 7, height: '45%', width:'10%'}
         const bigModeIcon = this.props.detailed ? {height: '23%', width:'22%'} : {marginTop: 7, height: '45%', width:'22%'}

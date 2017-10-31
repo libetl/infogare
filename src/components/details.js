@@ -419,7 +419,7 @@ export default class Details extends React.Component {
         const stops = details.stops || [{}]
         const finalStop = typeof stops.slice(-1)[0] === 'object' ? '?' : stops.slice(-1)[0]
         return (
-            <Modal  style={{display: this.props.details !== undefined ? 'block' : 'none'}} animationType={"slide"} visible={this.props.details !== undefined} onRequestClose={this.props.onClose} contentLabel="Details">
+            <Modal style={{zIndex: 2, width: '100%', height: '100%', display: this.props.details !== undefined ? 'block' : 'none'}} animationType={"slide"} visible={this.props.details !== undefined} onRequestClose={this.props.onClose} contentLabel="Details">
                 <View style={styles.screen}>
                     <View style={styles.journey}>
                         <View style={styles.description}>
@@ -439,8 +439,8 @@ export default class Details extends React.Component {
                                 <View style={styles.number}>
                                     {!details.name ? <Text style={{'display': 'none'}}/> :
                                     <Text style={{fontWeight: 'bold', borderStyle: 'solid', borderWidth: 3, borderRadius: mode === 'rer' ? 30 : 3,
-                                        borderColor: `#${details.color}`, color:`#${details.color}`, textAlign: 'center',"height": 30,
-                                        "width": 30}}>{details.name}</Text>}
+                                        borderColor: `#${details.color || '#000000'}`, color:`#${details.color || '#000000'}`, textAlign: 'center',height: 30,
+                                        width: 30}}>{details.name}</Text>}
                                     <Text style={styles.numberText}>{details.number}</Text></View>
                             </View>
                         </View>

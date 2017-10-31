@@ -39,7 +39,7 @@ export default class App extends React.Component {
         AsyncStorage.getItem('@store:apiToken').then(apiToken =>
             AsyncStorage.getItem('@store:dataSources').then(dataSources => {
                 let foundDataSources
-                try{foundDataSources = JSON.parse(dataSources) || undefined}catch(e){foundDataSources}
+                try{foundDataSources = JSON.parse(dataSources) || undefined}catch(e){}
                 this.initNow(apiToken, foundDataSources)}))
     }
     initNow(apiToken, dataSources = ['terSncf', 'inMemory', 'liveMap']) {
