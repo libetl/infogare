@@ -5,6 +5,6 @@ import liveMap from './liveMap'
 import raildar from './raildar'
 import sncfApi from './sncfApi'
 import terSncf from './terSncf'
-import viaNavigo from './viaNavigo'
+import vianavigo from './vianavigo'
 
-export default { garesSncf, horairesInfoTrafic, inMemory, liveMap, raildar, sncfApi, terSncf, viaNavigo }
+export default { garesSncf, horairesInfoTrafic, inMemory, liveMap, raildar, sncfApi, terSncf, vianavigo }
