@@ -1,4 +1,4 @@
-import {get, post} from 'axios'
+import {get} from 'axios'
 import moment from 'moment'
 import haversine from '../operations/haversine'
 
