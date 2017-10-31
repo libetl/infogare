@@ -2,6 +2,7 @@ import proj4 from 'proj4'
 import {get} from 'axios'
 import moment from 'moment'
 import promiseWhile from '../operations/promiseWhile'
+import capitalize from '../operations/capitalize'
 
 const epsg102582 = '+proj=lcc +lat_1=46.8 +lat_0=46.8 +lon_0=0 +k_0=0.99987742 +x_0=600000 +y_0=2200000 +a=6378249.2 +b=6356515 +towgs84=-168,-60,320,0,0,0,0 +pm=paris +units=m +no_defs'
 const lookAround = [[0, 0],[-35, -35], [-35, 35], [35, -35], [35, 35]]
@@ -28,7 +29,7 @@ const baseDepartures = ({projection, identification}) => Promise.all(identificat
                 },
                 dataToDisplay: {
                     mode: denormalizedDeparture.line.mode === 'Train' ? 'Transilien' : denormalizedDeparture.line.mode,
-                    direction: denormalizedDeparture.lineDirection,
+                    direction: capitalize(denormalizedDeparture.lineDirection),
                     number: denormalizedDeparture.line.label,
                     missionCode: denormalizedDeparture.vehicleName,
                     time: time,
