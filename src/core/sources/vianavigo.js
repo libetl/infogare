@@ -11,7 +11,7 @@ const stationSearch = (coords, {nestedStationSearch}) => Promise.resolve({coords
         promiseWhile(response => (!response.data || response.data.type === 'Line' || !response.data.type) && lookAroundIndex < lookAround.length,
             () => get(`https://api.vianavigo.com/identify?x=${projection[0] + lookAround[lookAroundIndex][0]}&y=${projection[1] + lookAround[lookAroundIndex++][1]}&zoom=5&mapType=2&pixelValue=1.3229193125052918`, {headers: {'X-Host-Override':'vgo-api'}})
                 .catch(e => Promise.resolve({data:[]})))
-        .then(identification => Promise.resolve({coords, nestedSearchData:inMemoryData, iataCodes: inMemoryData.iataCodes, projection, identification:identification().data.data.map(oneIdentification => {return {...oneIdentification, type:identification().data.type, id:oneIdentification.id, label:oneIdentification.labelNavitia||oneIdentification.streetName||inMemoryData.stationName}})})))
+        .then(identification => Promise.resolve({coords, nestedSearchData:inMemoryData, stationName: (identification().data.data.length && (identification().data.data[0].labelNavitia||identification().data.data[0].streetName))||inMemoryData.stationName, iataCodes: inMemoryData.iataCodes, projection, identification:identification().data.data.map(oneIdentification => {return {...oneIdentification, type:identification().data.type, id:oneIdentification.id, label:oneIdentification.labelNavitia||oneIdentification.streetName||inMemoryData.stationName}})})))
 
 
 const baseDepartures = ({projection, identification}) => Promise.all(identification.map(oneIdentification =>
