@@ -38,5 +38,5 @@ const baseDepartures = ({projection, identification}) => Promise.all(identificat
 
 export default {
     stationSearch, baseDepartures,
-    metadata: {features:['stations'], everywhere: true, butSpecificForRegion:'Île-de-France',
+    metadata: {features:['stations', 'departures'], everywhere: true, butSpecificForRegion:'Île-de-France',
         ratings:{relevancy: 3, reliability: 3, sustainability: 3}}}
