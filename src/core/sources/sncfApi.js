@@ -92,4 +92,4 @@ const stationSearch = (coords, {token, nestedStationSearch}) => {
 
 export default {testApi, stationSearch, baseDepartures, feed:[twoClosestJourneys],
     metadata: {features:['stations', 'departures', 'journeys'], everywhere: true,
-        ratings:{relevancy: 3, reliability: 5, sustainability: 4}}}
+        ratings:{relevancy: 2, reliability: 5, sustainability: 4}}}

@@ -43,4 +43,4 @@ const stationSearch = (coords) => {
 
 export default { stationSearch, stationsMatching, feed:[findIdfMapping, findColor, findName], closestStations,
     metadata: {features:['stations', 'colors', 'codes'], everywhere: true,
-    ratings:{relevancy: 3, reliability: 5, sustainability: 5}}}
+    ratings:{relevancy: 2, reliability: 5, sustainability: 5}}}

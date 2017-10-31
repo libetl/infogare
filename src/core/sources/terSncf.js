@@ -57,4 +57,4 @@ const findTerJourney = ({baseDepartures, stationsAreas:{nestedSearchData:{statio
 
 export default {baseDepartures, feed:[findTerJourney],
     metadata: {features:['departures', 'journeys','platforms','journeys'], everywhere: true,
-        ratings:{relevancy: 5, reliability: 2, sustainability: 1}}}
+        ratings:{relevancy: 4, reliability: 2, sustainability: 1}}}

@@ -30,4 +30,4 @@ const realTimeMap = ({stationsAreas:{nestedSearchData:{stationCoords}}}) => Prom
     }))
 
 export default {feed:[realTimeMap], metadata: {features: ['geolocation'], everywhere: true,
-    ratings:{relevancy: 4, reliability: 1, sustainability: 2}}}
+    ratings:{relevancy: 3, reliability: 1, sustainability: 2}}}
