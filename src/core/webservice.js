@@ -20,7 +20,7 @@ export default {
         const allowedCombinedSources = Array.from(new Set(Object.values(dataSourceByFeature))).map(sourceName => sources[sourceName])
 
         const stationsAreas = await sources[dataSourceByFeature.stations || 'inMemory'].stationSearch(coords, {token, nestedStationSearch:sources.inMemory.stationSearch})
-        notify({timetable:{station: `${dataSourceByFeature.departures === 'raildar' ? 'recherche raildar...' : stationsAreas.stationName}\n(mise à jour...)`, departures: new Array(10).fill({})}})
+        notify({timetable:{station: `${stationsAreas.stationName}\n(mise à jour...)`, departures: new Array(10).fill({})}})
 
         const baseDepartures = !sources[dataSourceByFeature.departures] ? [] : removeDuplicates(sortByTime(await sources[dataSourceByFeature.departures].baseDepartures(stationsAreas, token)))
         notify({timetable:{station: `${stationsAreas.stationName}\n(mise à jour...)`, departures: format(baseDepartures)}})
