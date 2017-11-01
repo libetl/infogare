@@ -33,9 +33,6 @@ export default StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center'
     },
-    scroll: {
-        height: 20
-    },
     stops: {
         paddingTop: 0,
         paddingBottom: 0,

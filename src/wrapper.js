@@ -16,7 +16,8 @@ try {
 }catch(e){
 }
 
-const IsNative = window === undefined
+const IsNative = global.nativeLibrary.Platform &&
+    ['android', 'ios'].includes(global.nativeLibrary.Platform.OS)
 const LoadPicture = name => pictures[name]
 const Image=global.nativeLibrary.Image || function(props){ return (<img src={props.source} alt={props.alt}/>)}
 const ScrollView=global.nativeLibrary.ScrollView || 'div'
