@@ -31,7 +31,8 @@
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
     "test": "node node_modules/jest/bin/jest.js --watch",
-    "postinstall": "node -r babel-register ./tools/prepare.js && node ./tools/busLines.js"
+    "postinstall": "node -r babel-register ./tools/prepare.js && node ./tools/busLines.js",
+    "publish": "node node_modules/exp/bin/exp.js ba"
   },
   "jest": {
     "preset": "jest-expo"
