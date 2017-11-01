@@ -39,6 +39,39 @@ const baseDepartures = ({nestedSearchData:{stations}}) =>
 
                 }
             }}).filter(departure => departure)))).then(departuresArray => departuresArray.reduce((acc, value) => acc.concat(value), []))
+        .then(departures => departures.length === 0 && stations.find(station => station.fields.agence_gare === 'Agence Ile-de-France') ?
+            [{
+                savedNumber: -2,
+                stop_date_time: {
+                    base_departure_date_time: moment().format('HH:mm'),
+                },
+                dataToDisplay: {
+                    mode: 'Transilien',
+                    name: '?',
+                    direction: 'terSncf indisponible en ÎDF !',
+                    number: 1,
+                    time: moment().format('HH:mm'),
+                    platform: '',
+                    stops: ['Autres sources :', 'transilien', 'vianavigo', 'sncfApi',
+                        'terSncf indisponible en ÎDF !']
+                }
+            },{
+                savedNumber: -1,
+                stop_date_time: {
+                    base_departure_date_time: moment().format('HH:mm'),
+                },
+                dataToDisplay: {
+                    mode: 'Transilien',
+                    name: '?',
+                    direction: 'Rendez vous dans les paramètres',
+                    number: 2,
+                    time: moment().add(1, 'minutes').format('HH:mm'),
+                    platform: '',
+                    stops: ['Autres sources :', 'transilien', 'vianavigo', 'sncfApi',
+                        'Rendez vous dans les paramètres']
+                }
+            }]
+            : departures)
 
 const findTerJourney = ({baseDepartures, stationsAreas:{nestedSearchData:{stations}, stationName}}) => Promise.all(baseDepartures.map(departure =>
     baseDepartures.indexOf(departure) > 1 || !stations[0].fields ? Promise.resolve({}) :
