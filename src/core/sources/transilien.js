@@ -12,10 +12,11 @@ const transilien = html => new DomParser().parseFromString(html.data)
     .map(result=>result[5] === 'Voie --' ? [...result.slice(0, 5), '', ...result.slice(5)] : result)
     .map(result=>[result[0].toUpperCase(), result[1].substring(result[1].indexOf('-')+1).toUpperCase(), ...result.slice(2)])
     .map((result,i)=> {
+        const hour = result[3]
         return {
             savedNumber:result[2]+i,
             stop_date_time: {
-                base_departure_date_time: result[3],
+                base_departure_date_time: hour.localeCompare(now) < 0 ? `${parseInt(hour.split(':')[0]) + 24}:${hour.split(':')[1]}` : hour,
             },
             dataToDisplay: {
                 mode: result[0],
