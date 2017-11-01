@@ -1,6 +1,7 @@
 import {get, post} from 'axios'
 import DomParser from 'dom-parser'
 import capitalize from '../operations/capitalize'
+import moment from 'moment'
 
 const idfStationUrl = 'https://www.transilien.com/fr/horaires/prochains-departs'
 const fetchTransilien = s => post(idfStationUrl, `departure=${encodeURIComponent(s.fields.intitule_gare)}&uicDestination=&destination=&uicDeparture=${s.fields.uic.replace(/^0+/, '').slice(0, -1)}`, {headers:{'Content-Type':'application/x-www-form-urlencoded'}})
@@ -13,6 +14,7 @@ const transilien = html => new DomParser().parseFromString(html.data)
     .map(result=>[result[0].toUpperCase(), result[1].substring(result[1].indexOf('-')+1).toUpperCase(), ...result.slice(2)])
     .map((result,i)=> {
         const hour = result[3]
+        const now = moment().format('HH:mm')
         return {
             savedNumber:result[2]+i,
             stop_date_time: {
