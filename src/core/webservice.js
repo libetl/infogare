@@ -1,6 +1,7 @@
 import {get} from 'axios'
 import {sortByTime, combineAll, removeDuplicates, feedWith} from './operations/combine'
 import sources from './sources'
+import {format} from './operations/formatDisplay'
 
 const allDataSources = Object.entries(sources).reduce((acc, [name, {metadata}]) => {return {...acc, [name]: metadata}}, {})
 
@@ -22,11 +23,11 @@ export default {
         notify({timetable:{station: `${dataSourceByFeature.departures === 'raildar' ? 'recherche raildar...' : stationsAreas.stationName}\n(mise à jour...)`, departures: new Array(10).fill({})}})
 
         const baseDepartures = !sources[dataSourceByFeature.departures] ? [] : removeDuplicates(sortByTime(await sources[dataSourceByFeature.departures].baseDepartures(stationsAreas, token)))
-        notify({timetable:{station: `${stationsAreas.stationName}\n(mise à jour...)`, departures: baseDepartures.map(x => x.dataToDisplay)}})
+        notify({timetable:{station: `${stationsAreas.stationName}\n(mise à jour...)`, departures: format(baseDepartures)}})
 
         const context = {baseDepartures, stationsAreas, token, closestStations: sources.inMemory.closestStations}
         const departures = combineAll(baseDepartures, await Promise.all(feedWith(allowedCombinedSources, context)))
 
-        return Promise.resolve({station: stationsAreas.stationName, departures: departures.map(x => x.dataToDisplay)})
+        return Promise.resolve({station: stationsAreas.stationName, departures: format(departures)})
     }
 }

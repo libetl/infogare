@@ -51,10 +51,9 @@ const departures = (stationId, page = 0, token) => fetch(stationUrl(stationId, m
 
 const vehicleJourney = (closestStations, link, fromCoords, token) => fetch(vehicleJourneyUrl(link), defaultEntity(token))
     .then(result => {
-        const allStops = result.data.vehicle_journeys[0].stop_times.map(
-            stop_time => stop_time.stop_point.name.replace(/ /g, '\u00a0').replace(/-/g, '\u2011').replace(/\//g, '\u00a0\u00a0\u00a0\u0338'))
+        const allStops = result.data.vehicle_journeys[0].stop_times.map(stop_time => stop_time.stop_point.name)
         const allStopsCoords = result.data.vehicle_journeys[0].stop_times.map(stop_time => { return {
-            name:stop_time.stop_point.name.replace(/ /g, '\u00a0').replace(/-/g, '\u2011').replace(/\//g, '\u00a0\u00a0\u00a0\u0338'),
+            name:stop_time.stop_point.name,
             geometry:{coordinates:[parseFloat(stop_time.stop_point.coord.lon), parseFloat(stop_time.stop_point.coord.lat)]}}})
         const missionCode = result.data.vehicle_journeys[0].name &&
         result.data.vehicle_journeys[0].name[0] >= 'A' &&  result.data.vehicle_journeys[0].name[0] <= 'Z'

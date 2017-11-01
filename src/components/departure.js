@@ -31,6 +31,8 @@ export default class Departure extends React.Component {
         const oneStop = IsNative ? {color: '#fff', fontSize: stopsFontSize, lineHeight, includeFontPadding:false} : {color: '#fff', fontSize: stopsFontSize, lineHeight}
         const direction = {color: '#fff', fontSize: directionFontSize, overflow: 'hidden', flexGrow: 1}
         const split = {marginBottom: -lineHeight, height: '100%', width: '100%', flexDirection: 'row'}
+        const numberText = mode !== 'bus' ? {alignSelf: 'center'} :
+            {color: departure.fontColor || '#fff', backgroundColor: departure.color || 'transparent', minWidth:numberFontSize * 3, alignSelf: 'center', textAlign: 'center', fontSize: numberFontSize}
         const number = {color: '#fff', width: '15%', fontSize: numberFontSize}
         const timeAndStatus = {width: '20%', flexDirection: 'column'}
         const time = {color: '#dfc81f', fontSize: numberFontSize, fontWeight: 'bold'}
@@ -48,7 +50,7 @@ export default class Departure extends React.Component {
                                         mode === 'intercités de nuit' ? <Image style={bigModeIcon} source={LoadPicture('intercites')} /> :
                                             <Text style={modeText}>{mode.toUpperCase()}</Text>}
                             {departure.name ? <Text style={lineColorStyle}>{departure.name}</Text> : <Text>{departure.name}</Text>}
-                            <Text style={number}>{departure.number}</Text>
+                            <View style={number}><Text style={numberText}>{departure.number}</Text></View>
                             <View style={timeAndStatus}><Text style={time}>{departure.time}</Text>{departure.status ? (<Text style={status}>{departure.status}</Text>) : <Text/>}</View>
                             <Text style={direction}>{directionName}</Text>
                             <Text style={departure.platform && departure.platform.length > 0 ?

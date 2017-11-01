@@ -3,6 +3,7 @@ import idfMapping from '../data/idfMapping.json'
 import numberToCode from '../data/idfMapping-lines.json'
 import codeToLine from '../data/routes-lines.json'
 import lineToColor from '../data/routes.json'
+import busLinesColors from '../data/ratpBusColors.json'
 
 const registeredStations = stations.filter (e => e.fields.tvs)
 
@@ -27,11 +28,16 @@ const stationsMatching = (text, stationsList = registeredStations) => text.lengt
 const findIdfMapping = ({baseDepartures}) => baseDepartures.map(departure => {return {savedNumber:departure.savedNumber,
     dataToDisplay:{number:idfMapping[departure.savedNumber] || departure.dataToDisplay.number}}})
 
-const findColor = ({baseDepartures}) => baseDepartures.map(departure => departure.dataToDisplay.color ? {} :
+const findColor = ({baseDepartures}) => baseDepartures.map(departure =>
+    departure.dataToDisplay.color || !lineToColor[codeToLine[numberToCode[departure.savedNumber]]] ? {} :
     {savedNumber:departure.savedNumber, dataToDisplay:{color: lineToColor[codeToLine[numberToCode[departure.savedNumber]]]}})
 
+const busColors = ({baseDepartures}) => baseDepartures.map(departure => (departure.dataToDisplay.mode||'').toLowerCase() !== 'bus' ? {} :
+    {savedNumber:departure.savedNumber, dataToDisplay:{
+        color: busLinesColors[departure.dataToDisplay.number].backgroundColor, fontColor:busLinesColors[departure.dataToDisplay.number].color}})
+
 const findName = ({baseDepartures}) => baseDepartures.map(departure => departure.dataToDisplay.name ? {} :
-    {savedNumber:departure.savedNumber, dataToDisplay:{name:  codeToLine[numberToCode[departure.savedNumber]]}})
+    {savedNumber:departure.savedNumber, dataToDisplay:{name: codeToLine[numberToCode[departure.savedNumber]]}})
 
 const stationSearch = (coords) => {
     const foundStations = closestStations(coords)
@@ -41,6 +47,6 @@ const stationSearch = (coords) => {
         iataCodes: foundStations.map(station => (station.fields.tvs || '').split('|')[0]),
         nestedSearchData:{stations:foundStations, stationName, stationCoords}}}
 
-export default { stationSearch, stationsMatching, feed:[findIdfMapping, findColor, findName], closestStations,
+export default { stationSearch, stationsMatching, feed:[findIdfMapping, busColors, findColor, findName], closestStations,
     metadata: {features:['stations', 'colors', 'codes'], everywhere: true,
     ratings:{relevancy: 2, reliability: 5, sustainability: 5}}}
