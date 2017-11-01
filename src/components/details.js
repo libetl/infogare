@@ -439,7 +439,7 @@ export default class Details extends React.Component {
                                 <View style={styles.number}>
                                     {!details.name ? <Text style={{'display': 'none'}}/> :
                                     <Text style={{fontWeight: 'bold', borderStyle: 'solid', borderWidth: 3, borderRadius: mode === 'rer' ? 30 : 3,
-                                        borderColor: `#${details.color || '#000000'}`, color:`#${details.color || '#000000'}`, textAlign: 'center',height: 30,
+                                        borderColor: `#${details.color || '000000'}`, color:`#${details.color || '000000'}`, textAlign: 'center',height: 30,
                                         width: 30}}>{details.name}</Text>}
                                     <Text style={styles.numberText}>{details.number}</Text></View>
                             </View>
