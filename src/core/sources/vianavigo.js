@@ -25,7 +25,7 @@ const baseDepartures = ({projection, identification}) => !identification ? Promi
             const time = moment().add(parseInt(denormalizedDeparture.time), 'minutes').format('HH:mm')
             return {
                 savedNumber:denormalizedDeparture.id,
-                brand: denormalizedDeparture.network && denormalizedDeparture.network.label,
+                brand: denormalizedDeparture.line && denormalizedDeparture.line.network && denormalizedDeparture.line.network.label,
                 stop_date_time: {
                     base_departure_date_time: time,
                 },

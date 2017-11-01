@@ -33,7 +33,7 @@ export default class Departure extends React.Component {
         const split = {marginBottom: -lineHeight, height: '100%', width: '100%', flexDirection: 'row'}
         const numberText = mode !== 'bus' ? {alignSelf: 'center'} :
             {color: departure.fontColor || '#fff', backgroundColor: departure.color || 'transparent', minWidth:numberFontSize * 3, alignSelf: 'center', textAlign: 'center', fontSize: numberFontSize}
-        const number = {color: '#fff', width: '15%', fontSize: numberFontSize}
+        const number = {width: '15%', fontSize: numberFontSize}
         const timeAndStatus = {width: '20%', flexDirection: 'column'}
         const time = {color: '#dfc81f', fontSize: numberFontSize, fontWeight: 'bold'}
         const status = {color: '#f5a665', fontSize: numberFontSize, fontWeight: 'bold'}
