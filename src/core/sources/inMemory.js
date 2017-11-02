@@ -4,6 +4,10 @@ import numberToCode from '../data/idfMapping-lines.json'
 import codeToLine from '../data/routes-lines.json'
 import lineToColor from '../data/routes.json'
 import busLinesColors from '../data/ratpBusColors.json'
+import metroLinesColors from '../data/metroLinesColors.json'
+import rerLinesColors from '../data/rerLinesColors.json'
+import tramLinesColors from '../data/tramLinesColors.json'
+import transilienLinesColors from '../data/transilienLinesColors.json'
 
 const registeredStations = stations.filter (e => e.fields.tvs)
 
@@ -38,10 +42,40 @@ const busColors = ({baseDepartures}) => baseDepartures.map(departure =>
     {savedNumber:departure.savedNumber, dataToDisplay:{
         color: busLinesColors[departure.dataToDisplay.number].backgroundColor, fontColor:busLinesColors[departure.dataToDisplay.number].color}})
 
-const findName = ({baseDepartures}) => baseDepartures.map(departure => departure.dataToDisplay.name ? {} :
+const metroColors = ({baseDepartures}) => baseDepartures.map(departure =>
+    (departure.dataToDisplay.mode||'').toLowerCase() !== 'metro' ||
+    !metroLinesColors[departure.dataToDisplay.number] ? {} :
+        {savedNumber:departure.savedNumber, dataToDisplay:{
+            name: departure.dataToDisplay.number,
+            color: metroLinesColors[departure.dataToDisplay.number]}})
+
+const transilienColors = ({baseDepartures}) => baseDepartures.map(departure =>
+    (departure.dataToDisplay.mode||'').toLowerCase() !== 'transilien' ||
+    !transilienLinesColors[departure.dataToDisplay.number] ? {} :
+        {savedNumber:departure.savedNumber, dataToDisplay:{
+            name: departure.dataToDisplay.number,
+            color: transilienLinesColors[departure.dataToDisplay.number]}})
+
+const rerColors = ({baseDepartures}) => baseDepartures.map(departure =>
+    (departure.dataToDisplay.mode||'').toLowerCase() !== 'rer' ||
+    !rerLinesColors[departure.dataToDisplay.number] ? {} :
+        {savedNumber:departure.savedNumber, dataToDisplay:{
+            name: departure.dataToDisplay.number,
+            color: rerLinesColors[departure.dataToDisplay.number]}})
+
+const tramColors = ({baseDepartures}) => baseDepartures.map(departure =>
+    (departure.dataToDisplay.mode||'').toLowerCase() !== 'tramway' ||
+    !tramLinesColors[departure.dataToDisplay.number.replace(/T/i,'')] ? {} :
+        {savedNumber:departure.savedNumber, dataToDisplay:{
+            number: departure.dataToDisplay.number.replace(/T/i,''),
+            name: departure.dataToDisplay.number.replace(/T/i,''),
+            color: tramLinesColors[departure.dataToDisplay.number.replace(/T/i,'')]}})
+
+const findName = ({baseDepartures}) => baseDepartures.map(departure =>
+    departure.dataToDisplay.name || !codeToLine[numberToCode[departure.savedNumber]] ? {} :
     {savedNumber:departure.savedNumber, dataToDisplay:{name: codeToLine[numberToCode[departure.savedNumber]]}})
 
-const stationSearch = (coords) => {
+const stationSearch = coords => {
     const foundStations = closestStations(coords)
     const stationName = foundStations[0].fields.intitule_gare
     const stationCoords = {long: foundStations[0].geometry.coordinates[0], lat: foundStations[0].geometry.coordinates[1]}
@@ -49,6 +83,8 @@ const stationSearch = (coords) => {
         iataCodes: foundStations.map(station => (station.fields.tvs || '').split('|')[0]),
         nestedSearchData:{stations:foundStations, stationName, stationCoords}}}
 
-export default { stationSearch, stationsMatching, feed:[findIdfMapping, busColors, findColor, findName], closestStations,
+export default { stationSearch, stationsMatching,
+    feed:[findIdfMapping, busColors, findColor, metroColors, transilienColors, tramColors, rerColors, findName],
+    closestStations,
     metadata: {features:['stations', 'colors', 'codes'], everywhere: true,
     ratings:{relevancy: 2, reliability: 5, sustainability: 5}}}

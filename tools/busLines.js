@@ -23,8 +23,8 @@ Promise.all(busLinesWikipediaUrls.map(wikipediaUrl => get(wikipediaUrl)))
     .then(allTds => allTds.map(td => {
         return {
             line:td.getElementsByTagName('b')[0].childNodes[0].text,
-            backgroundColor:td.attributes.find(attribute => attribute.name === 'style').value.match(/background-color:\s*(#[A-Fa-f0-9]+)/)[1],
-            color:td.attributes.find(attribute => attribute.name === 'style').value.match(/.*[^A-Za-z\-]?color:\s*(#[A-Fa-f0-9]+)/)[1]}})
+            backgroundColor:td.attributes.find(attribute => attribute.name === 'style').value.match(/background-color:\s*#([A-Fa-f0-9]+)/)[1],
+            color:td.attributes.find(attribute => attribute.name === 'style').value.match(/.*[^A-Za-z\-]?color:\s*#([A-Fa-f0-9]+)/)[1]}})
         .reduce((acc, value) => {return {...acc, [value.line]: {backgroundColor:value.backgroundColor, color:value.color}}}, []))
     .then(data => fs.writeFileSync('src/core/data/ratpBusColors.json', JSON.stringify(data)))
 

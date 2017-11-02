@@ -2,6 +2,7 @@ import React from 'react'
 import styles from '../css/app.css'
 import PropTypes from 'prop-types'
 import {Image, IsNative, LoadPicture, ScrollView, Text, TouchableHighlight, View} from '../wrapper'
+import {blackOrWhite} from '../core/operations/blackOrWhite'
 
 export default class Departure extends React.Component {
     constructor(props) {
@@ -22,8 +23,10 @@ export default class Departure extends React.Component {
             paddingBottom:(this.props.rowHeight * 0.23  - numberFontSize) / 2,
             fontSize:this.props.rowHeight * 0.11,
             textAlign: 'center', fontWeight: 'bold', borderStyle: 'solid', borderWidth: 3,
-            borderRadius: mode === 'rer' ? (IsNative ? 50 : '50%') : 3,
-            borderColor: `#${departure.color || 'FFFFFF'}`, color:`#${departure.color || 'FFFFFF'}`}
+            borderRadius: mode === 'rer' || mode === 'metro' || mode === 'tramway' ? (IsNative ? 50 : '50%') : 3,
+            borderColor: `#${departure.color || 'FFFFFF'}`,
+            color:mode === 'metro' ? blackOrWhite(departure.color || '#000000') : `#${departure.color || 'FFFFFF'}`,
+            backgroundColor: mode === 'metro' ? `#${departure.color}` : undefined}
         const modeView = {width:'10%'}
         const modeIcon = {width: numberFontSize * 3, height: numberFontSize * 3, alignSelf: 'center'}
         const bigModeIcon = this.props.detailed ? {height: '23%', width:'22%'} : {marginTop: 7, height: '45%', width:'22%'}
@@ -32,7 +35,7 @@ export default class Departure extends React.Component {
         const split = {height:this.props.rowHeight * 0.3, width: '100%', flexDirection: 'row'}
         const stopsScroll = {height:this.props.rowHeight * 0.3, marginTop:this.props.rowHeight * 0.4, minHeight:12}
         const numberText = mode !== 'bus' ? {alignSelf: 'center', color:'#fff'} :
-            {color: departure.fontColor || '#fff', backgroundColor: departure.color || 'transparent', minWidth:numberFontSize * 3, alignSelf: 'center', textAlign: 'center', fontSize: numberFontSize}
+            {color: '#' + departure.fontColor || '#fff', backgroundColor: '#' + departure.color || 'transparent', minWidth:numberFontSize * 3, alignSelf: 'center', textAlign: 'center', fontSize: numberFontSize}
         const number = {width: '15%'}
         const timeAndStatus = {minWidth:3 * numberFontSize + 4, flexDirection: 'column'}
         const time = {color: '#dfc81f', fontSize: numberFontSize, fontWeight: 'bold'}
@@ -45,12 +48,12 @@ export default class Departure extends React.Component {
                     <View style={{flexDirection:'column', height:'100%'}}>
                         <View style={this.props.detailed ? split : styles.dontsplit} >
                             <View style={modeView}>
-                                {mode === 'bus' || mode === 'transilien'|| mode === 'rer' ? <Image style={modeIcon} source={LoadPicture(mode)} /> :
+                                {mode === 'bus' || mode === 'transilien'|| mode === 'rer' || mode === 'tramway' ? <Image style={modeIcon} source={LoadPicture(mode)} /> :
                                     mode === 'intercités' || mode === 'intercités de nuit' ? <Image style={bigModeIcon} source={LoadPicture('intercites')} /> :
                                         <Text style={modeText}>{mode.toUpperCase()}</Text>}
                             </View>
                             {departure.name ? <View style={lineColor}><Text style={lineColorText}>{departure.name}</Text></View> : <Text>{departure.name}</Text>}
-                            <View style={number}><Text style={numberText}>{departure.number}</Text></View>
+                            {departure.number !== departure.name ? <View style={number}><Text style={numberText}>{departure.number}</Text></View> : <Text style={{width:'5%'}}/>}
                             <View style={timeAndStatus}><Text style={time}>{departure.time}</Text>{departure.status ? (<Text style={status}>{departure.status}</Text>) : <Text style={{display:'none'}}/>}</View>
                             <Text style={direction}>{directionName}</Text>
                             <Text style={departure.platform && departure.platform.length > 0 ?
