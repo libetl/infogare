@@ -33,7 +33,8 @@ const findColor = ({baseDepartures}) => baseDepartures.map(departure =>
     {savedNumber:departure.savedNumber, dataToDisplay:{color: lineToColor[codeToLine[numberToCode[departure.savedNumber]]]}})
 
 const busColors = ({baseDepartures}) => baseDepartures.map(departure =>
-    (departure.dataToDisplay.mode||'').toLowerCase() !== 'bus' || departure.brand !== 'RATP' ? {} :
+    (departure.dataToDisplay.mode||'').toLowerCase() !== 'bus' || departure.brand !== 'RATP' ||
+    !busLinesColors[departure.dataToDisplay.number] ? {} :
     {savedNumber:departure.savedNumber, dataToDisplay:{
         color: busLinesColors[departure.dataToDisplay.number].backgroundColor, fontColor:busLinesColors[departure.dataToDisplay.number].color}})
 
