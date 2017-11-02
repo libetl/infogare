@@ -48,7 +48,7 @@ export default class Departure extends React.Component {
                     <View style={{flexDirection:'column', height:'100%'}}>
                         <View style={this.props.detailed ? split : styles.dontsplit} >
                             <View style={modeView}>
-                                {mode === 'bus' || mode === 'transilien'|| mode === 'rer' || mode === 'tramway' ? <Image style={modeIcon} source={LoadPicture(mode)} /> :
+                                {mode === 'bus' || mode === 'transilien'|| mode === 'rer' || mode === 'metro' || mode === 'tramway' ? <Image style={modeIcon} source={LoadPicture(mode)} /> :
                                     mode === 'intercités' || mode === 'intercités de nuit' ? <Image style={bigModeIcon} source={LoadPicture('intercites')} /> :
                                         <Text style={modeText}>{mode.toUpperCase()}</Text>}
                             </View>
