@@ -431,7 +431,7 @@ export default class Details extends React.Component {
                             </View>
                             <View style={styles.direction}><Text style={{fontSize : this.props.rowWidth / (directionName.length * 1.76), fontWeight: "bold", color: "#004494"}}>{directionName}</Text></View>
                             <View style={styles.train}>
-                                <View>{mode === 'bus' || mode === 'transilien'|| mode === 'rer' || mode === 'metro' || mode === 'tramway' ? <Image style={modeIcon} source={LoadPicture(`${mode}B`)} /> :
+                                <View>{mode === 'bus' || mode === 'transilien'|| mode === 'rer' || mode === 'metro' || mode === 'tramway' ? <Image style={styles.modeIcon} source={LoadPicture(`${mode}B`)} /> :
                                         mode === 'intercités' ? <Image style={styles.modeIcon} source={LoadPicture('intercitesB')}/> :
                                             mode === 'intercités de nuit' ? <Image style={styles.modeIcon} source={LoadPicture('intercitesB')} /> :
                                                 <Text style={styles.mode}>{mode.toUpperCase()}</Text>}</View>
