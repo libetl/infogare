@@ -29,8 +29,9 @@ const closestStations = ({long, lat}, stationsList = registeredStations) => {
 const stationsMatching = (text, stationsList = registeredStations) => text.length < 1 ? [] :
     stationsList.filter(station => station.fields.intitule_gare.toLowerCase().includes(text.toLowerCase()))
 
-const findIdfMapping = ({baseDepartures}) => baseDepartures.map(departure => {return {savedNumber:departure.savedNumber,
-    dataToDisplay:{number:idfMapping[departure.savedNumber] || departure.dataToDisplay.number}}})
+const findIdfMapping = ({baseDepartures}) => baseDepartures.map(departure => findOneIdfMapping(departure))
+const findOneIdfMapping = departure => {return {savedNumber:departure.savedNumber,
+    dataToDisplay:{number:idfMapping[departure.savedNumber] || departure.dataToDisplay.number}}}
 
 const findColor = ({baseDepartures}) => baseDepartures.map(departure =>
     departure.dataToDisplay.color || !lineToColor[codeToLine[numberToCode[departure.savedNumber]]] ? {} :
@@ -38,7 +39,7 @@ const findColor = ({baseDepartures}) => baseDepartures.map(departure =>
 
 const busColors = ({baseDepartures}) => baseDepartures.map(departure =>
     (departure.dataToDisplay.mode||'').toLowerCase() !== 'bus' || departure.brand !== 'RATP' ||
-    !busLinesColors[departure.dataToDisplay.number] ? {} :
+    !busLinesColors[departure.dataToDisplay.number] ? {savedNumber:departure.savedNumber, dataToDisplay:{fontColor:'FFFFFF'}} :
     {savedNumber:departure.savedNumber, dataToDisplay:{
         color: busLinesColors[departure.dataToDisplay.number].backgroundColor, fontColor:busLinesColors[departure.dataToDisplay.number].color}})
 
@@ -49,19 +50,57 @@ const metroColors = ({baseDepartures}) => baseDepartures.map(departure =>
             name: departure.dataToDisplay.number,
             color: metroLinesColors[departure.dataToDisplay.number]}})
 
-const transilienColors = ({baseDepartures}) => baseDepartures.map(departure =>
-    (departure.dataToDisplay.mode||'').toLowerCase() !== 'transilien' ||
-    !transilienLinesColors[departure.dataToDisplay.number] ? {} :
-        {savedNumber:departure.savedNumber, dataToDisplay:{
-            name: departure.dataToDisplay.number,
-            color: transilienLinesColors[departure.dataToDisplay.number]}})
+const transilienColors = ({baseDepartures}) => baseDepartures.map(departure => {
+    if ((departure.dataToDisplay.mode || '').toLowerCase() !== 'transilien') return {}
+    if (transilienLinesColors[departure.dataToDisplay.name||'-1']) {
+        return {
+            savedNumber: departure.savedNumber, dataToDisplay: {
+                color: transilienLinesColors[departure.dataToDisplay.name]
+            }
+        }
+    }
+    if (transilienLinesColors[departure.dataToDisplay.number||'-1']){
+        return {
+            savedNumber: departure.savedNumber, dataToDisplay: {
+                name: departure.dataToDisplay.number,
+                color: transilienLinesColors[departure.dataToDisplay.number]
+            }
+        }
+    }
+    const fromTrainNumber = findOneIdfMapping(departure)
+    if (lineToColor[codeToLine[numberToCode[fromTrainNumber.savedNumber]]])
+        return {
+            savedNumber: departure.savedNumber, dataToDisplay: {
+                color: lineToColor[codeToLine[numberToCode[fromTrainNumber.savedNumber]]]
+            }
+        }
+    return {}
+})
 
-const rerColors = ({baseDepartures}) => baseDepartures.map(departure =>
-    (departure.dataToDisplay.mode||'').toLowerCase() !== 'rer' ||
-    !rerLinesColors[departure.dataToDisplay.number] ? {} :
-        {savedNumber:departure.savedNumber, dataToDisplay:{
-            name: departure.dataToDisplay.number,
-            color: rerLinesColors[departure.dataToDisplay.number]}})
+const rerColors = ({baseDepartures}) => baseDepartures.map(departure => {
+    if ((departure.dataToDisplay.mode || '').toLowerCase() !== 'rer') return {}
+    if (rerLinesColors[departure.dataToDisplay.name||'-1'])
+        return {
+            savedNumber: departure.savedNumber, dataToDisplay: {
+                color: rerLinesColors[departure.dataToDisplay.name]
+            }
+        }
+    if (rerLinesColors[departure.dataToDisplay.number||'-1'])
+        return {
+            savedNumber: departure.savedNumber, dataToDisplay: {
+                name: departure.dataToDisplay.number,
+                color: rerLinesColors[departure.dataToDisplay.number]
+            }
+        }
+    const fromTrainNumber = findOneIdfMapping(departure)
+    if (lineToColor[codeToLine[numberToCode[fromTrainNumber.savedNumber]]])
+    return {
+        savedNumber: departure.savedNumber, dataToDisplay: {
+            color: lineToColor[codeToLine[numberToCode[fromTrainNumber.savedNumber]]]
+        }
+    }
+    return {}
+})
 
 const tramColors = ({baseDepartures}) => baseDepartures.map(departure =>
     (departure.dataToDisplay.mode||'').toLowerCase() !== 'tramway' ||

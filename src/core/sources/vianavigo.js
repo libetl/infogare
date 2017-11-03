@@ -22,19 +22,20 @@ const baseDepartures = ({projection, identification}) => !identification ? Promi
         .then(values => values.map(value => value.data).map(value => value.proximityPoints.reduce((acc, value) =>
             acc.concat((value.nextPassages||[]).map(passage => {return {...value, ...(passage||{}), nextPassages:undefined}})), [])).reduce((acc, value) => acc.concat(value), []))
         .then(denormalizedDepartures => denormalizedDepartures.map(denormalizedDeparture => {
-            const time = moment().add(parseInt(denormalizedDeparture.time), 'minutes').format('HH:mm')
+            const hour = moment().add(parseInt(denormalizedDeparture.time), 'minutes').format('HH:mm')
+            const now = moment().format('HH:mm')
             return {
                 savedNumber:denormalizedDeparture.id,
                 brand: denormalizedDeparture.line && denormalizedDeparture.line.network && denormalizedDeparture.line.network.label,
                 stop_date_time: {
-                    base_departure_date_time: time,
+                    base_departure_date_time: hour.localeCompare(now) < 0 ? `${parseInt(hour.split(':')[0]) + 24}:${hour.split(':')[1]}` : hour,
                 },
                 dataToDisplay: {
                     mode: denormalizedDeparture.line.mode === 'Train' ? 'Transilien' : denormalizedDeparture.line.mode,
-                    direction: capitalize(denormalizedDeparture.lineDirection),
+                    direction: (capitalize(denormalizedDeparture.lineDirection)||''),
                     number: denormalizedDeparture.line.label,
                     missionCode: denormalizedDeparture.vehicleName,
-                    time: time,
+                    time: hour,
                     stops: []
                 }
             }}))
