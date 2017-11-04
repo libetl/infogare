@@ -1,6 +1,7 @@
 import React from 'react'
 import moment from 'moment'
-import {Button, Image, Modal, ScrollView, StyleSheet, Text, View, LoadPicture} from '../wrapper'
+import {Button, Image, Modal, ScrollView, StyleSheet, Text, View, IsNative, LoadPicture} from '../wrapper'
+import {blackOrWhite} from '../core/operations/blackOrWhite'
 
 const styles = StyleSheet.create({
     "View": {
@@ -418,6 +419,15 @@ export default class Details extends React.Component {
         const directionName = details.direction || ' '
         const stops = details.stops || [{}]
         const finalStop = typeof stops.slice(-1)[0] === 'object' ? '?' : stops.slice(-1)[0]
+        const lineColorText = {width:30, height:30,
+            fontSize:12,
+            textAlign: 'center', fontWeight: 'bold', borderStyle: 'solid', borderWidth: 3,
+            borderRadius: mode === 'rer' || mode === 'metro' || mode === 'tramway' ? (IsNative ? 50 : '50%') : 3,
+            borderColor: `#${details.color || 'FFFFFF'}`,
+            color:mode === 'metro' ? blackOrWhite(details.color || '#000000') : `#${details.color || 'FFFFFF'}`,
+            backgroundColor: mode === 'metro' ? `#${details.color}` : undefined}
+        const numberText = mode !== 'bus' ? {} :
+            {color: '#' + details.fontColor || '#fff', backgroundColor: '#' + details.color || 'transparent',alignSelf: 'center', textAlign: 'center'}
         return (
             <Modal style={{zIndex: 2, width: '100%', height: '100%', display: this.props.details !== undefined ? 'block' : 'none'}} animationType={"slide"} visible={this.props.details !== undefined} onRequestClose={this.props.onClose} contentLabel="Details">
                 <View style={styles.screen}>
@@ -431,17 +441,14 @@ export default class Details extends React.Component {
                             </View>
                             <View style={styles.direction}><Text style={{fontSize : this.props.rowWidth / (directionName.length * 1.76), fontWeight: "bold", color: "#004494"}}>{directionName}</Text></View>
                             <View style={styles.train}>
-                                <View>{mode === 'transilien' ? <Image style={styles.modeIcon} source={LoadPicture('transilienB')} /> :
-                                    mode === 'rer' ? <Image style={styles.modeIcon} source={LoadPicture('rerB')} /> :
+                                <View>{mode === 'bus' || mode === 'transilien'|| mode === 'rer' || mode === 'metro' || mode === 'tramway' ? <Image style={styles.modeIcon} source={LoadPicture(`${mode}B`)} /> :
                                         mode === 'intercités' ? <Image style={styles.modeIcon} source={LoadPicture('intercitesB')}/> :
                                             mode === 'intercités de nuit' ? <Image style={styles.modeIcon} source={LoadPicture('intercitesB')} /> :
                                                 <Text style={styles.mode}>{mode.toUpperCase()}</Text>}</View>
                                 <View style={styles.number}>
-                                    {!details.name ? <Text style={{'display': 'none'}}/> :
-                                    <Text style={{fontWeight: 'bold', borderStyle: 'solid', borderWidth: 3, borderRadius: mode === 'rer' ? 30 : 3,
-                                        borderColor: `#${details.color || '000000'}`, color:`#${details.color || '000000'}`, textAlign: 'center',height: 30,
-                                        width: 30}}>{details.name}</Text>}
-                                    <Text style={styles.numberText}>{details.number}</Text></View>
+                                    {details.name ? <Text style={lineColorText}>{details.name}</Text> : <Text>{details.name}</Text>}
+                                    {details.number !== details.name ? <Text style={numberText}>{details.number}</Text> : <Text style={{width:'5%'}}/>}
+                                </View>
                             </View>
                         </View>
                         <ScrollView style={styles.stops}>
