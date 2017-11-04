@@ -30,7 +30,7 @@ const baseDepartures = ({apiData}) =>
             dataToDisplay: {
                 mode: (horaire.circulation.mode||{typeLibelle:''}).typeLibelle.replace(/\s*Train\s*/,'').split(' ')[0],
                 name: '',
-                direction: capitalize(horaire.circulation.destination.libelle),
+                direction: capitalize(horaire.circulation.destination.libelle).replace(' Transilien', ''),
                 number: horaire.arret.depart.numeroCirculation,
                 time: moment(horaire.arret.depart.dateHeureReelle, 'YYYY-MM-DDTHH:mm:ssZ').format('HH:mm'),
                 platform: horaire.arret.voie.numeroPrevision,
