@@ -7,8 +7,8 @@ const getStation = stationName =>
 
 const extractstopAreaName = response =>
     response.data.reponseRechercherListeEmplacementsCommencantPar.reponse.listeResultats.resultat[0].donnees.listeEmplacements.emplacement[0].code
-const extractDepatures = response => response.data.reponseRechercherProchainsDeparts.reponse.listeResultats.resultat[0].donnees.listeHoraires.horaire
-const extractJourney = response => response.data.reponseRechercherListeCirculations.reponse.listeResultats.resultat[0].donnees.listeCirculations.circulation[0]
+const extractDepartures = response => response.data.reponseRechercherProchainsDeparts.reponse.listeResultats.resultat.reduce((acc, resultat) => acc.concat(resultat.donnees.listeHoraires.horaire),[])
+const extractJourney = response => (response.data.reponseRechercherListeCirculations.reponse.listeResultats.resultat[0].donnees.listeCirculations||{circulation:[{listeArretsDesserte:{arret:[{emplacement:{libelle:'Desserte non dispo'}}]}}]}).circulation[0]
 
 const departures = stopAreaName => get(`https://www.nouveau.sncf.com/api/iv/1.0/infoVoy/rechercherProchainsDeparts?codeZoneArret=${stopAreaName}&indicateurReponseGaresSecondaires=true`)
 const findJourney = ({baseDepartures, stationsAreas:{apiData:{stopAreaName}}}) =>
@@ -21,7 +21,7 @@ const findJourney = ({baseDepartures, stationsAreas:{apiData:{stopAreaName}}}) =
 
 const baseDepartures = ({apiData}) =>
     departures(apiData.stopAreaName)
-        .then(response => extractDepatures(response))
+        .then(response => extractDepartures(response))
         .then(horaires => horaires.map(horaire => {return {
             savedNumber:parseInt(horaire.arret.depart.numeroCirculation),
             stop_date_time: {
