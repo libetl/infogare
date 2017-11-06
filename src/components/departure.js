@@ -26,7 +26,7 @@ export default class Departure extends React.Component {
             borderRadius: mode === 'rer' || mode === 'metro' || mode === 'tramway' ? (IsNative ? 50 : '50%') : 3,
             borderColor: `#${departure.color || 'FFFFFF'}`,
             color:mode === 'metro' ? blackOrWhite(departure.color || '#000000') : `#${departure.color || 'FFFFFF'}`,
-            backgroundColor: mode === 'metro' ? `#${departure.color}` : undefined}
+            backgroundColor: mode === 'metro' ? `#${departure.color}` : 'transparent'}
         const modeView = {width:'10%'}
         const modeIcon = {width: numberFontSize * 3, height: numberFontSize * 3, alignSelf: 'center'}
         const bigModeIcon = this.props.detailed ? {height: '23%', width:'22%'} : {marginTop: 7, height: '45%', width:'22%'}
@@ -35,7 +35,7 @@ export default class Departure extends React.Component {
         const split = {height:this.props.rowHeight * 0.3, width: '100%', flexDirection: 'row'}
         const stopsScroll = {height:this.props.rowHeight * 0.3, marginTop:this.props.rowHeight * 0.4, minHeight:12}
         const numberText = mode !== 'bus' ? {alignSelf: 'center', color:'#fff'} :
-            {color: '#' + departure.fontColor || '#fff', backgroundColor: '#' + departure.color || 'transparent', minWidth:numberFontSize * 3, alignSelf: 'center', textAlign: 'center', fontSize: numberFontSize}
+            {color: departure.fontColor ? '#' + departure.fontColor : '#fff', backgroundColor: departure.color ? '#' + departure.color : 'transparent', minWidth:numberFontSize * 3, alignSelf: 'center', textAlign: 'center', fontSize: numberFontSize}
         const number = {width: '15%'}
         const timeAndStatus = {minWidth:3 * numberFontSize + 4, flexDirection: 'column'}
         const time = {color: '#dfc81f', fontSize: numberFontSize, fontWeight: 'bold'}
