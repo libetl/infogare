@@ -69,8 +69,7 @@ const styles = StyleSheet.create({
     "stop": {
         "display": "flex",
         "flexDirection": "row",
-        "flexWrap": "wrap",
-        "marginTop": "-1.5%"
+        "flexWrap": "wrap"
     },
     "finalStop": {
         "display": "flex",
@@ -98,13 +97,13 @@ const styles = StyleSheet.create({
         "display": "flex",
         "flexDirection": "row",
         "flexWrap": "wrap",
-        "marginBottom": "-5%"
+        "paddingBottom": "-5%"
     },
     "beforeFinalStopPadding": {
         "display": "flex",
         "flexDirection": "row",
         "flexWrap": "wrap",
-        "marginBottom": "-6.1%"
+        "marginBottom": "-10px"
     },
     "brand": {
         "height":"20%",
