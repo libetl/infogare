@@ -22,7 +22,7 @@ const findJourney = ({baseDepartures, stationsAreas:{apiData:{stopAreaName}}}) =
 const baseDepartures = ({apiData}) =>
     departures(apiData.stopAreaName)
         .then(response => extractDepartures(response))
-        .then(horaires => horaires.map(horaire => {debugger;return {
+        .then(horaires => horaires.map(horaire => {return {
             savedNumber:parseInt(horaire.arret.depart.numeroCirculation),
             stop_date_time: {
                 base_departure_date_time: horaire.arret.depart.dateHeureReelle,
