@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
         "display": "flex",
         "flexDirection": "row",
         "flexWrap": "wrap",
-        "marginBottom": "-10px"
+        "marginBottom": -10
     },
     "brand": {
         "height":"20%",
