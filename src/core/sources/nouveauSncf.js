@@ -22,13 +22,13 @@ const findJourney = ({baseDepartures, stationsAreas:{apiData:{stopAreaName}}}) =
 const baseDepartures = ({apiData}) =>
     departures(apiData.stopAreaName)
         .then(response => extractDepartures(response))
-        .then(horaires => horaires.map(horaire => {return {
+        .then(horaires => horaires.map(horaire => {debugger;return {
             savedNumber:parseInt(horaire.arret.depart.numeroCirculation),
             stop_date_time: {
                 base_departure_date_time: horaire.arret.depart.dateHeureReelle,
             },
             dataToDisplay: {
-                mode: (horaire.circulation.mode||{typeLibelle:''}).typeLibelle.replace(/\s*Train\s*/,'').split(' ')[0],
+                mode: (((horaire.circulation||{}).mode||{typeLibelle:''}).typeLibelle||'').replace(/\s*Train\s*/,'').split(' ')[0],
                 name: '',
                 direction: capitalize(horaire.circulation.destination.libelle).replace(' Transilien', ''),
                 number: horaire.arret.depart.numeroCirculation,
