@@ -25,6 +25,7 @@
   "scripts": {
     "start-desktop": "node node_modules/electron/cli.js -r babel-register ./electron.js",
     "windows-exe": "electron-packager . \"sncf-le-panneau\" --out=windows --platform=win32 --arch=ia32 --icon=public/favicon.ico",
+    "linux-elf": "electron-packager ./ --overwrite --ignore='.watchmanconfig|.gitignore|.flowconfig|yarn.lock|package-lock.json|.idea|.expo|android|sandbox|tools' \"sncf-le-panneau\" --out=linux --platform=linux --arch=x64 --icon=public/favicon.ico",
     "start": "react-native-scripts start",
     "eject": "react-native-scripts eject",
     "eject-web": "react-scripts eject",

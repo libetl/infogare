@@ -29,7 +29,7 @@ export default class Departure extends React.Component {
             backgroundColor: mode === 'metro' ? `#${departure.color}` : 'transparent'}
         const modeView = {width:'10%'}
         const modeIcon = {width: numberFontSize * 3, height: numberFontSize * 3, alignSelf: 'center'}
-        const bigModeIcon = this.props.detailed ? {height: '23%', width:'22%'} : {marginTop: 7, height: '45%', width:'22%'}
+        const bigModeIcon = this.props.detailed ? {height: numberFontSize * 3} : {marginTop: 7, height: numberFontSize * 3}
         const modeText = {color: '#fff', maxWidth: this.props.rowWidth * 0.25, fontSize: numberFontSize, fontWeight: 'bold', width: 60}
         const direction = {color: '#fff', fontSize: directionFontSize, overflow: 'hidden', flexGrow: 1}
         const split = {height:this.props.rowHeight * 0.3, width: '100%', flexDirection: 'row'}
