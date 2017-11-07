@@ -33,7 +33,7 @@ const baseDepartures = ({apiData}) =>
                 direction: capitalize(horaire.circulation.destination.libelle).replace(' Transilien', ''),
                 number: horaire.arret.depart.numeroCirculation,
                 time: moment(horaire.arret.depart.dateHeureReelle, 'YYYY-MM-DDTHH:mm:ssZ').format('HH:mm'),
-                platform: horaire.arret.voie.numeroQuai || horaire.arret.voie.numeroPrevision,
+                platform: horaire.arret.voie && (horaire.arret.voie.numeroQuai || horaire.arret.voie.numeroPrevision),
                 stops: []}}}))
 
 const stationSearch = (coords, {token, nestedStationSearch}) => {
