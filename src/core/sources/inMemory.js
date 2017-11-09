@@ -125,5 +125,5 @@ const stationSearch = coords => {
 export default { stationSearch, stationsMatching,
     feed:[findIdfMapping, busColors, findColor, metroColors, transilienColors, tramColors, rerColors, findName],
     closestStations,
-    metadata: {features:['stations', 'colors', 'codes'], everywhere: true,
+    metadata: {features:['stations', 'colors', 'codes'], everywhere: true, needsExtraSourceForGeolocation: false,
     ratings:{relevancy: 5, reliability: 5, sustainability: 5, efficiency: 5}}}
