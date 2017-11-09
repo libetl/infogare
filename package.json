@@ -3,6 +3,7 @@
   "version": "1.2.0",
   "private": true,
   "devDependencies": {
+    "chalk": "latest",
     "cross-env": "latest",
     "react-native-scripts": "1.6.0",
     "chrome-launch": "latest",

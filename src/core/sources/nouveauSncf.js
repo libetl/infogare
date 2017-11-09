@@ -46,4 +46,4 @@ const stationSearch = (coords, {token, nestedStationSearch}) => {
 export default {
     stationSearch, baseDepartures, feed:[findJourney],
     metadata: {features:['departures', 'stations', 'platforms', 'journeys'], everywhere: true,
-        ratings:{relevancy: 5, reliability: 3, sustainability: 1}}}
+        ratings:{relevancy: 5, reliability: 1, sustainability: 3, efficiency: 4}}}

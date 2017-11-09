@@ -39,4 +39,4 @@ const baseDepartures = ({nestedSearchData:{stations}}) => get('http://www.sncf.c
                                 stops: []}}})))
 
 export default {baseDepartures, feed:[], metadata: {features: ['departures'], everywhere: false,
-    ratings:{relevancy: 2, reliability: 2, sustainability: 1}}}
+    ratings:{relevancy: 2, reliability: 2, sustainability: 1, efficiency: 0}}}

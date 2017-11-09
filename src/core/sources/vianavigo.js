@@ -43,4 +43,4 @@ const baseDepartures = ({projection, identification}) => !identification ? Promi
 export default {
     stationSearch, baseDepartures,
     metadata: {features:['stations', 'departures'], everywhere: true, butSpecificForRegion:'Île-de-France',
-        ratings:{relevancy: 5, reliability: 2, sustainability: 2}}}
+        ratings:{relevancy: 5, reliability: 2, sustainability: 2, efficiency: 4}}}
