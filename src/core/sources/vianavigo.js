@@ -44,4 +44,4 @@ export default {
     stationSearch, baseDepartures,
     metadata: {features:['stations', 'departures'], everywhere: true, butSpecificForRegion:'Île-de-France',
         needsExtraSourceForGeolocation: false,
-        ratings:{relevancy: 5, reliability: 2, sustainability: 2, efficiency: 4}}}
+        ratings:{relevancy: 5, reliability: 2, sustainability: 2, efficiency: 2}}}

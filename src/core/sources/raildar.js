@@ -50,4 +50,4 @@ export default {
         .then(garesArrays => garesArrays.reduce((acc, value) => acc.concat(value), [])),
     metadata: {features:['stations', 'departures', 'journeys', 'geolocation'], everywhere: false,
         needsExtraSourceForGeolocation: false,
-        ratings:{relevancy: 1, reliability: 4, sustainability: 4, efficiency: 3}}}
+        ratings:{relevancy: 1, reliability: 4, sustainability: 4, efficiency: 2}}}

@@ -55,4 +55,4 @@ const baseDepartures = ({nestedSearchData:{stations}}) =>
 export default {baseDepartures,
     metadata: {features:['departures', 'journeys','platforms','journeys'], everywhere: true, butSpecificForRegion:'Île-de-France',
         needsExtraSourceForGeolocation: false,
-        ratings:{relevancy: 4, reliability: 2, sustainability: 1, efficiency: 0}}}
+        ratings:{relevancy: 4, reliability: 2, sustainability: 1, efficiency: 1}}}
