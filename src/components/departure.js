@@ -17,7 +17,7 @@ export default class Departure extends React.Component {
         const style = {width: '100%', backgroundColor: this.props.odd ? '#0d5da6' : '#04396d', flexDirection: 'column',
             alignItems: 'center', flexWrap: 'wrap', height: `${70.0 / this.props.rows * (this.props.detailed ? 2 : 1)}%`}
         const mode = (departure.mode || '').toLowerCase()
-        const lineColor = {width: '10%', height:'45%'}
+        const lineColor = {width: '10%', height:this.props.detailed ? '45%' : '62%'}
         const lineColorText = {width:numberFontSize * 3, height:numberFontSize * 3,
             paddingTop:(this.props.rowHeight * 0.23  - numberFontSize) / 2,
             paddingBottom:(this.props.rowHeight * 0.23  - numberFontSize) / 2,
@@ -29,7 +29,7 @@ export default class Departure extends React.Component {
             backgroundColor: mode === 'metro' ? `#${departure.color}` : 'transparent'}
         const modeView = {width:'10%'}
         const modeIcon = {width: numberFontSize * 3, height: numberFontSize * 3, alignSelf: 'center'}
-        const bigModeIcon = this.props.detailed ? {height: numberFontSize * 3} : {marginTop: 7, height: numberFontSize * 3}
+        const bigModeIcon = {height: numberFontSize * 3}
         const modeText = {color: '#fff', maxWidth: this.props.rowWidth * 0.25, fontSize: numberFontSize, fontWeight: 'bold', width: 60}
         const direction = {color: '#fff', fontSize: directionFontSize, overflow: 'hidden', flexGrow: 1}
         const split = {height:this.props.rowHeight * 0.3, width: '100%', flexDirection: 'row'}
