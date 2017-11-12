@@ -2,8 +2,13 @@ import {get, post} from 'axios'
 import capitalize from '../operations/capitalize'
 import moment from 'moment'
 
-const getStation = stationName =>
-    get(`https://www.nouveau.sncf.com/api/iv/1.0/util/rechercherListeEmplacementsCommencantPar?typeEmplacement=ZONE_ARRET&libelle=${stationName}&indicateurFiltreModes=true&Nbemplacement=5&indicateurReponseGaresSecondaires=true`)
+const getStation = stationName => get('https://www.nouveau.sncf.com/api/iv/1.0/util/rechercherListeEmplacementsCommencantPar',
+    {params: {
+        typeEmplacement: 'ZONE_ARRET',
+        libelle: stationName,
+        indicateurFiltreModes: true,
+        Nbemplacement: 5,
+        indicateurReponseGaresSecondaires: true}})
 
 const extractstopAreaName = response =>
     response.data.reponseRechercherListeEmplacementsCommencantPar.reponse.listeResultats.resultat[0].donnees.listeEmplacements.emplacement[0].code
@@ -17,7 +22,8 @@ const findJourney = ({baseDepartures, stationsAreas:{apiData:{stopAreaName}}}) =
             get(`https://www.nouveau.sncf.com/api/iv/1.0/infoVoy/rechercherListeCirculations?numero=${departure.savedNumber}&dateCirculation=${moment(departure.stop_date_time.base_departure_date_time, 'YYYY-MM-DDTHH:mm:ssZ').format('YYYY-MM-DD')}&codeZoneArret=${stopAreaName}&typeHoraire=TEMPS_REEL&codeZoneArretDepart&codeZoneArretArrivee&compositions=1&codeCirculation`)
                 .then(response => extractJourney(response))
                 .then(journey => journey.listeArretsDesserte.arret.map(arret => arret.emplacement.libelle))
-                .then(stops => {return {savedNumber:departure.savedNumber, dataToDisplay:{stops}}})))
+                .then(stops => {return {savedNumber:departure.savedNumber, dataToDisplay:{stops}}})
+                .catch(e => ['Desserte non dispo'])))
 
 const baseDepartures = ({apiData}) =>
     departures(apiData.stopAreaName)
