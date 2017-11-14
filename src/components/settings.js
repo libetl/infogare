@@ -85,7 +85,7 @@ export default class Settings extends React.Component {
                         <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>Fiabilité</Text></View><Text style={settingName}>la source fonctionne t-elle tout le temps ? Peut il y avoir des coupures inopinées ?</Text></View>
                         <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>Perennité</Text></View><Text style={settingName}>le service peut il être supprimé définitivement du jour au lendemain ?</Text></View>
                         <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>Rapidité</Text></View><Text style={settingName}>le service répond il avec efficacité et en temps raisonnable ?</Text></View>
-                        <View style={oneSetting}><View><Text>Attention : la source 'sncf api' nécessite d'être enregistré sur http://data.sncf.com/api</Text></View></View>
+                        <View style={oneSetting}><View><Text>Attention : la source 'sncf api' nécessite d'être enregistré sur https://www.digital.sncf.com/startup/api/token-developpeur</Text></View></View>
                         <View style={oneSetting}><View><Text>Attention : seules les fonctionnalités surlignées en jaune sont réellement utilisées.
                             Inutile de cocher toutes les sources.</Text></View></View>
                         <Text style={titleInGreen}>Activer les sources suivantes :</Text>

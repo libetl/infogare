@@ -8,12 +8,6 @@
     "sdkVersion": "22.0.0",
     "primaryColor": "#0d5da6",
     "nodeModulesPath": ".",
-    "loading": {
-      "icon": "logo.png",
-      "hideExponentText": false,
-      "backgroundColor": "#0d5da6",
-      "backgroundImage": "background.png"
-    },
     "androidStatusBarColor": "#ffffff",
     "androidStatusBar": {
       "barStyle": "light-content",
@@ -24,7 +18,12 @@
     },
     "android": {
       "package": "org.toilelibre.libe.trains",
-      "versionCode": 15
+      "versionCode": 16
+    },
+    "splash": {
+      "image": "logo.png",
+      "backgroundColor": "#0d5da6",
+      "resizeMode": "cover"
     },
     "scheme": "exp",
     "privacy": "public"
