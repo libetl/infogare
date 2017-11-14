@@ -22,6 +22,7 @@
     },
     "splash": {
       "image": "logo.png",
+      "tabletImage": "logo.png",
       "backgroundColor": "#0d5da6",
       "resizeMode": "cover"
     },
