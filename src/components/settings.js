@@ -58,6 +58,9 @@ const featuresTranslations = {
     journeys: 'dessertes',
     geolocation: 'géolocalisation'
 }
+const selectedSource = {
+    backgroundColor: '#ddc15d'
+}
 
 export default class Settings extends React.Component {
     constructor(props) {
@@ -83,9 +86,37 @@ export default class Settings extends React.Component {
                         <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>Perennité</Text></View><Text style={settingName}>le service peut il être supprimé définitivement du jour au lendemain ?</Text></View>
                         <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>Rapidité</Text></View><Text style={settingName}>le service répond il avec efficacité et en temps raisonnable ?</Text></View>
                         <View style={oneSetting}><View><Text>Attention : la source 'sncf api' nécessite d'être enregistré sur http://data.sncf.com/api</Text></View></View>
+                        <View style={oneSetting}><View><Text>Attention : seules les fonctionnalités surlignées en jaune sont réellement utilisées.
+                            Inutile de cocher toutes les sources.</Text></View></View>
                         <Text style={titleInGreen}>Activer les sources suivantes :</Text>
                         {Object.entries(webservice.dataSources).map(([name, metadata]) =>
-                            <View key={name} style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>{name}</Text><Text style={settingDescription}>{metadata.features.map(feature => featuresTranslations[feature]).join('+\n')}{metadata.everywhere ? '' : ' (grandes gares)'}{metadata.butSpecificForRegion ? `(disponible uniquement pour la région ${metadata.butSpecificForRegion})` : ''}</Text></View><Switch style={smallInput} id={name} label={name} value={this.props.dataSources.includes(name)} onValueChange={(value) => this.props.onDataSourceListChange(name, value)}/><View style={ratings}><View style={oneRating}><Text style={ratingText}>Pertinence{new Array(metadata.ratings.relevancy).fill('★')}{new Array(5 - metadata.ratings.relevancy).fill('☆')}</Text></View><View style={oneRating}><Text style={ratingText}>Fiabilité{new Array(metadata.ratings.reliability).fill('★')}{new Array(5 - metadata.ratings.reliability).fill('☆')}</Text></View><View style={oneRating}><Text style={ratingText}>Perennité{new Array(metadata.ratings.sustainability).fill('★')}{new Array(5 - metadata.ratings.sustainability).fill('☆')}</Text></View><View style={oneRating}><Text style={ratingText}>Rapidité{new Array(metadata.ratings.efficiency).fill('★')}{new Array(5 - metadata.ratings.efficiency).fill('☆')}</Text></View></View></View>
+                            <View key={name} style={oneSettingNoBottomRow}>
+                                <View style={settingTitle}>
+                                    <Text style={settingName}>{name}</Text>
+                                    <View style={settingDescription}>
+                                        {metadata.features.map((feature,i) => <Text key={name + '-' + feature + '-' + i} style={this.props.currentMapping[feature] === name ? selectedSource : {}}>•{featuresTranslations[feature]}</Text>)}
+                                        <Text>
+                                            {metadata.everywhere ? '' : ' (grandes gares)'}
+                                            {metadata.butSpecificForRegion ? `(disponible uniquement pour la région ${metadata.butSpecificForRegion})` : ''}
+                                        </Text>
+                                    </View>
+                                </View>
+                                <Switch style={smallInput} id={name} label={name} value={this.props.dataSources.includes(name)} onValueChange={(value) => this.props.onDataSourceListChange(name, value)}/>
+                                <View style={ratings}>
+                                    <View style={oneRating}>
+                                        <Text style={ratingText}>Pertinence{new Array(metadata.ratings.relevancy).fill('★')}{new Array(5 - metadata.ratings.relevancy).fill('☆')}</Text>
+                                    </View>
+                                    <View style={oneRating}>
+                                        <Text style={ratingText}>Fiabilité{new Array(metadata.ratings.reliability).fill('★')}{new Array(5 - metadata.ratings.reliability).fill('☆')}</Text>
+                                    </View>
+                                    <View style={oneRating}>
+                                        <Text style={ratingText}>Perennité{new Array(metadata.ratings.sustainability).fill('★')}{new Array(5 - metadata.ratings.sustainability).fill('☆')}</Text>
+                                    </View>
+                                    <View style={oneRating}>
+                                        <Text style={ratingText}>Rapidité{new Array(metadata.ratings.efficiency).fill('★')}{new Array(5 - metadata.ratings.efficiency).fill('☆')}</Text>
+                                    </View>
+                                </View>
+                            </View>
                         )}
                         <Text style={titleInGreen}>Autorisation pour api sncf</Text>
                         <View style={oneSettingNoBottomRow}><Text>Si le token est valide, l'accès à la source 'sncf api' devient possible</Text></View>
@@ -101,6 +132,7 @@ Settings.propTypes = {
     settingsOpened: PropTypes.bool,
     closeSettings: PropTypes.func,
     dataSources: PropTypes.array,
+    currentMapping: PropTypes.object,
     token: PropTypes.string,
     onDataSourceListChange:PropTypes.func,
     validateToken:PropTypes.func
