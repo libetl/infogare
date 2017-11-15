@@ -55,7 +55,14 @@ export default class Departure extends React.Component {
                             {departure.name ? <View style={lineColor}><Text style={lineColorText}>{departure.name}</Text></View> : <Text>{departure.name}</Text>}
                             {departure.number !== departure.name ? <View style={number}><Text style={numberText}>{departure.number}</Text></View> : <Text style={{width:'5%'}}/>}
                             <View style={timeAndStatus}><Text style={time}>{departure.time}</Text>{departure.status ? (<Text style={status}>{departure.status}</Text>) : <Text style={{display:'none'}}/>}</View>
-                            <Text style={direction}>{directionName}</Text>
+                            {this.props.detailed || !departure.boardingPoint ? <Text style={direction}>{directionName}</Text> :
+                                <View key={departure.boardingPoint} style={{overflow: 'hidden', flexGrow: 1}}>
+                                    <Text style={{color:'#fff'}}>{directionName} </Text>
+                                    <View style={{flexDirection: 'row'}}>
+                                        <Image style={{height: this.props.rowHeight * 0.15 - (IsNative ? 0 : 6), width: this.props.rowHeight * 0.15 - (IsNative ? 0 : 6)}} source={LoadPicture('walk')} />
+                                        <Text style={{lineHeight: this.props.rowHeight * 0.15 - (IsNative ? 0 : 6), color: '#fff', fontSize: this.props.rowHeight * 0.075}}>{departure.boardingPoint}</Text>
+                                    </View>
+                                </View>}
                             <Text style={departure.platform && departure.platform.length > 0 ?
                                 platform : styles.noPlatformYet}>{departure.platform}</Text>
                         </View>
@@ -63,6 +70,11 @@ export default class Departure extends React.Component {
                         <ScrollView ref={(thisRef) => this.props.parent[`stopsListOfRow${this.props.detailsRow}`] = thisRef}
                                     {...androidSpecialAttributes}
                                     contentContainerStyle={styles.stops} style={stopsScroll}>
+                            {this.props.detailed && departure.boardingPoint ?
+                                (<View key={departure.boardingPoint} style={{flexDirection:'row'}}>
+                                    <Image style={{height: this.props.rowHeight * 0.3 - (IsNative ? 0 : 6), width: this.props.rowHeight * 0.3 - (IsNative ? 0 : 6)}} source={LoadPicture('walk')} />
+                                    <Text style={{lineHeight: this.props.rowHeight * 0.3 - (IsNative ? 0 : 6), color: '#fff', fontSize: this.props.rowHeight * 0.15}}>{departure.boardingPoint}</Text>
+                                </View>): <Text/>}
                             <Text onLayout={event => this.props.parent.measureView(event, `stopsListOfRow${this.props.detailsRow}`)}>{!departure.stops ? '' :
                                 departure.stops.map(stop => (
                                     <Text style={{lineHeight: this.props.rowHeight * 0.3 - (IsNative ? 0 : 6)}} key={stop}>

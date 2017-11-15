@@ -31,6 +31,7 @@ const baseDepartures = ({projection, identification}) => !identification ? Promi
                     base_departure_date_time: hour.localeCompare(now) < 0 ? `${parseInt(hour.split(':')[0]) + 24}:${hour.split(':')[1]}` : hour,
                 },
                 dataToDisplay: {
+                    boardingPoint:`${capitalize(denormalizedDeparture.name)}(${denormalizedDeparture.distance}m)`,
                     mode: denormalizedDeparture.line.mode === 'Train' ? 'Transilien' : denormalizedDeparture.line.mode,
                     direction: (capitalize(denormalizedDeparture.lineDirection)||''),
                     number: denormalizedDeparture.line.label,
