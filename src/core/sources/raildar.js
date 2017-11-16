@@ -17,7 +17,7 @@ const normalize = (gare) => gare.departures.filter(departure => departure.termin
     const allStops = departure.mission.arrets.map(arret => arret.name_gare)
     const number = parseInt(departure.mission.num) || departure.mission.num
     const radar = gare.trafic.find(train => train.properties.id_train === departure.id_train)
-    const trainCoords = radar && radar.geometry.coordinates
+    const trainCoords = radar && radar.coordinates
     const mode = number < 6000 ? 'Intercités' : number < 10000 ? 'TGV' : number < 153000 ? 'Transilien' : 'TER'
     const now = moment().add({minutes:-10}).format('HH:mm')
     const heure = moment(departure.time_reel, 'YYYY-MM-DD HH:mm:ssZ').format('HH:mm')

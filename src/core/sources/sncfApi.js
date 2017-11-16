@@ -54,7 +54,7 @@ const vehicleJourney = (closestStations, link, fromCoords, token) => fetch(vehic
         const allStops = result.data.vehicle_journeys[0].stop_times.map(stop_time => stop_time.stop_point.name)
         const allStopsCoords = result.data.vehicle_journeys[0].stop_times.map(stop_time => { return {
             name:stop_time.stop_point.name,
-            geometry:{coordinates:[parseFloat(stop_time.stop_point.coord.lon), parseFloat(stop_time.stop_point.coord.lat)]}}})
+            coordinates:[parseFloat(stop_time.stop_point.coord.lon), parseFloat(stop_time.stop_point.coord.lat)]}})
         const missionCode = result.data.vehicle_journeys[0].name &&
         result.data.vehicle_journeys[0].name[0] >= 'A' &&  result.data.vehicle_journeys[0].name[0] <= 'Z'
             ? result.data.vehicle_journeys[0].name.substring(0, 4) : undefined

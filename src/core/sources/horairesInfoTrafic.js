@@ -12,7 +12,7 @@ const headersFrom = (infoRequest, redirect) => {return {headers:{
 const baseDepartures = ({nestedSearchData:{stations}}) => get('http://www.sncf.com/fr/horaires-info-trafic').then(infoRequest =>
         promiseWhile(response => !response.data.includes('Error 404 - Page not found') &&
             new DomParser().parseFromString(response.data).getElementsByClassName('tab-depart').length === 0,
-            () => post(`http://www.sncf.com/sncf/gare`, `libelleGare=${stations[0].fields.intitule_gare.toLowerCase().replace(/[^a-z]/g, '-')}`, {maxRedirects: 0}).catch(redirect =>
+            () => post(`http://www.sncf.com/sncf/gare`, `libelleGare=${stations[0].intitule_gare.toLowerCase().replace(/[^a-z]/g, '-')}`, {maxRedirects: 0}).catch(redirect =>
                 get(`http://www.sncf.com${redirect.response.headers.location.replace('/sncf/..', '')}`, headersFrom(infoRequest, redirect))))
                 .then(response => response().data.includes('Error 404 - Page not found') ? [] :
                     new DomParser().parseFromString(response().data).getElementsByClassName('tab-depart')

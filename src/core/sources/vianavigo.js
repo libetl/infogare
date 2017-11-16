@@ -34,7 +34,8 @@ const baseDepartures = ({projection, identification}) => !identification ? Promi
                     boardingPoint:`${capitalize(denormalizedDeparture.name)}(${denormalizedDeparture.distance}m)`,
                     mode: denormalizedDeparture.line.mode === 'Train' ? 'Transilien' : denormalizedDeparture.line.mode,
                     direction: (capitalize(denormalizedDeparture.lineDirection)||''),
-                    number: denormalizedDeparture.line.label,
+                    number: (denormalizedDeparture.line.label||'').toUpperCase().replace('T3A', '3a').replace('T3B', '3b')
+                        .replace('T11', '11 Express').replace('T12', '12 Express').replace('T13', '13 Express'),
                     missionCode: denormalizedDeparture.vehicleName,
                     time: hour,
                     stops: []

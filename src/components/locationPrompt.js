@@ -16,7 +16,7 @@ export default class LocationPrompt extends React.Component {
         this.setState(newProps)
     }
     done(station) {
-        this.state.done({ long: station.geometry.coordinates[0], lat: station.geometry.coordinates[1] })
+        this.state.done({ long: station.coordinates[0], lat: station.coordinates[1] })
     }
     render() {
         return (
@@ -28,7 +28,7 @@ export default class LocationPrompt extends React.Component {
                     <View style={{ flex: 1, flexDirection: 'column', width: '100%', height: '100%' }}>
                         {(this.state.guessedStations || []).slice(0, 10).map(station =>
                             <Text key={`station${station.recordid}`} onPress={() => this.done(station)}>
-                                {station.fields.intitule_gare}</Text>)}
+                                {station.intitule_gare}</Text>)}
                     </View>
                 </View>
             </Modal>

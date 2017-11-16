@@ -1,16 +1,17 @@
-import { get } from 'axios'
-import unzip from 'unzip2'
-import fs from 'fs'
-import download from 'download'
-import stream from 'stream'
-import event from 'events'
-import es from 'event-stream'
+const { get } = require('axios')
+const unzip = require('unzip2')
+const fs = require('fs')
+const download = require('download')
+const stream = require('stream')
+const event = require('events')
+const es = require('event-stream')
 
 const datasets = 'https://ressources.data.sncf.com/explore/dataset/'
 const gares = `${datasets}referentiel-gares-voyageurs/download/?format=json&timezone=Europe/Berlin`
 const idfUrls = [
     `${datasets}sncf-transilien-gtfs/files/f1a8e58126fbe2f67dd0512ef74a1124/download/`,
     `${datasets}sncf-transilien-gtfs/files/023d3733775238ae2e431e3613812bae/download/`]
+//const garesRatp = 'https://data.ratp.fr/explore/dataset/positions-geographiques-des-stations-du-reseau-ratp/download/?format=json&timezone=Europe/Berlin'
 const zipEntryEmitter = new event.EventEmitter
 const writeMappingEmitter = new event.EventEmitter
 
@@ -62,11 +63,22 @@ writeMappingEmitter.on('endOfFile', data => {
 })
 
 getSingleFileFromWebZips(idfUrls, ['trips.txt', 'routes.txt'], ['./src/core/data/idfMapping.json', './src/core/data/routes.json'])
-get(gares).then((result) => {
-    fs.writeFileSync('./src/core/data/stations.json', JSON.stringify(result.data))
+get(gares).then(sncf =>
+    //get(garesRatp).then(ratp =>
+   {
+    const smallStationList =
+        /*ratp.data.map(station => {
+            return {coordinates:station.geometry.coordinates, tvs:station.fields.stop_id,
+                intitule_gare:station.fields.stop_name, uic:station.fields.stop_id}}).concat(*/
+        sncf.data.filter(station => station.geometry && station.fields.tvs).map(station => {
+        return {coordinates:station.geometry.coordinates,
+            tvs:station.fields.tvs, intitule_gare:station.fields.intitule_gare, uic:station.fields.uic}})
+        //)
+    fs.writeFileSync('./src/core/data/stations.json', JSON.stringify(smallStationList))
     fs.writeFileSync('./src/core/data/places.js',
-            'export default ' + JSON.stringify(result.data.filter(station => station.geometry).map(station => {return {name:station.fields.intitule_gare
+            'export default ' + JSON.stringify(smallStationList.map(station => {return {name:station.intitule_gare
                 .replace(/[àâ]/g, 'a').replace(/[éèêë]/g, 'e').replace(/î/g, 'i').replace(/ô/g, 'o').replace(/[ùûü]/g, 'u')
-                .replace(/[^a-zA-Z]/g, '').replace(/^./, station.fields.intitule_gare[0].toLowerCase()),
-                coordinates: {lat: station.geometry.coordinates[1], long: station.geometry.coordinates[0]}}}).reduce((a, b) =>
+                .replace(/[^a-zA-Z]/g, '').replace(/^./, station.intitule_gare[0].toLowerCase()),
+                coordinates: {lat: station.coordinates[1], long: station.coordinates[0]}}}).reduce((a, b) =>
                 ((a[b.name] = b.coordinates) && a), {})))})
+//)
