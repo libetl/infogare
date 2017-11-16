@@ -2,7 +2,6 @@ import React from 'react'
 import styles from '../css/app.css'
 import PropTypes from 'prop-types'
 import {Image, IsNative, LoadPicture, ScrollView, Text, TouchableHighlight, View} from '../wrapper'
-import {blackOrWhite} from '../core/operations/blackOrWhite'
 
 export default class Departure extends React.Component {
     constructor(props) {
@@ -25,7 +24,7 @@ export default class Departure extends React.Component {
             textAlign: 'center', fontWeight: 'bold', borderStyle: 'solid', borderWidth: 3,
             borderRadius: mode === 'rer' || mode === 'metro' || mode === 'tramway' ? (IsNative ? 50 : '50%') : 3,
             borderColor: `#${departure.color || 'FFFFFF'}`,
-            color:mode === 'metro' ? blackOrWhite(departure.color || '#000000') : `#${departure.color || 'FFFFFF'}`,
+            color:mode === 'metro' && departure.fontColor ? `#${departure.fontColor}` : `#${departure.color || 'FFFFFF'}`,
             backgroundColor: mode === 'metro' ? `#${departure.color}` : 'transparent'}
         const modeView = {width:'10%'}
         const modeIcon = {width: numberFontSize * 3, height: numberFontSize * 3, alignSelf: 'center'}

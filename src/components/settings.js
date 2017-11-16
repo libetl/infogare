@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import webservice from '../core/webservice'
 import {Constants, Button, Modal, Platform, ScrollView, StyleSheet, Switch, Text, TextInput, View} from '../wrapper'
 
 const titleInGreen = {
@@ -89,7 +88,7 @@ export default class Settings extends React.Component {
                         <View style={oneSetting}><View><Text>Attention : seules les fonctionnalités surlignées en jaune sont réellement utilisées.
                             Inutile de cocher toutes les sources.</Text></View></View>
                         <Text style={titleInGreen}>Activer les sources suivantes :</Text>
-                        {Object.entries(webservice.dataSources).map(([name, metadata]) =>
+                        {Object.entries(this.props.allDataSourcesMetadata||{}).map(([name, metadata]) =>
                             <View key={name} style={oneSettingNoBottomRow}>
                                 <View style={settingTitle}>
                                     <Text style={settingName}>{name}</Text>
@@ -129,6 +128,7 @@ export default class Settings extends React.Component {
 }
 
 Settings.propTypes = {
+    allDataSourcesMetadata: PropTypes.object,
     settingsOpened: PropTypes.bool,
     closeSettings: PropTypes.func,
     dataSources: PropTypes.array,

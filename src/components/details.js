@@ -1,7 +1,6 @@
 import React from 'react'
 import moment from 'moment'
 import {Button, Image, Modal, ScrollView, StyleSheet, Text, View, IsNative, LoadPicture} from '../wrapper'
-import {blackOrWhite} from '../core/operations/blackOrWhite'
 
 const styles = StyleSheet.create({
     "View": {
@@ -423,7 +422,7 @@ export default class Details extends React.Component {
             textAlign: 'center', fontWeight: 'bold', borderStyle: 'solid', borderWidth: 3,
             borderRadius: mode === 'rer' || mode === 'metro' || mode === 'tramway' ? (IsNative ? 50 : '50%') : 3,
             borderColor: `#${details.color || 'FFFFFF'}`,
-            color:mode === 'metro' ? blackOrWhite(details.color || '#000000') : `#${details.color || 'FFFFFF'}`,
+            color:mode === 'metro' && details.fontColor ? `#${details.fontColor}` : `#${details.color || 'FFFFFF'}`,
             backgroundColor: mode === 'metro' ? `#${details.color}` : undefined}
         const numberText = mode !== 'bus' ? {} :
             {color: '#' + details.fontColor || '#fff', backgroundColor: '#' + details.color || 'transparent',alignSelf: 'center', textAlign: 'center'}

@@ -8,6 +8,7 @@ import metroLinesColors from '../data/metroLinesColors.json'
 import rerLinesColors from '../data/rerLinesColors.json'
 import tramLinesColors from '../data/tramLinesColors.json'
 import transilienLinesColors from '../data/transilienLinesColors.json'
+import {blackOrWhite} from '../operations/blackOrWhite'
 
 const registeredStations = stations.filter (e => e.fields.tvs)
 
@@ -48,7 +49,8 @@ const metroColors = ({baseDepartures}) => baseDepartures.map(departure =>
     !metroLinesColors[departure.dataToDisplay.number] ? {} :
         {savedNumber:departure.savedNumber, dataToDisplay:{
             name: departure.dataToDisplay.number,
-            color: metroLinesColors[departure.dataToDisplay.number]}})
+            color: metroLinesColors[departure.dataToDisplay.number],
+            fontColor: blackOrWhite(metroLinesColors[departure.dataToDisplay.number] || '000000')}})
 
 const transilienColors = ({baseDepartures}) => baseDepartures.map(departure => {
     if ((departure.dataToDisplay.mode || '').toLowerCase() !== 'transilien') return {}

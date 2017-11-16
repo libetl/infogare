@@ -10,6 +10,7 @@ export default class App extends React.Component {
         this.state = {
             ...props, settingsOpened: false,
             dataSources: [],
+            allDataSourcesMetadata: webservice.dataSources,
             geo: {lat:48.880185,long:2.355151},
             dataSourceByFeature: {},
             timetable: {
