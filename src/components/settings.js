@@ -64,9 +64,9 @@ const selectedSource = {
 export default class Settings extends React.Component {
     constructor(props) {
         super(props)
-        this.testToken = this.testToken.bind(this)
+        this.validateToken = this.validateToken.bind(this)
     }
-    testToken(value) {
+    validateToken(value) {
         if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value)) {
             this.props.validateToken(value)
         }
@@ -119,7 +119,7 @@ export default class Settings extends React.Component {
                         )}
                         <Text style={titleInGreen}>Autorisation pour api sncf</Text>
                         <View style={oneSettingNoBottomRow}><Text>Si le token est valide, l'accès à la source 'sncf api' devient possible</Text></View>
-                        <View style={oneSetting}><View style={settingTitle}><Text style={settingName}>token</Text></View><TextInput style={freeField} id="token" label="token" onChangeText={value => this.testToken(value)} defaultValue={this.props.token}/></View>
+                        <View style={oneSetting}><View style={settingTitle}><Text style={settingName}>token</Text></View><TextInput style={freeField} id="token" label="token" onChangeText={value => this.validateToken(value)} defaultValue={this.props.token}/></View>
                     </View>
                 </ScrollView>
             </Modal>

@@ -7,7 +7,7 @@ const allDataSources = Object.entries(sources).reduce((acc, [name, {metadata}]) 
 
 export default {
     dataSources: allDataSources,
-    test: sources.sncfApi.testApi,
+    testToken: sources.sncfApi.testApi,
     minimalMappingFor: (wantedDataSources, listOfDataSources = allDataSources) => {
         const guess = wantedDataSources.sort((a, b) => listOfDataSources[a].features.length < listOfDataSources[b].features.length)
            .reduce((acc, value) => {return {...listOfDataSources[value].features

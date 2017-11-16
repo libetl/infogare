@@ -1,3 +1,3 @@
-import webservice from '../src/core/webservice'
+import core from '../src/core'
 
-console.log(webservice.minimalMappingFor(['inMemory', 'garesSncf', 'sncfApi', 'liveMap']))
+console.log(core.minimalMappingFor(['inMemory', 'garesSncf', 'sncfApi', 'liveMap']))

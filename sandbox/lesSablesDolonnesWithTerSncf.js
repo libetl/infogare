@@ -1,6 +1,6 @@
-import webservice from '../src/core/webservice'
+import core from '../src/core'
 import places from '../src/core/data/places'
 import coloredStringifiedJson from './coloredStringifiedJson'
 
-webservice.nextDepartures(places.lesSablesdOlonne).then(data => coloredStringifiedJson(data))
+core.nextDepartures(places.lesSablesdOlonne).then(data => coloredStringifiedJson(data))
     .then(highlightedData => console.log(highlightedData))

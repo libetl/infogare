@@ -1,7 +1,7 @@
-import webservice from '../src/core/webservice'
+import core from '../src/core'
 import places from '../src/core/data/places'
 import coloredStringifiedJson from './coloredStringifiedJson'
 
-webservice.nextDepartures(places.parisGaredeLyon, {dataSourceByFeature:{}})
+core.nextDepartures(places.parisGaredeLyon, {dataSourceByFeature:{}})
     .then(data => coloredStringifiedJson(data))
     .then(highlightedData => console.log(highlightedData))

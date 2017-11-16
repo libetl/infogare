@@ -1,4 +1,4 @@
-import webservice from '../src/core/webservice'
+import core from '../src/core'
 import places from '../src/core/data/places'
 import sources from '../src/core/sources'
 import chalk from 'chalk'
@@ -6,8 +6,8 @@ import chalk from 'chalk'
 const {parisGaredeLyon} = places
 const theContestants = Object.keys(sources).map(source =>
     sources[source].metadata.needsExtraSourceForGeolocation ?
-        {[source]:webservice.minimalMappingFor([source, 'inMemory', 'liveMap'])} :
-        {[source]:webservice.minimalMappingFor([source, 'inMemory'])})
+        {[source]:core.minimalMappingFor([source, 'inMemory', 'liveMap'])} :
+        {[source]:core.minimalMappingFor([source, 'inMemory'])})
     .reduce((acc, value) => {return {...acc, ...value}}, {})
 
 const timestamp = () => {const hrTime = process.hrtime(); return hrTime[0] * 1000000 + hrTime[1] / 1000}
@@ -27,7 +27,7 @@ const measureThemAll = (candidates, {from:station, howManyTimes}) =>
         .reduce((acc, value) => acc.concat(value), [])
         .map(([name, dataSourceByFeature]) =>
     previouslyFoundData => Promise.resolve(timestamp()).then(startTime =>
-        webservice.nextDepartures(station, {token: process.env.TOKEN, dataSourceByFeature})
+        core.nextDepartures(station, {token: process.env.TOKEN, dataSourceByFeature})
             .catch(e => console.log(`[${name.padStart(20)}]: ERROR (${e})`))
             .then(() => timestamp())
             .then(endTime => Promise.resolve({...previouslyFoundData, [name]:[...(previouslyFoundData[name]||[]), endTime - startTime].sort()}))))

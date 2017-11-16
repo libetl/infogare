@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import webservice from './core/webservice'
+import core from './core'
 import Timetable from './components/timetable'
 import {AsyncStorage} from './wrapper'
 
@@ -10,7 +10,7 @@ export default class App extends React.Component {
         this.state = {
             ...props, settingsOpened: false,
             dataSources: [],
-            allDataSourcesMetadata: webservice.dataSources,
+            allDataSourcesMetadata: core.dataSources,
             geo: {lat:48.880185,long:2.355151},
             dataSourceByFeature: {},
             timetable: {
@@ -44,10 +44,10 @@ export default class App extends React.Component {
                 this.initNow(apiToken, foundDataSources)}))
     }
     initNow(apiToken, dataSources = ['terSncf', 'inMemory', 'liveMap']) {
-        this.setState({apiToken, dataSources, dataSourceByFeature:webservice.minimalMappingFor(dataSources)})
+        this.setState({apiToken, dataSources, dataSourceByFeature:core.minimalMappingFor(dataSources)})
         navigator.geolocation.getCurrentPosition(position => {
                 this.setState({geo:{long: position.coords.longitude, lat: position.coords.latitude}})
-                webservice.nextDepartures(this.state.geo,
+                core.nextDepartures(this.state.geo,
                     {token: this.state.apiToken, notify: this.setState.bind(this), dataSourceByFeature:this.state.dataSourceByFeature})
                     .then((timetable) => this.setState({timetable,
                         firstScrollY: 3, secondScrollY: 3,
@@ -74,7 +74,7 @@ export default class App extends React.Component {
         this.setState({displayNowColon: !this.state.displayNowColon})
     }
     updateTimetable(geo) {
-        return webservice.nextDepartures(geo || this.state.geo, {token: this.state.apiToken, dataSourceByFeature:this.state.dataSourceByFeature})
+        return core.nextDepartures(geo || this.state.geo, {token: this.state.apiToken, dataSourceByFeature:this.state.dataSourceByFeature})
             .then((timetable) => this.setState({timetable}))
     }
     askForALocation() {
@@ -85,14 +85,14 @@ export default class App extends React.Component {
     }
     changeLocation(geo) {
         this.setState({geo, displayLocationPrompt: false, currentlyUpdating:true})
-        webservice.nextDepartures(geo, {token: this.state.apiToken, notify:this.setState.bind(this), dataSourceByFeature:this.state.dataSourceByFeature})
+        core.nextDepartures(geo, {token: this.state.apiToken, notify:this.setState.bind(this), dataSourceByFeature:this.state.dataSourceByFeature})
             .then((timetable) => this.setState({currentlyUpdating:false, timetable}))
     }
     updateLocation() {
         this.setState({currentlyUpdating:true})
         navigator.geolocation.getCurrentPosition((position) => {
             this.setState({geo:{long: position.coords.longitude, lat: position.coords.latitude}})
-            webservice.nextDepartures(this.state.geo, {token: this.state.apiToken, notify:this.setState.bind(this), dataSourceByFeature:this.state.dataSourceByFeature})
+            core.nextDepartures(this.state.geo, {token: this.state.apiToken, notify:this.setState.bind(this), dataSourceByFeature:this.state.dataSourceByFeature})
                 .then((timetable) => this.setState({currentlyUpdating:false, timetable}))})
     }
     measureView(event, rowName) {
@@ -108,7 +108,7 @@ export default class App extends React.Component {
         }
     }
     validateToken(newValue) {
-        webservice.test(newValue)
+        core.testToken(newValue)
             .then(() => AsyncStorage.setItem('@store:apiToken', newValue))
             .then(() => this.setState({apiToken: newValue}))
             .catch((e) => this.setState({loginError:e.message}))
@@ -128,12 +128,12 @@ export default class App extends React.Component {
     onDataSourceListChange(dataSource, added) {
         const dataSources = added ? [...this.state.dataSources, dataSource] :
             this.state.dataSources.filter(dataSource1 => dataSource1 !== dataSource)
-        const minimalMapping = webservice.minimalMappingFor(dataSources)
+        const minimalMapping = core.minimalMappingFor(dataSources)
         AsyncStorage.setItem('@store:dataSources', JSON.stringify(dataSources)).then(() =>
             this.setState({dataSources, dataSourceByFeature: minimalMapping}))
     }
     render() {
-        return (<Timetable suggestStations={webservice.suggestStations}
+        return (<Timetable suggestStations={core.suggestStations}
                            displayLocationPrompt={this.state.displayLocationPrompt}
                            rowHeight={this.state.row1Height || 60} rowWidth={320}
                            timetable={this.state.timetable} parent={this}
