@@ -53,7 +53,8 @@ export default class App extends React.Component {
                         firstScrollY: 3, secondScrollY: 3,
                         displayNowColon:true}))
                     .then(() => setInterval(this.autoScroll, 3000))
-            }, () => {}, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
+                    .catch(() => setInterval(this.autoScroll, 3000))
+            }, () => setInterval(this.autoScroll, 3000), {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
         setInterval(this.refreshScreen, 500)
     }
     autoScroll() {
