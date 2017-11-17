@@ -24,6 +24,10 @@ const baseDepartures = ({projection, identification}) => !identification ? Promi
         .then(denormalizedDepartures => denormalizedDepartures.map(denormalizedDeparture => {
             const hour = moment().add(parseInt(denormalizedDeparture.time), 'minutes').format('HH:mm')
             const now = moment().format('HH:mm')
+            const label = (denormalizedDeparture.line.label||'').toUpperCase().replace('T3A', '3a').replace('T3B', '3b')
+            .replace('T11', '11 Express').replace('T12', '12 Express').replace('T13', '13 Express')
+            const number = denormalizedDeparture.vehicleName ? denormalizedDeparture.vehicleName : label
+            const name = denormalizedDeparture.vehicleName ? label : undefined
             return {
                 savedNumber:denormalizedDeparture.id,
                 brand: denormalizedDeparture.line && denormalizedDeparture.line.network && denormalizedDeparture.line.network.label,
@@ -34,9 +38,7 @@ const baseDepartures = ({projection, identification}) => !identification ? Promi
                     boardingPoint:`${capitalize(denormalizedDeparture.name)}(${denormalizedDeparture.distance}m)`,
                     mode: denormalizedDeparture.line.mode === 'Train' ? 'Transilien' : denormalizedDeparture.line.mode,
                     direction: (capitalize(denormalizedDeparture.lineDirection)||''),
-                    number: (denormalizedDeparture.line.label||'').toUpperCase().replace('T3A', '3a').replace('T3B', '3b')
-                        .replace('T11', '11 Express').replace('T12', '12 Express').replace('T13', '13 Express'),
-                    missionCode: denormalizedDeparture.vehicleName,
+                    name, number,
                     time: hour,
                     stops: []
                 }

@@ -24,7 +24,7 @@ export default class Timetable extends React.Component {
                 {(!this.props.timetable.departures ? new Array(10) : this.props.timetable.departures).map((departure, i) =>
                     <Departure rows={this.props.timetable.departures.length} num={i} key={`departure${i}`} detailed={i <= 1}
                                odd={i % 2 === 0} departure={departure} detailsRow={i <= 1 ? i + 1 : undefined} parent={this.props.parent}
-                               rowHeight={this.props.rowHeight} rowWidth={this.props.rowWidth}/>)}
+                               rowHeight={this.props.rowHeight} rowWidth={this.props.rowWidth} mustBePadded={!departure.name && this.props.timetable.departures.filter(d => d.name).length}/>)}
                     <View style={styles.bottomPaddingAfterScrolldown}/>
                 </ScrollView>
                 <Footer station={this.props.timetable.station} openSettings={this.props.parent.openSettings} displayNowColon={this.props.displayNowColon} askForALocation={this.props.parent.askForALocation} updateLocation={this.props.parent.updateLocation}/>

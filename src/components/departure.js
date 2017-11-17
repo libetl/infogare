@@ -9,7 +9,8 @@ export default class Departure extends React.Component {
     }
     render() {
         const departure = this.props.departure || {}
-        const directionName = (!departure.stops || departure.stops.length === 0 || departure.stops[departure.stops.length - 1] === 'Desserte non dispo' ?
+        const directionName = (!departure.stops || departure.stops.length === 0 ||
+            departure.stops[departure.stops.length - 1] === 'Desserte\u00a0non\u00a0dispo' ?
             departure.direction : departure.stops[departure.stops.length - 1]) || ' '
         const directionFontSize = Math.min(this.props.rowHeight * 0.3, this.props.rowWidth * 0.8 / directionName.length)
         const numberFontSize = Math.min(this.props.rowHeight * 0.1, this.props.rowWidth / directionName.length)
@@ -35,7 +36,7 @@ export default class Departure extends React.Component {
         const stopsScroll = {height:this.props.rowHeight * 0.3, marginTop:this.props.rowHeight * 0.4, minHeight:12}
         const numberText = mode !== 'bus' ? {alignSelf: 'center', color:'#fff'} :
             {color: departure.fontColor ? '#' + departure.fontColor : '#fff', backgroundColor: departure.color ? '#' + departure.color : 'transparent', minWidth:numberFontSize * 3, alignSelf: 'center', textAlign: 'center', fontSize: numberFontSize}
-        const number = {width: '15%'}
+        const number = {width: this.props.mustBePadded ? '25%' : '15%'}
         const timeAndStatus = {minWidth:3 * numberFontSize + 4, flexDirection: 'column'}
         const time = {color: '#dfc81f', fontSize: numberFontSize, fontWeight: 'bold'}
         const status = {color: '#f5a665', fontSize: numberFontSize, fontWeight: 'bold'}
@@ -52,7 +53,7 @@ export default class Departure extends React.Component {
                                         <Text style={modeText}>{mode.toUpperCase()}</Text>}
                             </View>
                             {departure.name ? <View style={lineColor}><Text style={lineColorText}>{departure.name}</Text></View> : <Text>{departure.name}</Text>}
-                            {departure.number !== departure.name ? <View style={number}><Text style={numberText}>{departure.number}</Text></View> : <Text style={{width:'5%'}}/>}
+                            {departure.number !== departure.name ? <View style={number}><Text style={numberText}>{departure.number}</Text></View> : <Text style={{width:mode === 'metro' || mode === 'tramway' ? '15%' : '5%'}}/>}
                             <View style={timeAndStatus}><Text style={time}>{departure.time}</Text>{departure.status ? (<Text style={status}>{departure.status}</Text>) : <Text style={{display:'none'}}/>}</View>
                             {this.props.detailed || !departure.boardingPoint ? <Text style={direction}>{directionName}</Text> :
                                 <View key={departure.boardingPoint} style={{overflow: 'hidden', flexGrow: 1}}>
@@ -89,6 +90,7 @@ export default class Departure extends React.Component {
 }
 
 Departure.propTypes = {
+    mustBePadded: PropTypes.bool,
     rowHeight: PropTypes.number,
     num : PropTypes.number,
     rows: PropTypes.number,
