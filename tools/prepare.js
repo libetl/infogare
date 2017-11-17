@@ -71,7 +71,7 @@ get(gares).then(sncf =>
             return {coordinates:station.geometry.coordinates, tvs:station.fields.stop_id,
                 intitule_gare:station.fields.stop_name, uic:station.fields.stop_id}}).concat(*/
         sncf.data.filter(station => station.geometry && station.fields.tvs).map(station => {
-        return {coordinates:station.geometry.coordinates,
+        return {coordinates:station.geometry.coordinates, region:station.fields.agence_gare,
             tvs:station.fields.tvs, intitule_gare:station.fields.intitule_gare, uic:station.fields.uic}})
         //)
     fs.writeFileSync('./src/core/data/stations.json', JSON.stringify(smallStationList))
