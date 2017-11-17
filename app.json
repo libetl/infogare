@@ -18,13 +18,13 @@
     },
     "android": {
       "package": "org.toilelibre.libe.trains",
-      "versionCode": 17
+      "versionCode": 18
     },
     "splash": {
       "image": "logo.png",
       "tabletImage": "logo.png",
       "backgroundColor": "#0d5da6",
-      "resizeMode": "cover"
+      "resizeMode": "contain"
     },
     "scheme": "exp",
     "privacy": "public"
