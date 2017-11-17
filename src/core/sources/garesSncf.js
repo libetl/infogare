@@ -1,5 +1,5 @@
 import {get} from 'axios'
-import moment from 'moment'
+import moment from 'moment-mini-ts'
 import capitalize from '../operations/capitalize'
 
 const garesSncfDeparturesUrl = (tvs) => `https://www.gares-sncf.com/fr/train-times/${tvs.toUpperCase()}/departure`

@@ -1,6 +1,6 @@
 import proj4 from 'proj4'
 import {get} from 'axios'
-import moment from 'moment'
+import moment from 'moment-mini-ts'
 import promiseWhile from '../operations/promiseWhile'
 import capitalize from '../operations/capitalize'
 

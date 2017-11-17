@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from '../css/app.css'
-import moment from 'moment'
+import moment from 'moment-mini-ts'
 import {Platform, Text, TouchableHighlight, TouchableNativeFeedback, View} from '../wrapper'
 
 export default class Footer extends React.Component {

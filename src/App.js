@@ -1,5 +1,5 @@
 import React from 'react'
-import moment from 'moment'
+import moment from 'moment-mini-ts'
 import core from './core'
 import Timetable from './components/timetable'
 import {AsyncStorage} from './wrapper'

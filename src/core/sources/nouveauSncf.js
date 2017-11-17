@@ -1,6 +1,6 @@
 import {get, post} from 'axios'
 import capitalize from '../operations/capitalize'
-import moment from 'moment'
+import moment from 'moment-mini-ts'
 
 const getStation = stationName => get('https://www.nouveau.sncf.com/api/iv/1.0/util/rechercherListeEmplacementsCommencantPar',
     {params: {
