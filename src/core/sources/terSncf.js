@@ -65,7 +65,7 @@ const baseDepartures = ({nestedSearchData:{stations}}) =>
                     number: 1,
                     time: moment().format('HH:mm'),
                     platform: '',
-                    stops: ['Autres sources :', 'transilien', 'vianavigo', 'sncfApi',
+                    stops: ['Autres sources :', 'nouveauSncf', 'transilien', 'vianavigo', 'sncfApi',
                         'terSncf indisponible en ÎDF !']
                 }
             },{
@@ -80,7 +80,7 @@ const baseDepartures = ({nestedSearchData:{stations}}) =>
                     number: 2,
                     time: moment().add(1, 'minutes').format('HH:mm'),
                     platform: '',
-                    stops: ['Autres sources :', 'transilien', 'vianavigo', 'sncfApi',
+                    stops: ['Autres sources :', 'nouveauSncf', 'transilien', 'vianavigo', 'sncfApi',
                         'Rendez vous dans les paramètres']
                 }
             }]
