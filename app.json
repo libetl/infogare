@@ -4,7 +4,7 @@
     "description": "Sncf le panneau",
     "slug": "sncf-le-panneau",
     "icon": "logo.png",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "sdkVersion": "23.0.0",
     "primaryColor": "#0d5da6",
     "nodeModulesPath": ".",
@@ -18,7 +18,7 @@
     },
     "android": {
       "package": "org.toilelibre.libe.trains",
-      "versionCode": 18
+      "versionCode": 19
     },
     "splash": {
       "image": "logo.png",

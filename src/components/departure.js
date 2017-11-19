@@ -54,7 +54,7 @@ export default class Departure extends React.Component {
                                         <Text style={modeText}>{mode.toUpperCase()}</Text>}
                             </View>
                             {departure.name ? <View style={lineColor}><Text style={lineColorText}>{departure.name}</Text></View> : <Text>{departure.name}</Text>}
-                            {departure.number !== departure.name ? <View style={number}><Text style={numberText}>{departure.number}</Text></View> : <Text style={{width:mode === 'metro' || mode === 'tramway' ? '15%' : '5%'}}/>}
+                            {departure.number !== departure.name ? <View style={number}><Text style={numberText}>{departure.number}</Text></View> : <Text style={{width:'5%'}}/>}
                             <View style={timeAndStatus}><Text style={time}>{departure.time}</Text>{departure.status ? (<Text style={status}>{departure.status}</Text>) : <Text style={{display:'none'}}/>}</View>
                             {this.props.detailed || !departure.boardingPoint ? <Text style={direction}>{directionName}</Text> :
                                 <View key={departure.boardingPoint} style={{overflow: 'hidden', flexGrow: 1}}>
