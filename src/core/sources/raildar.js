@@ -1,5 +1,5 @@
 import {get} from 'axios'
-import moment from 'moment-mini-ts'
+import moment from 'moment'
 import {Html5Entities} from 'html-entities'
 import haversine from '../operations/haversine'
 

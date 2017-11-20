@@ -1,5 +1,5 @@
 import {get} from 'axios'
-import moment from 'moment-mini-ts'
+import moment from 'moment'
 import haversine from '../operations/haversine'
 
 const maxDistanceInRealTimeMap = 500000

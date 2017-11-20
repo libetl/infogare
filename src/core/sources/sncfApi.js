@@ -1,5 +1,5 @@
 import {get} from 'axios'
-import moment from 'moment-mini-ts'
+import moment from 'moment'
 
 const sncfApiPrefix = 'https://api.sncf.com/v1/coverage/sncf/'
 const stationUrlPrefix = `${sncfApiPrefix}stop_areas/`

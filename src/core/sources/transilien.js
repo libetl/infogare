@@ -1,7 +1,7 @@
 import {get, post} from 'axios'
 import DomParser from 'dom-parser'
 import capitalize from '../operations/capitalize'
-import moment from 'moment-mini-ts'
+import moment from 'moment'
 
 const idfStationUrl = 'https://www.transilien.com/fr/horaires/prochains-departs'
 const fetchTransilien = s => post(idfStationUrl, `departure=${encodeURIComponent(s.intitule_gare)}&uicDestination=&destination=&uicDeparture=${s.uic.replace(/^0+/, '').slice(0, -1)}`, {headers:{'Content-Type':'application/x-www-form-urlencoded'}})

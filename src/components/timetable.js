@@ -27,7 +27,7 @@ export default class Timetable extends React.Component {
                                rowHeight={this.props.rowHeight} rowWidth={this.props.rowWidth} mustBePadded={!departure.name && this.props.timetable.departures.filter(d => d.mode === 'Bus').length == 0 && this.props.timetable.departures.filter(d => d.name).length !== 0}/>)}
                     <View style={styles.bottomPaddingAfterScrolldown}/>
                 </ScrollView>
-                <Footer station={this.props.timetable.station} openSettings={this.props.parent.openSettings} displayNowColon={this.props.displayNowColon} askForALocation={this.props.parent.askForALocation} updateLocation={this.props.parent.updateLocation}/>
+                <Footer updateHightlightedComponent={this.props.updateHightlightedComponent} station={this.props.timetable.station} openSettings={this.props.parent.openSettings} displayNowColon={this.props.displayNowColon} askForALocation={this.props.parent.askForALocation} updateLocation={this.props.parent.updateLocation}/>
             </View>
         )
     }
@@ -39,5 +39,6 @@ Timetable.propTypes = {
     timetable: PropTypes.object,
     parent: PropTypes.object,
     displayNowColon: PropTypes.bool,
-    displayLocationPrompt: PropTypes.bool
+    displayLocationPrompt: PropTypes.bool,
+    updateHightlightedComponent: PropTypes.func
 }

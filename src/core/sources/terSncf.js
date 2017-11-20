@@ -1,6 +1,6 @@
 import {get, post} from 'axios'
 import {Html5Entities} from 'html-entities'
-import moment from 'moment-mini-ts'
+import moment from 'moment'
 import DomParser from 'dom-parser'
 import capitalize from '../operations/capitalize'
 

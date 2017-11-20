@@ -1,5 +1,5 @@
 import React from 'react'
-import moment from 'moment-mini-ts'
+import moment from 'moment'
 import {Button, Image, Modal, ScrollView, StyleSheet, Text, View, IsNative, LoadPicture} from '../wrapper'
 
 const styles = StyleSheet.create({
