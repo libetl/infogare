@@ -82,7 +82,7 @@ export default class App extends React.Component {
         this.setState({displayNowColon: !this.state.displayNowColon})
     }
     updateTimetable({geo, progressBar, closeLocationPrompt} = {geo: this.state.geo, progressBar: false, closeLocationPrompt: false}) {
-        this.setState({geo, currentlyUpdating:progressBar, displayLocationPrompt: closeLocationPrompt ? false : this.state.displayLocationPrompt})
+        this.setState({geo, currentlyUpdating:progressBar ? true : this.state.currentlyUpdating, displayLocationPrompt: closeLocationPrompt ? false : this.state.displayLocationPrompt})
         const notify = progressBar ? this.setState.bind(this) : () => {}
         return core.nextDepartures(geo, {token: this.state.apiToken, notify, dataSourceByFeature:this.state.dataSourceByFeature})
             .then((timetable) => this.setState({currentlyUpdating: false, timetable}))
