@@ -81,8 +81,8 @@ export default class App extends React.Component {
         }
         this.setState({displayNowColon: !this.state.displayNowColon})
     }
-    updateTimetable({geo, progressBar} = {geo: this.state.geo, progressBar: false}) {
-        if (progressBar) this.setState({currentlyUpdating:true})
+    updateTimetable({geo, progressBar, closeLocationPrompt} = {geo: this.state.geo, progressBar: false, closeLocationPrompt: false}) {
+        this.setState({geo, currentlyUpdating:progressBar, displayLocationPrompt: closeLocationPrompt ? false : this.state.displayLocationPrompt})
         const notify = progressBar ? this.setState.bind(this) : () => {}
         return core.nextDepartures(geo, {token: this.state.apiToken, notify, dataSourceByFeature:this.state.dataSourceByFeature})
             .then((timetable) => this.setState({currentlyUpdating: false, timetable}))
@@ -94,18 +94,14 @@ export default class App extends React.Component {
         this.setState({displayLocationPrompt: false})
     }
     changeLocation(geo) {
-        this.setState({displayLocationPrompt: false})
-        return this.updateTimetable({geo, progressBar: true})
+        return this.updateTimetable({geo, progressBar: true, closeLocationPrompt: true})
     }
     updateLocation() {
-        return this.tryGps().then((position = {coords: {longitude: this.state.geo.long, latitude: this.state.geo.lat}}) => {
-            const geo = {long: position.coords.longitude, lat: position.coords.latitude}
-            this.setState({geo})
-            this.updateTimetable({geo, progressBar: true})})
+        return this.tryGps().then((geo = this.state.geo) => this.updateTimetable({geo, progressBar: true}))
     }
     tryGps({failsafe} = {failsafe:false}){
         return new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(
-            position => resolve(position),
+            position => resolve({long: position.coords.longitude, lat: position.coords.latitude}),
             () => failsafe ? resolve() : this.tryGps({failsafe:true}), 
             {enableHighAccuracy: !failsafe, timeout: 2000, maximumAge: 10000}))
     }
