@@ -1,4 +1,7 @@
-import { DeviceEventEmitter } from 'react-native'
+let DeviceEventEmitter
+
+try {     DeviceEventEmitter = require('react-native').DeviceEventEmitter}
+catch(e){ DeviceEventEmitter =  {addListener:()=>{remove:()=>{}}}}
 
 class KeyEvent {
   onKeyDownListener(cb) {

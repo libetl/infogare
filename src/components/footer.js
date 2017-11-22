@@ -17,7 +17,7 @@ export default class Footer extends React.Component {
 					</TouchableHighlight>
 					<TouchableHighlight onShowUnderlay={() => this.props.updateHightlightedComponent(this)} onPress={this.props.openSettings}>
 						<View style={styles.button}>
-							<Text style={styles.buttonText}>{Platform.OS === 'ios' || Platform.Version >= 21 ? '⚙' : '¤'}</Text>
+							<Text style={styles.buttonText}>{Platform.OS === 'ios' || Platform.OS === 'web' || Platform.Version >= 21 ? '⚙' : '¤'}</Text>
 						</View>
 					</TouchableHighlight>
 				</View>
