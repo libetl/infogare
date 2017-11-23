@@ -135,11 +135,19 @@ export default class App extends React.Component {
     closeSettings() {
         this.setState({settingsOpened: false})
     }
-    onDataSourceListChange(dataSource, added) {
-        const dataSources = added ? [...this.state.dataSources, dataSource] :
-            this.state.dataSources.filter(dataSource1 => dataSource1 !== dataSource)
+    onDataSourceListChange(dataSource, isItAnAddOperation) {
+        const metadata = this.state.allDataSourcesMetadata
+        const newDataSourceHasDepartures = metadata[dataSource].features.includes('departures')
+        const dataSources =
+            newDataSourceHasDepartures && isItAnAddOperation ?
+                this.state.dataSources.filter(oneDataSource => !metadata[oneDataSource].features.includes('departures'))
+                                      .concat([dataSource]):
+            isItAnAddOperation ?
+                this.state.dataSources.concat([dataSource]) :
+            /*in case of removal*/
+                this.state.dataSources.filter(dataSource1 => dataSource1 !== dataSource)
         const minimalMapping = core.minimalMappingFor(dataSources)
-        AsyncStorage.setItem('@store:dataSources', JSON.stringify(dataSources)).then(() =>
+        return AsyncStorage.setItem('@store:dataSources', JSON.stringify(dataSources)).then(() =>
             this.setState({dataSources, dataSourceByFeature: minimalMapping}))
     }
     updateHightlightedComponent(component) {
