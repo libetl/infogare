@@ -25,7 +25,6 @@ test('but combine operation is still allowed', () => {
     return data.onDataSourceListChange('sncfApi', true).then(() =>
         data.onDataSourceListChange('garesSncf', true)).then(() =>
         data.onDataSourceListChange('liveMap', true)).then(() =>
-        data.onDataSourceListChange('inMemory', true)).then(() =>
             expect(data.state.dataSources).toEqual(['sncfApi', 'garesSncf', 'liveMap']))
 })
 
@@ -35,7 +34,7 @@ test('a useless source will not be added', () => {
         data.onDataSourceListChange('inMemory', true)).then(() =>
         data.onDataSourceListChange('garesSncf', true)).then(() =>
         data.onDataSourceListChange('liveMap', true)).then(() =>
-        expect(data.state.dataSources).toHaveLength(3))
+        expect(data.state.dataSources).toEqual(['sncfApi', 'garesSncf', 'liveMap']))
 })
 
 test('unless if a source becomes useful afterwards', () => {
@@ -70,5 +69,7 @@ test('removing a source will do the job if possible', () => {
     data.onDataSourceListChange('inMemory', false).then(() =>
         data.onDataSourceListChange('liveMap', false)).then(() =>
         data.onDataSourceListChange('nouveauSncf', true)).then(() =>
-        expect(data.state.dataSources).toHaveLength(1))
+        data.onDataSourceListChange('inMemory', true)).then(() =>
+        data.onDataSourceListChange('inMemory', false)).then(() =>
+        expect(data.state.dataSources).toEqual(['nouveauSncf']))
 })
