@@ -8,8 +8,8 @@ const allDataSources = Object.entries(sources).reduce((acc, [name, {metadata}]) 
 export default {
     dataSources: allDataSources,
     testToken: sources.sncfApi.testApi,
-    minimalMappingFor: (wantedDataSources) => minimalMappingFor(wantedDataSources, sources),
-    suggestStations: (text) => sources.inMemory.stationsMatching(text),
+    minimalMappingFor: wantedDataSources => minimalMappingFor(wantedDataSources, sources),
+    suggestStations: text => sources.inMemory.stationsMatching(text),
     nextDepartures: async (coords, {token, notify = () => {},
         dataSourceByFeature = {platforms: 'terSncf', departures: 'terSncf', stations: 'inMemory', colors: 'inMemory', codes: 'inMemory', journeys: 'terSncf', geolocation: 'liveMap'}} = {}) => {
 
