@@ -63,7 +63,6 @@ test('adding a source will simply add a new Source', () => {
         expect(data.state.dataSources).toEqual(["nouveauSncf", "inMemory", "liveMap"]))
 })
 
-
 test('removing a source will do the job if possible', () => {
     const data = provideData()
     return data.onDataSourceListChange('inMemory', false).then(() =>
