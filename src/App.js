@@ -137,13 +137,13 @@ export default class App extends React.Component {
     }
     onDataSourceListChange(dataSource, isItAnAddOperation) {
         const metadata = this.state.allDataSourcesMetadata
-        const newDataSourceHasDepartures = metadata[dataSource].features.includes('departures')
+        const newDataSourceShadows = otherDataSource =>
+            metadata[otherDataSource].features.every(entry => metadata[dataSource].features.includes(entry))
+
         const dataSources =
-            newDataSourceHasDepartures && isItAnAddOperation ?
-                this.state.dataSources.filter(oneDataSource => !metadata[oneDataSource].features.includes('departures'))
-                                      .concat([dataSource]):
             isItAnAddOperation ?
-                this.state.dataSources.concat([dataSource]) :
+                this.state.dataSources.filter(oneDataSource => !newDataSourceShadows(oneDataSource))
+                                      .concat([dataSource]):
             /*in case of removal*/
                 this.state.dataSources.filter(dataSource1 => dataSource1 !== dataSource)
         const minimalMapping = core.minimalMappingFor(dataSources)

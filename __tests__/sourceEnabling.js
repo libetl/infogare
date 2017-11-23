@@ -11,7 +11,7 @@ provideData = () => {
     return data
 }
 
-test('enabling a duplicate data source would disable the first one', () => {
+test('enabling a shadowing data source would disable the first one', () => {
     const data = provideData()
     return data.onDataSourceListChange('terSncf', true).then(() =>
         data.onDataSourceListChange('inMemory', true)).then(() =>
@@ -20,6 +20,14 @@ test('enabling a duplicate data source would disable the first one', () => {
         expect(data.state.dataSources).toHaveLength(3))
 })
 
+test('but combine operation is still allowed', () => {
+    const data = provideData()
+    return data.onDataSourceListChange('sncfApi', true).then(() =>
+        data.onDataSourceListChange('inMemory', true)).then(() =>
+        data.onDataSourceListChange('liveMap', true)).then(() =>
+        data.onDataSourceListChange('garesSncf', true)).then(() =>
+        expect(data.state.dataSources).toHaveLength(4))
+})
 
 test('adding a source will simply add a new Source', () => {
     const data = provideData()
