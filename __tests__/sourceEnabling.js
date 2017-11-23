@@ -25,7 +25,8 @@ test('but combine operation is still allowed', () => {
     return data.onDataSourceListChange('sncfApi', true).then(() =>
         data.onDataSourceListChange('garesSncf', true)).then(() =>
         data.onDataSourceListChange('liveMap', true)).then(() =>
-            expect(data.state.dataSources).toHaveLength(3))
+        data.onDataSourceListChange('inMemory', true)).then(() =>
+            expect(data.state.dataSources).toEqual(['sncfApi', 'garesSncf', 'liveMap']))
 })
 
 test('a useless source will not be added', () => {
