@@ -57,16 +57,16 @@ test('unless if a source becomes useful afterwards', () => {
 
 test('adding a source will simply add a new Source', () => {
     const data = provideData()
-    data.onDataSourceListChange('inMemory', true).then(() =>
+    return data.onDataSourceListChange('inMemory', true).then(() =>
         data.onDataSourceListChange('liveMap', true)).then(() =>
         data.onDataSourceListChange('nouveauSncf', true)).then(() =>
-        expect(data.state.dataSources).toHaveLength(3))
+        expect(data.state.dataSources).toEqual(["nouveauSncf", "inMemory", "liveMap"]))
 })
 
 
 test('removing a source will do the job if possible', () => {
     const data = provideData()
-    data.onDataSourceListChange('inMemory', false).then(() =>
+    return data.onDataSourceListChange('inMemory', false).then(() =>
         data.onDataSourceListChange('liveMap', false)).then(() =>
         data.onDataSourceListChange('nouveauSncf', true)).then(() =>
         data.onDataSourceListChange('inMemory', true)).then(() =>
