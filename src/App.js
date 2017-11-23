@@ -140,13 +140,16 @@ export default class App extends React.Component {
         const newDataSourceShadows = otherDataSource =>
             metadata[otherDataSource].features.every(entry => metadata[dataSource].features.includes(entry))
 
-        const dataSources =
+        const dataSourcesWithMaybeUselessSources =
             isItAnAddOperation ?
-                this.state.dataSources.filter(oneDataSource => !newDataSourceShadows(oneDataSource))
-                                      .concat([dataSource]):
+                [dataSource].concat(
+                    this.state.dataSources.filter(oneDataSource => !newDataSourceShadows(oneDataSource))) :
             /*in case of removal*/
-                this.state.dataSources.filter(dataSource1 => dataSource1 !== dataSource)
-        const minimalMapping = core.minimalMappingFor(dataSources)
+                this.state.dataSources.filter(oneDataSource => oneDataSource !== dataSource)
+        const minimalMapping = core.minimalMappingFor(dataSourcesWithMaybeUselessSources)
+        const reallyUsedSources = Array.from(new Set(Object.values(minimalMapping)))
+        const dataSources = dataSourcesWithMaybeUselessSources
+            .filter(dataSource => reallyUsedSources.includes(dataSource))
         return AsyncStorage.setItem('@store:dataSources', JSON.stringify(dataSources)).then(() =>
             this.setState({dataSources, dataSourceByFeature: minimalMapping}))
     }
