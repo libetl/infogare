@@ -17,7 +17,7 @@ test('enabling a shadowing data source would disable the first one', () => {
         data.onDataSourceListChange('inMemory', true)).then(() =>
         data.onDataSourceListChange('liveMap', true)).then(() =>
         data.onDataSourceListChange('nouveauSncf', true)).then(() =>
-        expect(data.state.dataSources).toHaveLength(3))
+        expect(data.state.dataSources).toEqual(['nouveauSncf', 'inMemory', 'liveMap']))
 })
 
 test('but combine operation is still allowed', () => {
