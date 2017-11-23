@@ -23,18 +23,44 @@ test('enabling a shadowing data source would disable the first one', () => {
 test('but combine operation is still allowed', () => {
     const data = provideData()
     return data.onDataSourceListChange('sncfApi', true).then(() =>
-        data.onDataSourceListChange('inMemory', true)).then(() =>
-        data.onDataSourceListChange('liveMap', true)).then(() =>
         data.onDataSourceListChange('garesSncf', true)).then(() =>
-        expect(data.state.dataSources).toHaveLength(4))
+        data.onDataSourceListChange('liveMap', true)).then(() =>
+            expect(data.state.dataSources).toHaveLength(3))
+})
+
+test('a useless source will not be added', () => {
+    const data = provideData()
+    return data.onDataSourceListChange('sncfApi', true).then(() =>
+        data.onDataSourceListChange('inMemory', true)).then(() =>
+        data.onDataSourceListChange('garesSncf', true)).then(() =>
+        data.onDataSourceListChange('liveMap', true)).then(() =>
+        expect(data.state.dataSources).toHaveLength(3))
+})
+
+test('unless if a source becomes useful afterwards', () => {
+    const data = provideData()
+    return data.onDataSourceListChange('sncfApi', true).then(() =>
+        data.onDataSourceListChange('inMemory', true)).then(() =>
+        data.onDataSourceListChange('garesSncf', true)).then(() =>
+        data.onDataSourceListChange('liveMap', true)).then(() => {
+
+        // no inMemory
+        expect(data.state.dataSources).toEqual(['sncfApi', 'garesSncf', 'liveMap'])
+
+        return data.onDataSourceListChange('sncfApi', false)}).then(() =>
+        data.onDataSourceListChange('nouveauSncf', true)).then(() =>
+        data.onDataSourceListChange('inMemory', true)).then(() =>
+
+        // inMemory allowed this time
+        expect(data.state.dataSources).toEqual(['nouveauSncf', 'inMemory', 'liveMap']))
 })
 
 test('adding a source will simply add a new Source', () => {
     const data = provideData()
     data.onDataSourceListChange('inMemory', true).then(() =>
-    data.onDataSourceListChange('liveMap', true)).then(() =>
-    data.onDataSourceListChange('nouveauSncf', true)).then(() =>
-    expect(data.state.dataSources).toHaveLength(3))
+        data.onDataSourceListChange('liveMap', true)).then(() =>
+        data.onDataSourceListChange('nouveauSncf', true)).then(() =>
+        expect(data.state.dataSources).toHaveLength(3))
 })
 
 
