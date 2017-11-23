@@ -1,5 +1,5 @@
 import {get} from 'axios'
-import {sortByTime, combineAll, removeDuplicates, feedWith} from './operations/combine'
+import {minimalMappingFor, sortByTime, combineAll, removeDuplicates, feedWith} from './operations/combine'
 import sources from './sources'
 import {format} from './operations/formatDisplay'
 
@@ -8,11 +8,7 @@ const allDataSources = Object.entries(sources).reduce((acc, [name, {metadata}]) 
 export default {
     dataSources: allDataSources,
     testToken: sources.sncfApi.testApi,
-    minimalMappingFor: (wantedDataSources, listOfDataSources = allDataSources) => {
-        const guess = wantedDataSources.sort((a, b) => listOfDataSources[a].features.length < listOfDataSources[b].features.length)
-           .reduce((acc, value) => {return {...listOfDataSources[value].features
-               .map(feature => {return {[feature]: value}}).reduce((acc1, value1) => {return {...acc1, ...value1}}, {}), ...acc}}, {})
-        return {...guess, stations:(sources[guess.departures]||{}).stationSearch ? guess.departures : guess.stations || 'inMemory'}},
+    minimalMappingFor: (wantedDataSources) => minimalMappingFor(wantedDataSources, sources),
     suggestStations: (text) => sources.inMemory.stationsMatching(text),
     nextDepartures: async (coords, {token, notify = () => {},
         dataSourceByFeature = {platforms: 'terSncf', departures: 'terSncf', stations: 'inMemory', colors: 'inMemory', codes: 'inMemory', journeys: 'terSncf', geolocation: 'liveMap'}} = {}) => {
