@@ -1,0 +1,11 @@
+#!/bin/sh
+git add .
+git checkout expo
+sleep 2
+git commit -m "$1"
+git checkout detached
+sleep 2
+git merge expo -m "merge"
+git reset --soft expo
+git commit -m "detached"
+git push --all origin -f
