@@ -1,6 +1,6 @@
 {
   "name": "sncf-le-panneau",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "private": true,
   "devDependencies": {
     "chalk": "latest",
@@ -34,7 +34,9 @@
     "ios": "react-native-scripts ios",
     "test": "node node_modules/jest/bin/jest.js --watch",
     "postinstall": "node ./tools/prepare.js && node ./tools/busLines.js && node ./tools/transportsLines.js",
-    "publish": "node node_modules/exp/bin/exp.js ba"
+    "publish": "node node_modules/exp/bin/exp.js ba",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "jest": {
     "preset": "jest-expo"
@@ -51,6 +53,9 @@
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
     "react-native": "^0.50.3",
-    "react-native-web": "^0.1.14"
+    "react-native-web": "^0.1.14",
+    "@storybook/react": "latest",
+    "@storybook/addon-actions": "latest",
+    "@storybook/addon-links": "latest"
   }
 }

@@ -1,9 +1,7 @@
 const React = require('react')
 import pictures from './images/base64pictures'
 
-try {
-    global.nativeLibrary = global.nativeLibrary || require('react-native')
-}catch(e){}
+try {global.nativeLibrary = global.nativeLibrary || require('react-native')}catch(e){}
 
 const IsNative = global.nativeLibrary.Platform &&
     ['android', 'ios'].includes(global.nativeLibrary.Platform.OS)
