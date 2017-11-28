@@ -1,6 +1,6 @@
 import React from 'react'
-import moment from 'moment'
 import {Button, Image, Modal, ScrollView, StyleSheet, Text, View, IsNative, LoadPicture} from '../wrapper'
+import Time from './time'
 
 const styles = StyleSheet.create({
     "View": {
@@ -501,11 +501,7 @@ export default class Details extends React.Component {
                         </View>
                         <View style={styles.statusbar}>
                             <ScrollView style={styles.info} horizontal={true}><Text style={styles.infoText}>{'L\'accès au train ne peut être garanti 2 minutes avant le départ.'.toUpperCase()}</Text></ScrollView>
-                            <View style={styles.now}>
-                                <View style={styles.hhmmss}>
-                                    <Text style={styles.hour}>{this.props.displayNowColon ? moment().format('HH:mm') : moment().format('HH mm')}</Text><Text style={styles.seconds}>{moment().format('ss')}</Text>
-                                </View>
-                            </View>
+                            <Time/>
                         </View>
                     </View>
                 </View>

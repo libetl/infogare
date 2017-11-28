@@ -1,5 +1,4 @@
 import React from 'react'
-import moment from 'moment'
 import KeyEvent from './keyboard/keyEvent'
 import core from './core'
 import Timetable from './components/timetable'
@@ -24,7 +23,6 @@ export default class App extends React.Component {
         this.stopsListOfRow1 = {}
         this.stopsListOfRow2 = {}
         this.autoScroll = this.autoScroll.bind(this)
-        this.refreshScreen = this.refreshScreen.bind(this)
         this.updateTimetable = this.updateTimetable.bind(this)
         this.updateLocation = this.updateLocation.bind(this)
         this.abortChangeLocation = this.abortChangeLocation.bind(this)
@@ -61,7 +59,7 @@ export default class App extends React.Component {
     initNow(apiToken, dataSources = ['terSncf', 'inMemory', 'liveMap']) {
         this.setState({firstScrollY: 3, secondScrollY: 3, apiToken, dataSources, dataSourceByFeature:core.minimalMappingFor(dataSources)})
         setInterval(this.autoScroll, 3000)
-        setInterval(this.refreshScreen, 500)
+        setInterval(this.updateTimetable, 60000)
         return this.updateLocation()
     }
     autoScroll() {
@@ -74,12 +72,6 @@ export default class App extends React.Component {
             firstScrollY: maybeNextScrollY1 >= this.state.stopsListOfRow1Height ? fromTop : maybeNextScrollY1,
             secondScrollY: maybeNextScrollY2 >= this.state.stopsListOfRow2Height ? fromTop : maybeNextScrollY2
         })
-    }
-    refreshScreen() {
-        if (moment().second() === 2 && !this.state.displayNowColon) {
-            this.updateTimetable()
-        }
-        this.setState({displayNowColon: !this.state.displayNowColon})
     }
     updateTimetable({geo, progressBar, closeLocationPrompt} = {geo: this.state.geo, progressBar: false, closeLocationPrompt: false}) {
         this.setState({geo, currentlyUpdating:progressBar ? true : this.state.currentlyUpdating, 
@@ -161,7 +153,6 @@ export default class App extends React.Component {
                            displayLocationPrompt={this.state.displayLocationPrompt}
                            rowHeight={this.state.row1Height || 60} rowWidth={320}
                            timetable={this.state.timetable} parent={this}
-                           displayNowColon={this.state.displayNowColon}
                            updateHightlightedComponent={this.updateHightlightedComponent}/>)
     }
 }
