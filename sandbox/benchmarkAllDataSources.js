@@ -1,7 +1,7 @@
 import core from '../src/core'
 import places from '../src/core/data/places'
 import sources from '../src/core/sources'
-import benchmark from './benchmark'
+import {benchmark} from './benchmark'
 
 const theContestants = Object.keys(sources).map(source =>
     sources[source].metadata.needsExtraSourceForGeolocation ?
