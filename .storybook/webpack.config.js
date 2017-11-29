@@ -9,5 +9,5 @@ module.exports = (storybookBaseConfig, configType) => {
         }
     };
 
-    return storybookBaseConfig;
+    return storybookBaseConfig
 };
