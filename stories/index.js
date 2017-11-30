@@ -7,7 +7,9 @@ import { linkTo } from '@storybook/addon-links'
 import { Button, Welcome } from '@storybook/react/demo'
 import Time from '../src/components/time'
 import Departure from '../src/components/departure'
+import LocationPrompt from '../src/components/locationPrompt'
 import {View, Text, LoadPicture, Image} from '../src/wrapper'
+import core from '../src/core'
 
 storiesOf('Welcome', module).add('Sncf-le-panneau', () =>
   <View>
@@ -49,3 +51,6 @@ storiesOf('Departure', module)
                                       stops:[]}}/>)
 
 storiesOf('Time', module).add('Time', () => <Time/>)
+
+storiesOf('LocationPrompt', module).add('LocationPrompt', () => 
+                        <LocationPrompt displayLocationPrompt={true} suggestStations={station => core.suggestStations(station)}/>)
