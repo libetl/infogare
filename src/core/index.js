@@ -3,10 +3,8 @@ import {minimalMappingFor, sortByTime, combineAll, removeDuplicates, feedWith} f
 import sources from './sources'
 import {format} from './operations/formatDisplay'
 
-const allDataSources = Object.entries(sources).reduce((acc, [name, {metadata}]) => {return {...acc, [name]: metadata}}, {})
-
 export default {
-    dataSources: allDataSources,
+    dataSources: Object.entries(sources).reduce((acc, [name, {metadata}]) => {return {...acc, [name]: metadata}}, {}),
     testToken: sources.sncfApi.testApi,
     minimalMappingFor: wantedDataSources => minimalMappingFor(wantedDataSources, sources),
     suggestStations: text => sources.inMemory.stationsMatching(text),
