@@ -16,13 +16,9 @@ export default class App extends React.Component {
             highlightedComponent: null,
             timetable: {
                 departures: new Array(10).fill({}), station: 'chargement...',
-                firstScrollY: 3, secondScrollY: 3, stopsListOfRow1Height: 0, stopsListOfRow2Height: 0,
                 displayNowColon:true, apiToken: undefined, currentlyUpdating: false
             }
         }
-        this.stopsListOfRow1 = {}
-        this.stopsListOfRow2 = {}
-        this.autoScroll = this.autoScroll.bind(this)
         this.updateTimetable = this.updateTimetable.bind(this)
         this.updateLocation = this.updateLocation.bind(this)
         this.abortChangeLocation = this.abortChangeLocation.bind(this)
@@ -58,20 +54,8 @@ export default class App extends React.Component {
     }
     initNow(apiToken, dataSources = ['terSncf', 'inMemory', 'liveMap']) {
         this.setState({firstScrollY: 3, secondScrollY: 3, apiToken, dataSources, dataSourceByFeature:core.minimalMappingFor(dataSources)})
-        setInterval(this.autoScroll, 3000)
         setInterval(this.updateTimetable, 60000)
         return this.updateLocation()
-    }
-    autoScroll() {
-        const fromTop = 3
-        const delta = (this.state.row1Height || 60) * 0.3 + 0.25
-        const maybeNextScrollY1 = this.state.firstScrollY + delta
-        const maybeNextScrollY2 = this.state.secondScrollY + delta
-        this.setState({
-            ...this.state,
-            firstScrollY: maybeNextScrollY1 >= this.state.stopsListOfRow1Height ? fromTop : maybeNextScrollY1,
-            secondScrollY: maybeNextScrollY2 >= this.state.stopsListOfRow2Height ? fromTop : maybeNextScrollY2
-        })
     }
     updateTimetable({geo, progressBar, closeLocationPrompt} = {geo: this.state.geo, progressBar: false, closeLocationPrompt: false}) {
         this.setState({geo, currentlyUpdating:progressBar ? true : this.state.currentlyUpdating, 
@@ -97,17 +81,6 @@ export default class App extends React.Component {
             position => resolve({long: position.coords.longitude, lat: position.coords.latitude}),
             () => failsafe ? resolve() : this.tryGps({failsafe:true}), 
             {enableHighAccuracy: !failsafe, timeout: 2000, maximumAge: 10000}))
-    }
-    measureView(event, rowName) {
-        this.setState({...this.state, [`${rowName}Height`]: event.nativeEvent.layout.height, [`${rowName}Width`]: event.nativeEvent.layout.width})
-    }
-    componentDidUpdate() {
-        if (this.stopsListOfRow1 && this.stopsListOfRow1.scrollTo) {
-            this.stopsListOfRow1.scrollTo({x: 0, y: this.state.firstScrollY, animated: true})
-        }
-        if (this.stopsListOfRow2 && this.stopsListOfRow2.scrollTo) {
-            this.stopsListOfRow2.scrollTo({x: 0, y: this.state.secondScrollY, animated: true})
-        }
     }
     validateToken(newValue) {
         core.testToken(newValue)
@@ -151,7 +124,6 @@ export default class App extends React.Component {
     render() {
         return (<Timetable suggestStations={core.suggestStations}
                            displayLocationPrompt={this.state.displayLocationPrompt}
-                           rowHeight={this.state.row1Height || 60} rowWidth={320}
                            timetable={this.state.timetable} parent={this}
                            updateHightlightedComponent={this.updateHightlightedComponent}/>)
     }

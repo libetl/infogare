@@ -27,7 +27,7 @@ export default class LocationPrompt extends React.Component {
                     <TextInput value={this.state.newStationName} onChangeText={this.handleTextChange} style={{ width: 200, height: 44, padding: 8 }} />
                     <View style={{ flex: 1, flexDirection: 'column', width: '100%', height: '100%' }}>
                         {(this.state.guessedStations || []).slice(0, 10).map(station =>
-                            <Text key={`station${station.recordid}`} onPress={() => this.done(station)}>
+                            <Text key={`station${station.tvs}`} onPress={() => this.done(station)}>
                                 {station.intitule_gare}</Text>)}
                     </View>
                 </View>
