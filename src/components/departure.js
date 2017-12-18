@@ -25,12 +25,12 @@ export default class Departure extends React.Component {
         this.setState({height: event.nativeEvent.layout.height, width: event.nativeEvent.layout.width})
     }
     measureJourney(event) {
-        this.setState({journeyHeight: event.nativeEvent.layout.height, journeyWidth: event.nativeEvent.layout.width})
+        this.setState({journeyHeight: event.nativeEvent.layout.height})
     }
     scrollJourney(){
         if (this.stopsList && this.stopsList.scrollTo) {
             const fromTop = 3
-            const delta = (this.state.height || 60) * 0.3 + 0.25
+            const delta = (this.state.height || 60) * (IsNative ? 0.272 : 0.3)
             const maybeNextScroll = (this.state.scrollFromTop||3) + delta
             this.setState({
                 scrollFromTop: maybeNextScroll >= this.state.journeyHeight ? fromTop : maybeNextScroll
@@ -39,14 +39,16 @@ export default class Departure extends React.Component {
         }
     }
     render() {
+        const baseFontSize = this.state.height * 0.15
+        const doubleBaseFontSize = 2 * baseFontSize
         const zoom = this.props.detailed ? 1 : 2
         const departure = this.props.departure || {}
         const directionName = (!departure.stops || departure.stops.length === 0 ||
             departure.stops[departure.stops.length - 1] === 'Desserte\u00a0non\u00a0dispo' ?
             departure.direction : departure.stops[departure.stops.length - 1]) || ' '
-        const directionFontSize = Math.min(this.state.height * 0.3 * zoom, this.state.width * 0.8 / directionName.length)
+        const directionFontSize = Math.min(doubleBaseFontSize * zoom, this.state.width * 0.8 / directionName.length)
         const numberFontSize = Math.min(this.state.height * 0.1 * zoom, this.state.width / directionName.length)
-        const descriptionSize = this.state.height * 0.3 * zoom
+        const descriptionSize = doubleBaseFontSize * zoom
         const style = {width: '100%', backgroundColor: this.props.odd ? '#0d5da6' : '#04396d', flexDirection: 'column',
             alignItems: 'center', flexWrap: 'wrap', height: this.props.height}
         const mode = (departure.mode || '').toLowerCase()
@@ -65,8 +67,8 @@ export default class Departure extends React.Component {
         const bigModeIcon = {height: descriptionSize}
         const modeText = {color: '#fff', maxWidth: this.state.width * 0.25, fontSize: numberFontSize, fontWeight: 'bold', width: 60}
         const direction = {color: '#fff', fontSize: directionFontSize, overflow: 'hidden', flexGrow: 1}
-        const split = {height:this.state.height * 0.3, width: '100%', flexDirection: 'row'}
-        const stopsScroll = {height:this.state.height * 0.3, marginTop:this.state.height * 0.4, minHeight:12}
+        const split = {height:doubleBaseFontSize, width: '100%', flexDirection: 'row'}
+        const stopsScroll = {height:doubleBaseFontSize, marginTop:this.state.height * 0.4, minHeight:12}
         const numberText = mode !== 'bus' ? {alignSelf: 'center', color:'#fff'} :
             {color: departure.fontColor ? '#' + departure.fontColor : '#fff', backgroundColor: departure.color ? '#' + departure.color : 'transparent', minWidth:numberFontSize * 3, alignSelf: 'center', textAlign: 'center', fontSize: numberFontSize}
         const number = {width: this.props.mustBePadded ? '25%' : '15%'}
@@ -92,8 +94,8 @@ export default class Departure extends React.Component {
                                 <View key={departure.boardingPoint} style={{overflow: 'hidden', flexGrow: 1}}>
                                     <Text style={{color:'#fff'}}>{directionName} </Text>
                                     <View style={{flexDirection: 'row'}}>
-                                        <Image style={{height: this.state.height * 0.15 * zoom - (IsNative ? 0 : 6), width: this.state.height * 0.15 * zoom - (IsNative ? 0 : 6)}} source={LoadPicture('walk')} />
-                                        <Text style={{lineHeight: this.state.height * 0.15 * zoom - (IsNative ? 0 : 6), color: '#fff', fontSize: this.state.height * 0.075 * zoom}}>{departure.boardingPoint}</Text>
+                                        <Image style={{height: baseFontSize * zoom - (IsNative ? 0 : 6), width: baseFontSize * zoom - (IsNative ? 0 : 6)}} source={LoadPicture('walk')} />
+                                        <Text style={{lineHeight: baseFontSize * zoom - (IsNative ? 0 : 6), color: '#fff', fontSize: this.state.height * 0.075 * zoom}}>{departure.boardingPoint}</Text>
                                     </View>
                                 </View>}
                             <Text style={departure.platform && departure.platform.length > 0 ?
@@ -105,16 +107,12 @@ export default class Departure extends React.Component {
                                     contentContainerStyle={styles.stops} style={stopsScroll}>
                             {this.props.detailed && departure.boardingPoint ?
                                 (<View key={departure.boardingPoint} style={{flexDirection:'row'}}>
-                                    <Image style={{height: this.state.height * 0.3 * zoom - (IsNative ? 0 : 6), width: this.state.height * 0.3 * zoom  - (IsNative ? 0 : 6)}} source={LoadPicture('walk')} />
-                                    <Text style={{lineHeight: this.state.height * 0.3 * zoom  - (IsNative ? 0 : 6), color: '#fff', fontSize: this.state.height * 0.15 * zoom }}>{departure.boardingPoint}</Text>
+                                    <Image style={{height: doubleBaseFontSize * zoom - (IsNative ? 0 : 6), width: doubleBaseFontSize * zoom  - (IsNative ? 0 : 6)}} source={LoadPicture('walk')} />
+                                    <Text style={{lineHeight: doubleBaseFontSize * zoom  - (IsNative ? 0 : 6), color: '#fff', fontSize: baseFontSize * zoom }}>{departure.boardingPoint}</Text>
                                 </View>): <Text/>}
-                            <Text onLayout={this.measureJourney}>{!departure.stops ? '' :
-                                departure.stops.map(stop => (
-                                    <Text style={{lineHeight: this.state.height * 0.3 - (IsNative ? 0 : 6)}} key={stop}>
-                                        <Text style={{color: '#fff', fontSize: this.state.height * 0.3 - (IsNative ? 0 : 6)}}> </Text>
-                                        <Text style={{color: '#fff', fontSize: this.state.height * 0.15}}>{stop}</Text>
-                                        <Text style={{color: '#fff', fontSize: this.state.height * 0.3 - (IsNative ? 0 : 6)}}> </Text>
-                                        <Text style={styles.yellowBullet}>•</Text></Text>))}</Text></ScrollView>}
+                            <Text onLayout={this.measureJourney} style={{padding:0, color: '#fff'}}>{
+                                !departure.stops ? <Text/> : departure.stops.map(stop => (<Text key={stop} style={{fontSize: baseFontSize, lineHeight: doubleBaseFontSize}}> {stop} <Text style={styles.yellowBullet}>•</Text></Text>))
+                            }</Text></ScrollView>}
                     </View>
                 </TouchableHighlight>
             </View>
