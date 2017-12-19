@@ -6,6 +6,7 @@ import {linkTo} from '@storybook/addon-links'
 
 import {Button, Welcome} from '@storybook/react/demo'
 import Time from '../src/components/time'
+import RoundButton from '../src/components/roundButton'
 import Departure from '../src/components/departure'
 import LocationPrompt from '../src/components/locationPrompt'
 import {Image, LoadPicture, Text, View} from '../src/wrapper'
@@ -54,3 +55,12 @@ storiesOf('Time', module).add('Time', () => <Time/>)
 
 storiesOf('LocationPrompt', module).add('LocationPrompt', () =>
     <LocationPrompt displayLocationPrompt={true} suggestStations={station => core.suggestStations(station)}/>)
+
+storiesOf('RoundButton', module).add('Refresh', () =>
+    <div style={{width:600, height:600, position:'absolute'}}>
+        <RoundButton text='↻' color='#dfc81f' fontColor='#FFFFFF' onClick={() => console.log('You clicked on ↻')}/>
+    </div>).add('Two buttons', () =>
+    <div style={{width:400, height:400, position:'absolute'}}>
+        <RoundButton text='⚙' color='#0d5da6' fontColor='#FFFFFF' onClick={() => console.log('You clicked on ⚙')}/>
+        <RoundButton text='↻' color='#dfc81f' fontColor='#FFFFFF' onClick={() => console.log('You clicked on ↻')}/>
+    </div>)
