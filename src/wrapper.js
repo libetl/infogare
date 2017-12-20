@@ -16,6 +16,7 @@ const Button=global.nativeLibrary.Button || 'button'
 const Modal=global.nativeLibrary.Modal || 'div'
 const StyleSheet=global.nativeLibrary.StyleSheet || {create: (data) => data}
 const Platform=global.nativeLibrary.Platform || {OS:'browser'}
+const TouchableWithoutFeedback=global.nativeLibrary.TouchableWithoutFeedback || 'button'
 const TouchableNativeFeedback=global.nativeLibrary.TouchableNativeFeedback || 'button'
 const TextInput=global.nativeLibrary.TextInput || 'input'
 const Switch=global.nativeLibrary.Switch || 'input'
@@ -31,6 +32,7 @@ export {
     Image,
     ScrollView,
     Text,
+    TouchableWithoutFeedback,
     TouchableOpacity,
     TouchableHighlight,
     View,

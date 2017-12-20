@@ -9,7 +9,8 @@ import Time from '../src/components/time'
 import RoundButton from '../src/components/roundButton'
 import Departure from '../src/components/departure'
 import LocationPrompt from '../src/components/locationPrompt'
-import {Image, LoadPicture, Text, View} from '../src/wrapper'
+import Timetable from '../src/components/timetable'
+import {Switch, Image, LoadPicture, Text, View} from '../src/wrapper'
 import core from '../src/core'
 
 storiesOf('Welcome', module).add('Sncf-le-panneau', () =>
@@ -18,6 +19,103 @@ storiesOf('Welcome', module).add('Sncf-le-panneau', () =>
         <Text>Ce storybook permet de voir et de tester les composants de l'application sncf-le-panneau</Text>
         <Image style={{width:300, height:250}} source={LoadPicture('logo')} />
     </View>)
+
+storiesOf('Full timetable', module).add('Malesherbes', () =>
+        <div style={{width:800, height:600, position:'absolute'}}>
+        <Timetable suggestStations={()=>{}}
+                   displayLocationPrompt={()=>{}}
+                   timetable={{departures:[{mode:'RER',
+                           name:'D',
+                           direction:'Villiers‑Le‑Bel‑Gonesse',
+                           number:'VUPE',
+                           time:'05:23',
+                           stops:['Boigneville','Buno‑Gironville','Maisse','Boutigny','La Ferté‑Alais','Ballancourt','Mennecy','Moulin‑Galant','Corbeil‑Essonnes','Le Bras‑de‑Fer','Evry‑Courcouronnes','Orangis‑Bois‑de‑l\'Epine','Grigny‑Centre','Juvisy','Vigneux‑sur‑Seine','Villeneuve‑St‑Georges','Maisons‑Alfort‑Alfortv.','Gare‑de‑Lyon‑RER‑D','Châtelet‑les‑Halles','Gare‑du‑Nord','Stade‑France‑St‑Denis','St‑Denis','Pierrefitte‑Stains','Garges‑Sarcelles','Villiers‑le‑Bel‑Gonesse'],
+                           fontColor:'FFFFFF',
+                           platform: '2',
+                           color:'5E9620'
+                       },{mode:'RER',
+                           name:'D',
+                           direction:'Villiers‑Le‑Bel‑Gonesse',
+                           number:'VUPE',
+                           time:'05:53',
+                           stops:['Boigneville','Buno‑Gironville','Maisse','Boutigny','La Ferté‑Alais','Ballancourt','Mennecy','Moulin‑Galant','Corbeil‑Essonnes','Le Bras‑de‑Fer','Evry‑Courcouronnes','Orangis‑Bois‑de‑l\'Epine','Grigny‑Centre','Juvisy','Vigneux‑sur‑Seine','Villeneuve‑St‑Georges','Maisons‑Alfort‑Alfortv.','Gare‑de‑Lyon‑RER‑D','Châtelet‑les‑Halles','Gare‑du‑Nord','Stade‑France‑St‑Denis'],
+                           fontColor:'FFFFFF',
+                           platform: '2',
+                           color:'5E9620'
+                       },{mode:'RER',
+                           name:'D',
+                           direction:'Villiers‑Le‑Bel‑Gonesse',
+                           number:'VUPE',
+                           time:'06:23',
+                           stops:[],
+                           fontColor:'FFFFFF',
+                           platform: '2',
+                           color:'5E9620'
+                       },{mode:'RER',
+                           name:'D',
+                           direction:'Villiers‑Le‑Bel‑Gonesse',
+                           number:'VUPE',
+                           time:'06:38',
+                           stops:[],
+                           fontColor:'FFFFFF',
+                           platform: '2',
+                           color:'5E9620'
+                       },{mode:'RER',
+                           name:'D',
+                           direction:'Villiers‑Le‑Bel‑Gonesse',
+                           number:'VUPE',
+                           time:'06:53',
+                           stops:[],
+                           fontColor:'FFFFFF',
+                           platform: '2',
+                           color:'5E9620'
+                       },{mode:'RER',
+                           name:'D',
+                           direction:'Villiers‑Le‑Bel‑Gonesse',
+                           number:'VUPE',
+                           time:'07:08',
+                           stops:[],
+                           fontColor:'FFFFFF',
+                           platform: '2',
+                           color:'5E9620'
+                       },{mode:'RER',
+                           name:'D',
+                           direction:'Villiers‑Le‑Bel‑Gonesse',
+                           number:'VUPE',
+                           time:'07:23',
+                           stops:[],
+                           fontColor:'FFFFFF',
+                           platform: '2',
+                           color:'5E9620'
+                       },{mode:'RER',
+                           name:'D',
+                           direction:'Villiers‑Le‑Bel‑Gonesse',
+                           number:'VUPE',
+                           time:'07:38',
+                           stops:[],
+                           fontColor:'FFFFFF',
+                           platform: '2',
+                           color:'5E9620'
+                       },{mode:'RER',
+                           name:'D',
+                           direction:'Villiers‑Le‑Bel‑Gonesse',
+                           number:'VUPE',
+                           time:'07:53',
+                           stops:[],
+                           fontColor:'FFFFFF',
+                           platform: '2',
+                           color:'5E9620'
+                       },{mode:'RER',
+                           name:'D',
+                           direction:'Villiers‑Le‑Bel‑Gonesse',
+                           number:'VUPE',
+                           time:'08:23',
+                           stops:[],
+                           fontColor:'FFFFFF',
+                           platform: '2',
+                           color:'5E9620'}]}} parent={{state:{}}}
+                   updateHightlightedComponent={()=>{}}/>
+        </div>)
 
 storiesOf('Departure', module)
     .add('Rouen Rive Droite', () =>
@@ -56,6 +154,7 @@ storiesOf('Time', module).add('Time', () => <Time/>)
 storiesOf('LocationPrompt', module).add('LocationPrompt', () =>
     <LocationPrompt displayLocationPrompt={true} suggestStations={station => core.suggestStations(station)}/>)
 
+let viewButton = true
 storiesOf('RoundButton', module).add('Refresh', () =>
     <div style={{width:600, height:600, position:'absolute'}}>
         <RoundButton text='↻' color='#dfc81f' fontColor='#FFFFFF' onClick={() => console.log('You clicked on ↻')}/>
@@ -63,4 +162,17 @@ storiesOf('RoundButton', module).add('Refresh', () =>
     <div style={{width:400, height:400, position:'absolute'}}>
         <RoundButton text='⚙' color='#0d5da6' fontColor='#FFFFFF' onClick={() => console.log('You clicked on ⚙')}/>
         <RoundButton text='↻' color='#dfc81f' fontColor='#FFFFFF' onClick={() => console.log('You clicked on ↻')}/>
+    </div>).add('Image', () =>
+    <div style={{width:600, height:600, position:'absolute'}}>
+        <RoundButton align='left top' image='walk' color='#04396d' fontColor='#FFFFFF'
+                     onClick={() => console.log('You clicked on walk')}/>
+    </div>).add('Switch display', () =>  <div style={{width:600, height:600, position:'absolute'}}>
+        <Switch value={viewButton} onValueChange={() => viewButton = !viewButton}/>
+        <RoundButton align='left top' text='switch' color='#04396d' fontColor='#FFFFFF' visible={viewButton}
+                     onClick={() => viewButton = !viewButton}/>
+    </div>).add('Long press', () =>
+    <div style={{width:800, height:800, position:'absolute'}}>
+        <RoundButton align='left top' longPressText='⚙' longPressColor='#0d5da6' longPressFontColor='#FFFFFF' text='↻'
+                     color='#dfc81f' fontColor='#FFFFFF' onClick={() => console.log('You clicked on ↻')}
+                     onLongClick={() => console.log('You clicked on ⚙')}/>
     </div>)
