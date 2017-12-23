@@ -17,10 +17,10 @@ export default class Timetable extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={StyleSheet.create({statusBar: {backgroundColor: '#ddc15d',height: Platform.OS === 'ios' ? Constants.statusBarHeight : 0}}).statusBar} />
-                <View style={{zIndex:10, position: 'absolute', right: '10%', bottom: '25%', width:'10%', height:'10%'}}>
-                    <RoundButton text={Platform.OS === 'ios' || Platform.OS === 'web' || Platform.Version >= 21 ? '⚙' : '¤'}
+                <View style={{zIndex:10, position: 'absolute', right: '0%', bottom: '15%', width:'20%', height:'20%'}}>
+                    <RoundButton nbButtons={2} text={Platform.OS === 'ios' || Platform.OS === 'web' || Platform.Version >= 21 ? '⚙' : '¤'}
                                  color='#663399' fontColor='#FFFFFF' onClick={this.props.parent.openSettings}/>
-                    <RoundButton longPressText='🔍' longPressColor='#DB0A5B' longPressFontColor='#FFFFFF' text='↻'
+                    <RoundButton nbButtons={2} longPressText='🔍' longPressColor='#DB0A5B' longPressFontColor='#FFFFFF' text='↻'
                                  color='#F9BF3B' fontColor='#FFFFFF' onClick={this.props.parent.updateLocation}
                                  onLongClick={this.props.parent.askForALocation}/>
                 </View>

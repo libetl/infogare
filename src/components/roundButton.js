@@ -5,7 +5,8 @@ import {
 export default class RoundButton extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {width: '100%', height:'100%', fadeAnim: new Animated.Value(0), longPressHeight: 0}
+        this.state = {width: `${100/props.nbButtons}%`, height: `${100/props.nbButtons}%`,
+            fadeAnim: new Animated.Value(0), longPressHeight: 0}
         this.measureButton = this.measureButton.bind(this)
         this.display = this.display.bind(this)
         this.hide = this.hide.bind(this)
