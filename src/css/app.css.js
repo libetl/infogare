@@ -54,7 +54,8 @@ export default StyleSheet.create({
     },
     footerFont: {
         color: '#fff',
-        flexGrow: 1
+        flexGrow: 1,
+        textAlign: 'center'
     },
     now: {
         backgroundColor: '#04396d',

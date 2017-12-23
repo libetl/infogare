@@ -1,10 +1,11 @@
 import React from 'react'
-import {Animated, Image, IsNative, LoadPicture, Text, TouchableOpacity, View} from '../wrapper'
+import {
+    Animated, Image, IsNative, LoadPicture, Text, TouchableOpacity, TouchableWithoutFeedback, View} from '../wrapper'
 
 export default class RoundButton extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {width: '10%', height:'10%', fadeAnim: new Animated.Value(0), longPressHeight: 0}
+        this.state = {width: '100%', height:'100%', fadeAnim: new Animated.Value(0), longPressHeight: 0}
         this.measureButton = this.measureButton.bind(this)
         this.display = this.display.bind(this)
         this.hide = this.hide.bind(this)
@@ -47,40 +48,43 @@ export default class RoundButton extends React.Component {
         this.setState({height: event.nativeEvent.layout.height, width: event.nativeEvent.layout.width})
     }
     render() {
+        const Touchable = this.props.longPressColor ? TouchableWithoutFeedback : TouchableOpacity
         return <Animated.View onLayout={this.measureButton} style={{opacity: this.state.fadeAnim,
             maxHeight: 100, maxWidth: 100, marginBottom: 5,
-            left: !this.props.align || this.props.align.includes('right') ? '100%' : 0,
-            top: !this.props.align || this.props.align.includes('bottom') ? '100%' : 0,
-            width: this.state.width, height: this.state.height}}>
+            width: isNaN(this.state.width) ? this.state.width : Math.max(this.state.height, this.state.width),
+            height: isNaN(this.state.height) ? this.state.height : Math.max(this.state.height, this.state.width)}}>
             <View style={{height:this.state.height - this.state.longPressHeight,
                 width: this.state.width, overflow: 'hidden'}}>
-                <TouchableOpacity onPressIn={this.startRoll} onPressOut={this.stopRoll}
-                                  onPress={!this.props.longPressColor ? this.props.onClick : undefined}
-                                  activeOpacity={!this.props.longPressColor ? 0.2 : 1.0}
-                                  style={{backgroundColor: this.props.color,
-                    borderRadius: IsNative ? 50 : '50%',
-                    boxShadow: `2px 2px 2px 1px ${this.props.shadowColor || '#80808080'}`,
-                    width: '100%', height: this.state.height, alignContent: 'center'}}>
-                    {this.props.text && <Text style={{color: this.props.fontColor, textAlign: 'center',
-                        fontSize: Math.min(this.state.width, this.state.height) / this.props.text.length}}>{
-                        this.props.text}</Text>}
-                    {this.props.image && <Image style={{height: this.state.height,
-                        width: this.state.width}} source={LoadPicture(this.props.image)} />}
-                </TouchableOpacity>
+                <Touchable onPressIn={this.startRoll} onPressOut={this.stopRoll}
+                           onPress={!this.props.longPressColor ? this.props.onClick : undefined}
+                           activeOpacity={!this.props.longPressColor ? 0.2 : 1.0}>
+                    <View style={{backgroundColor: this.props.color,
+                        borderRadius: IsNative ? 50 : '50%',
+                        boxShadow: `2px 2px 2px 1px ${this.props.shadowColor || '#80808080'}`,
+                        width: '100%', height: this.state.height, alignContent: 'center'}}>
+                        {this.props.text && <Text style={{color: this.props.fontColor, textAlign: 'center',
+                            fontSize: Math.min(this.state.width, this.state.height) / this.props.text.length}}>{
+                            this.props.text}</Text>}
+                        {this.props.image && <Image style={{height: this.state.height,
+                            width: this.state.width}} source={LoadPicture(this.props.image)} />}
+                    </View>
+                </Touchable>
             </View>
             {this.props.longPressColor &&
             <View style={{height:this.state.longPressHeight,
                 width: this.state.width, overflow: 'hidden'}}>
-                <TouchableOpacity style={{backgroundColor: this.props.longPressColor,
-                    borderRadius: IsNative ? 50 : '50%', position: 'relative', top: -this.state.height + this.state.longPressHeight,
-                    boxShadow: `2px 2px 2px 1px ${this.props.shadowColor || '#80808080'}`,
-                    width: '100%', height: this.state.height, alignContent: 'center'}}>
-                    {this.props.longPressText && <Text style={{color: this.props.longPressFontColor, textAlign: 'center',
-                        fontSize: Math.min(this.state.width, this.state.height) / this.props.text.length}}>{
-                        this.props.longPressText}</Text>}
-                    {this.props.longPressImage && <Image style={{height: this.state.height,
-                        width: this.state.width}} source={LoadPicture(this.props.longPressImage)} />}
-                </TouchableOpacity>
+                <Touchable>
+                    <View style={{backgroundColor: this.props.longPressColor,
+                        borderRadius: IsNative ? 50 : '50%', position: 'relative', top: -this.state.height + this.state.longPressHeight,
+                        boxShadow: `2px 2px 2px 1px ${this.props.shadowColor || '#80808080'}`,
+                        width: '100%', height: this.state.height, alignContent: 'center'}}>
+                        {this.props.longPressText && <Text style={{color: this.props.longPressFontColor, textAlign: 'center',
+                            fontSize: Math.min(this.state.width, this.state.height) / this.props.text.length}}>{
+                            this.props.longPressText}</Text>}
+                        {this.props.longPressImage && <Image style={{height: this.state.height,
+                            width: this.state.width}} source={LoadPicture(this.props.longPressImage)} />}
+                    </View>
+                </Touchable>
             </View>}
         </Animated.View>
     }

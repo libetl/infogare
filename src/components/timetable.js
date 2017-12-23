@@ -2,6 +2,7 @@ import styles from '../css/app.css'
 import Departure from './departure'
 import Footer from './footer'
 import LocationPrompt from './locationPrompt'
+import RoundButton from './roundButton'
 import Settings from './settings'
 import Details from './details'
 import PropTypes from 'prop-types'
@@ -16,6 +17,13 @@ export default class Timetable extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={StyleSheet.create({statusBar: {backgroundColor: '#ddc15d',height: Platform.OS === 'ios' ? Constants.statusBarHeight : 0}}).statusBar} />
+                <View style={{zIndex:10, position: 'absolute', right: '10%', bottom: '25%', width:'10%', height:'10%'}}>
+                    <RoundButton text={Platform.OS === 'ios' || Platform.OS === 'web' || Platform.Version >= 21 ? '⚙' : '¤'}
+                                 color='#663399' fontColor='#FFFFFF' onClick={this.props.parent.openSettings}/>
+                    <RoundButton longPressText='🔍' longPressColor='#DB0A5B' longPressFontColor='#FFFFFF' text='↻'
+                                 color='#F9BF3B' fontColor='#FFFFFF' onClick={this.props.parent.updateLocation}
+                                 onLongClick={this.props.parent.askForALocation}/>
+                </View>
                 <LocationPrompt displayLocationPrompt={this.props.displayLocationPrompt} suggestStations={this.props.suggestStations} done={this.props.parent.changeLocation} abortChangeLocation={this.props.parent.abortChangeLocation}/>
                 <Settings onDataSourceListChange={this.props.parent.onDataSourceListChange} token={this.props.parent.state.apiToken} dataSources={this.props.parent.state.dataSources||[]} allDataSourcesMetadata={this.props.parent.state.allDataSourcesMetadata||{}} currentMapping={this.props.parent.state.dataSourceByFeature||{}} settingsOpened={this.props.parent.state.settingsOpened} closeSettings={this.props.parent.closeSettings} validateToken={this.props.parent.validateToken}/>
                 <Details rowWidth={320} details={this.props.parent.state.departureDetails} onClose={this.props.parent.hideDetails}/>
