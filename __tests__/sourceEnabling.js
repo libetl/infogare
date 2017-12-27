@@ -23,9 +23,7 @@ test('enabling a shadowing data source would disable the first one', () => {
 test('but combine operation is still allowed', () => {
     const data = provideData()
     return data.onDataSourceListChange('sncfApi', true).then(() =>
-        data.onDataSourceListChange('garesSncf', true)).then(() =>
-        data.onDataSourceListChange('liveMap', true)).then(() =>
-            expect(data.state.dataSources).toEqual(['sncfApi', 'garesSncf', 'liveMap']))
+            expect(data.state.dataSources).toEqual(['sncfApi', 'inMemory', 'garesSncf', 'liveMap']))
 })
 
 test('a useless source will not be added', () => {
@@ -34,7 +32,7 @@ test('a useless source will not be added', () => {
         data.onDataSourceListChange('inMemory', true)).then(() =>
         data.onDataSourceListChange('garesSncf', true)).then(() =>
         data.onDataSourceListChange('liveMap', true)).then(() =>
-        expect(data.state.dataSources).toEqual(['sncfApi', 'garesSncf', 'liveMap']))
+        expect(data.state.dataSources).toEqual(['garesSncf', 'liveMap']))
 })
 
 test('unless if a source becomes useful afterwards', () => {
@@ -45,7 +43,7 @@ test('unless if a source becomes useful afterwards', () => {
         data.onDataSourceListChange('liveMap', true)).then(() => {
 
         // no inMemory
-        expect(data.state.dataSources).toEqual(['sncfApi', 'garesSncf', 'liveMap'])
+        expect(data.state.dataSources).toEqual(['garesSncf', 'liveMap'])
 
         return data.onDataSourceListChange('sncfApi', false)}).then(() =>
         data.onDataSourceListChange('nouveauSncf', true)).then(() =>
@@ -70,5 +68,5 @@ test('removing a source will do the job if possible', () => {
         data.onDataSourceListChange('nouveauSncf', true)).then(() =>
         data.onDataSourceListChange('inMemory', true)).then(() =>
         data.onDataSourceListChange('inMemory', false)).then(() =>
-        expect(data.state.dataSources).toEqual(['nouveauSncf']))
+        expect(data.state.dataSources).toEqual(['nouveauSncf', 'liveMap']))
 })
