@@ -9,6 +9,7 @@ import Time from '../src/components/time'
 import RoundButton from '../src/components/roundButton'
 import Departure from '../src/components/departure'
 import LocationPrompt from '../src/components/locationPrompt'
+import Settings from '../src/components/settings'
 import Timetable from '../src/components/timetable'
 import {Switch, Image, LoadPicture, Text, View} from '../src/wrapper'
 import core from '../src/core'
@@ -176,3 +177,8 @@ storiesOf('RoundButton', module).add('Refresh', () =>
                      color='#dfc81f' fontColor='#FFFFFF' onClick={() => console.log('You clicked on ↻')}
                      onLongClick={() => console.log('You clicked on ⚙')}/>
     </div>)
+
+storiesOf('Settings', module).add('All the settings', () =>
+    <Settings onDataSourceListChange={()=>{}} token={''} dataSources={['terSncf']}
+              allDataSourcesMetadata={core.dataSources} currentMapping={{}} settingsOpened={true} closeSettings={()=>{}}
+              validateToken={()=>{}}/>)

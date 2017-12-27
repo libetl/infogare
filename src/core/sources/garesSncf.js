@@ -44,6 +44,7 @@ const getGaresSncfPlatforms = ({baseDepartures, stationsAreas:{iataCodes:tvsList
 export default {baseDepartures, feed:[getGaresSncfPlatforms],
     metadata:{
         features:['departures', 'platforms'], everywhere: false,
+        betterServedWith: [],
         ratings:{relevancy: 2, reliability: 4, sustainability: 2, efficiency: 4}
     }
 }

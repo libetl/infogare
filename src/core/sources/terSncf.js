@@ -101,5 +101,5 @@ const findTerJourney = ({baseDepartures, stationsAreas:{nestedSearchData:{statio
                     return {savedNumber: departure.savedNumber, dataToDisplay: {stops}}})))
 
 export default {baseDepartures, feed:[findTerJourney],
-    metadata: {features:['departures', 'journeys','platforms','journeys'], everywhere: true,
+    metadata: {features:['departures', 'journeys','platforms'], everywhere: true,
         ratings:{relevancy: 3, reliability: 2, sustainability: 1, efficiency: 0}}}

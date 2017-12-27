@@ -67,6 +67,7 @@ const baseDepartures = ({code}) => code === -1 ? Promise.resolve([]) : get(`${st
 export default {stationSearch, baseDepartures, feed:[],
     metadata:{
         features:['stations', 'departures'], everywhere: false, butSpecificForRegion: 'Alpes-Maritimes',
-        ratings:{relevancy: 2, reliability: 2, sustainability: 2, efficiency: 4,}
+        betterServedWith: [],
+        ratings:{relevancy: 2, reliability: 2, sustainability: 2, efficiency: 1}
     }
 }

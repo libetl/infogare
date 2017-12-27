@@ -91,4 +91,5 @@ const stationSearch = (coords, {token, nestedStationSearch}) => {
 
 export default {testApi, stationSearch, baseDepartures, feed:[twoClosestJourneys],
     metadata: {features:['stations', 'departures', 'colors', 'codes', 'journeys'], everywhere: true,
+        betterServedWith: ['inMemory', 'garesSncf', 'liveMap'],
         ratings:{relevancy: 2, reliability: 5, sustainability: 4, efficiency: 4}}}

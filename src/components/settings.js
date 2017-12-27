@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import {Constants, Button, Modal, Platform, ScrollView, StyleSheet, Switch, Text, TextInput, View} from '../wrapper'
+import {Button, Constants, Modal, Platform, ScrollView, StyleSheet, Switch, Text, TextInput, View} from '../wrapper'
 
 const titleInGreen = {
     color: '#009586',
@@ -33,32 +33,18 @@ const settingName = {
     flex: 1,
     flexDirection: 'column'
 }
-const settingDescription = {
-    width: '100%'
-}
-const smallInput = {}
 const freeField = {minWidth: 120}
-const ratings = {
-    flexDirection: 'column'
-}
-const oneRating = {
-    alignSelf: 'flex-end',
-    flexDirection: 'row'
-}
 const ratingText = {
     fontSize: 12
 }
 const featuresTranslations = {
-    platforms: 'quais',
-    departures: 'départs',
-    stations: 'gares',
-    colors: 'couleurs',
-    codes: 'codes',
-    journeys: 'dessertes',
-    geolocation: 'géolocalisation'
-}
-const selectedSource = {
-    backgroundColor: '#ddc15d'
+    platforms: '🚉',
+    departures: '⌚',
+    stations: '📖',
+    colors: '🎨',
+    codes: '🔗',
+    journeys: '🛤',
+    geolocation: '🗺'
 }
 
 export default class Settings extends React.Component {
@@ -80,43 +66,44 @@ export default class Settings extends React.Component {
                         <View style={{width:'100%',backgroundColor:'#6d612d',flexDirection:'row', minHeight: 30, padding: 10}}><Button onPress={this.props.closeSettings} color='#ddc15d' title="◀"/><Text style={{color:'#FFFFFF', fontWeight: 'bold', fontSize: 15, width:'100%', padding:10}}>Paramètres</Text></View>
                         <Text style={titleInGreen}>Petite notice avant tout :</Text>
                         <View style={oneSettingNoBottomRow}><Text>Signification des notes ci-dessous : </Text></View>
-                        <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>Pertinence</Text></View><Text style={settingName}>les données sont elles dignes de confiance ? Peuvent elles être érronées ou obsolètes ?</Text></View>
-                        <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>Fiabilité</Text></View><Text style={settingName}>la source fonctionne t-elle tout le temps ? Peut il y avoir des coupures inopinées ?</Text></View>
-                        <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>Perennité</Text></View><Text style={settingName}>le service peut il être supprimé définitivement du jour au lendemain ?</Text></View>
-                        <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>Rapidité</Text></View><Text style={settingName}>le service répond il avec efficacité et en temps raisonnable ?</Text></View>
+                        <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>🎯 Pertinence</Text></View><Text style={settingName}>les données sont elles dignes de confiance ? Peuvent elles être érronées ou obsolètes ?</Text></View>
+                        <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>🌉 Fiabilité</Text></View><Text style={settingName}>la source fonctionne t-elle tout le temps ? Peut il y avoir des coupures inopinées ?</Text></View>
+                        <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>🆕 Perennité</Text></View><Text style={settingName}>le service peut il être supprimé définitivement du jour au lendemain ?</Text></View>
+                        <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>🚀 Rapidité</Text></View><Text style={settingName}>le service répond il avec efficacité et en temps raisonnable ?</Text></View>
                         <View style={oneSetting}><View><Text>Attention : la source 'sncf api' nécessite d'être enregistré sur https://www.digital.sncf.com/startup/api/token-developpeur</Text></View></View>
-                        <View style={oneSetting}><View><Text>Attention : seules les fonctionnalités surlignées en jaune sont réellement utilisées.
-                            Inutile de cocher toutes les sources.</Text></View></View>
-                        <Text style={titleInGreen}>Activer les sources suivantes :</Text>
-                        {Object.entries(this.props.allDataSourcesMetadata||{}).map(([name, metadata]) =>
-                            <View key={name} style={oneSettingNoBottomRow}>
-                                <View style={settingTitle}>
-                                    <Text style={settingName}>{name}</Text>
-                                    <View style={settingDescription}>
-                                        {metadata.features.map((feature,i) => <Text key={name + '-' + feature + '-' + i} style={this.props.currentMapping[feature] === name ? selectedSource : {}}>•{featuresTranslations[feature]}</Text>)}
+                        <View style={oneSetting}><View><Text>Légende : quai=🚉, départs=⌚, gares=📖, couleurs=🎨, codes=🔗, dessertes=🛤, géolocalisation=🗺</Text></View></View>
+                        <Text style={titleInGreen}>Activer la source suivante :</Text>
+                        <View style={{flexDirection: 'row', width: '100%', flexWrap: 'wrap'}}>
+                            {Object.entries(this.props.allDataSourcesMetadata||{}).map(([name, metadata]) =>
+                                <View key={name} style={{flexDirection: 'column', minWidth: 160, minHeight: 180, padding: 20}}>
+                                    <Text>{name}</Text>
+                                    <Switch id={name} label={name} value={this.props.dataSources.includes(name)} onValueChange={(value) => this.props.onDataSourceListChange(name, value)}/>
+                                    <View>
+                                        <View>
+                                            <Text style={ratingText}>🎯{new Array(metadata.ratings.relevancy).fill('🌟')}{new Array(5 - metadata.ratings.relevancy).fill('☆')}</Text>
+                                        </View>
+                                        <View>
+                                            <Text style={ratingText}>🌉{new Array(metadata.ratings.reliability).fill('🌟')}{new Array(5 - metadata.ratings.reliability).fill('☆')}</Text>
+                                        </View>
+                                        <View>
+                                            <Text style={ratingText}>🆕{new Array(metadata.ratings.sustainability).fill('🌟')}{new Array(5 - metadata.ratings.sustainability).fill('☆')}</Text>
+                                        </View>
+                                        <View>
+                                            <Text style={ratingText}>🚀{new Array(metadata.ratings.efficiency).fill('🌟')}{new Array(5 - metadata.ratings.efficiency).fill('☆')}</Text>
+                                        </View>
+                                    </View>
+                                    <View style={{flexDirection: 'column'}}>
+                                        <Text>{metadata.features.map((feature) => featuresTranslations[feature])}</Text>
+                                        <Text style={{color: 'red'}}>
+                                            {metadata.everywhere ? '' : '⚠️ gares'}
+                                        </Text>
                                         <Text>
-                                            {metadata.everywhere ? '' : ' (grandes gares)'}
-                                            {metadata.butSpecificForRegion ? `(disponible uniquement pour la région ${metadata.butSpecificForRegion})` : ''}
+                                            {metadata.butSpecificForRegion ? `🌎 ${metadata.butSpecificForRegion}` : ''}
                                         </Text>
                                     </View>
                                 </View>
-                                <Switch style={smallInput} id={name} label={name} value={this.props.dataSources.includes(name)} onValueChange={(value) => this.props.onDataSourceListChange(name, value)}/>
-                                <View style={ratings}>
-                                    <View style={oneRating}>
-                                        <Text style={ratingText}>Pertinence{new Array(metadata.ratings.relevancy).fill('★')}{new Array(5 - metadata.ratings.relevancy).fill('☆')}</Text>
-                                    </View>
-                                    <View style={oneRating}>
-                                        <Text style={ratingText}>Fiabilité{new Array(metadata.ratings.reliability).fill('★')}{new Array(5 - metadata.ratings.reliability).fill('☆')}</Text>
-                                    </View>
-                                    <View style={oneRating}>
-                                        <Text style={ratingText}>Perennité{new Array(metadata.ratings.sustainability).fill('★')}{new Array(5 - metadata.ratings.sustainability).fill('☆')}</Text>
-                                    </View>
-                                    <View style={oneRating}>
-                                        <Text style={ratingText}>Rapidité{new Array(metadata.ratings.efficiency).fill('★')}{new Array(5 - metadata.ratings.efficiency).fill('☆')}</Text>
-                                    </View>
-                                </View>
-                            </View>
-                        )}
+                            )}
+                        </View>
                         <Text style={titleInGreen}>Autorisation pour api sncf</Text>
                         <View style={oneSettingNoBottomRow}><Text>Si le token est valide, l'accès à la source 'sncf api' devient possible</Text></View>
                         <View style={oneSetting}><View style={settingTitle}><Text style={settingName}>token</Text></View><TextInput style={freeField} id="token" label="token" onChangeText={value => this.validateToken(value)} defaultValue={this.props.token}/></View>

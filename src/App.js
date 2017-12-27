@@ -101,7 +101,16 @@ export default class App extends React.Component {
         this.setState({settingsOpened: false})
     }
     onDataSourceListChange(dataSource, isItAnAddOperation) {
+
         const metadata = this.state.allDataSourcesMetadata
+
+        if (isItAnAddOperation && metadata[dataSource].betterServedWith) {
+            const dataSources = [dataSource, ...metadata[dataSource].betterServedWith]
+            const minimalMapping = core.minimalMappingFor(dataSources)
+            return AsyncStorage.setItem('@store:dataSources', JSON.stringify(dataSources)).then(() =>
+                this.setState({dataSources, dataSourceByFeature: minimalMapping}))
+        }
+
         const newDataSourceShadows = otherDataSource =>
             metadata[otherDataSource].features.every(entry => metadata[dataSource].features.includes(entry))
 

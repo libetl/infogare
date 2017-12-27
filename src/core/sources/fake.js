@@ -91,4 +91,5 @@ const baseDepartures = () => Promise.resolve(
         color:'5E9620'}}])
 
 export default {baseDepartures, feed:[], metadata: {features: ['departures'], everywhere: false,
+        betterServedWith: [],
         ratings:{relevancy: 0, reliability: 5, sustainability: 5, efficiency: 5}}}
