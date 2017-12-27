@@ -12,7 +12,7 @@ const stationSearch = ({lat, long}) => get(`${stopTimetable}searchfromlocation?l
         select.childNodes.filter(node => node.nodeName === 'option')[0])
     .then(option => {return {coords:{lat, long}, code: option.attributes[0].value, stationName: option.childNodes[0].text}})
 
-const baseDepartures = ({code}) => get(`${stopTimetable}Search?LogicalId=${code}`)
+const baseDepartures = ({code}) => code === -1 ? Promise.resolve([]) : get(`${stopTimetable}Search?LogicalId=${code}`)
     .then(html => new DomParser().parseFromString(html.data).getElementsByClassName('partner-lines-item')
         .map(elem => {return {
             links:
