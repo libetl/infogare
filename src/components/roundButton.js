@@ -63,7 +63,8 @@ export default class RoundButton extends React.Component {
                         borderRadius: IsNative ? 50 : '50%',
                         boxShadow: `2px 2px 2px 1px ${this.props.shadowColor || '#80808080'}`,
                         width: '100%', height: this.state.height, alignContent: 'center'}}>
-                        {this.props.text && <Text style={{color: this.props.fontColor, textAlign: 'center',
+                        {this.props.text && <Text style={{marginTop: this.props.marginTop || 0,
+                            color: this.props.fontColor, textAlign: 'center',
                             fontSize: Math.min(this.state.width, this.state.height) / this.props.text.length}}>{
                             this.props.text}</Text>}
                         {this.props.image && <Image style={{height: this.state.height,
@@ -79,7 +80,8 @@ export default class RoundButton extends React.Component {
                         borderRadius: IsNative ? 50 : '50%', position: 'relative', top: -this.state.height + this.state.longPressHeight,
                         boxShadow: `2px 2px 2px 1px ${this.props.shadowColor || '#80808080'}`,
                         width: '100%', height: this.state.height, alignContent: 'center'}}>
-                        {this.props.longPressText && <Text style={{color: this.props.longPressFontColor, textAlign: 'center',
+                        {this.props.longPressText && <Text style={{marginTop: this.props.marginTop || 0,
+                            color: this.props.longPressFontColor, textAlign: 'center',
                             fontSize: Math.min(this.state.width, this.state.height) / this.props.text.length}}>{
                             this.props.longPressText}</Text>}
                         {this.props.longPressImage && <Image style={{height: this.state.height,

@@ -8,6 +8,7 @@ import Details from './details'
 import PropTypes from 'prop-types'
 import React from 'react'
 import {Constants, Platform, RefreshControl, ScrollView, StyleSheet, View} from '../wrapper'
+import ButtonPanel from './buttonPanel'
 
 export default class Timetable extends React.Component {
     constructor(props) {
@@ -15,20 +16,21 @@ export default class Timetable extends React.Component {
     }
     render() {
         return (
-            <View style={styles.container}>
+            <View style={styles.container} onMoveShouldSetResponder={() => this.buttonPanel && this.buttonPanel.show() && false}>
                 <View style={StyleSheet.create({statusBar: {backgroundColor: '#ddc15d',height: Platform.OS === 'ios' ? Constants.statusBarHeight : 0}}).statusBar} />
-                <View style={{zIndex:10, position: 'absolute', right: '0%', bottom: '15%', width:'20%', height:'20%'}}>
-                    <RoundButton nbButtons={2} text={Platform.OS === 'ios' || Platform.OS === 'web' || Platform.Version >= 21 ? '⚙' : '¤'}
-                                 color='#663399' fontColor='#FFFFFF' onClick={this.props.parent.openSettings}/>
+                <ButtonPanel ref={thisRef => this.buttonPanel = thisRef}>
                     <RoundButton nbButtons={2} text='🔍' color='#DB0A5B' fontColor='#FFFFFF' longPressText='↻'
                                  longPressColor='#F9BF3B' longPressFontColor='#FFFFFF' onClick={this.props.parent.askForALocation}
                                  onLongClick={this.props.parent.updateLocation}/>
-                </View>
+                    <RoundButton nbButtons={2} text={Platform.OS === 'ios' || Platform.OS === 'web' || Platform.Version >= 21 ? '⚙' : '¤'}
+                                 marginTop='-20%' color='#663399' fontColor='#FFFFFF' onClick={this.props.parent.openSettings}/>
+                </ButtonPanel>
                 <LocationPrompt displayLocationPrompt={this.props.displayLocationPrompt} suggestStations={this.props.suggestStations} done={this.props.parent.changeLocation} abortChangeLocation={this.props.parent.abortChangeLocation}/>
                 <Settings onDataSourceListChange={this.props.parent.onDataSourceListChange} token={this.props.parent.state.apiToken} dataSources={this.props.parent.state.dataSources||[]} allDataSourcesMetadata={this.props.parent.state.allDataSourcesMetadata||{}} currentMapping={this.props.parent.state.dataSourceByFeature||{}} settingsOpened={this.props.parent.state.settingsOpened} closeSettings={this.props.parent.closeSettings} validateToken={this.props.parent.validateToken}/>
                 <Details rowWidth={320} details={this.props.parent.state.departureDetails} onClose={this.props.parent.hideDetails}/>
                 <ScrollView style={styles.scrollView} contentContainerStyle={{height: `${this.props.timetable.departures.length * 15}%`}}
-                            refreshControl={ <RefreshControl refreshing={this.props.parent.state.currentlyUpdating || false} onRefresh={this.props.parent.updateLocation} /> }>
+                            refreshControl={ <RefreshControl refreshing={this.props.parent.state.currentlyUpdating || false} onRefresh={this.props.parent.updateLocation} /> }
+                            >
                 {(!this.props.timetable.departures ? new Array(10) : this.props.timetable.departures).map((departure, i) =>
                     <Departure height={`${70.0 / this.props.timetable.departures.length * (i <= 1 ? 2 : 1)}%`} num={i} key={`departure${i}`} detailed={i <= 1}
                                odd={i % 2 === 0} departure={departure} viewOneDeparture={this.props.parent.viewOneDeparture}
