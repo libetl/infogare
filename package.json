@@ -57,7 +57,6 @@
     "react-native-web": "^0.1.14",
     "@storybook/react": "latest",
     "@storybook/addon-actions": "latest",
-    "@storybook/addon-links": "latest"
     "@storybook/addon-links": "latest",
     "@storybook/react-native": "latest"
   }
