@@ -48,13 +48,14 @@ const baseDepartures = ({code}) => get(`${stopTimetable}Search?LogicalId=${code}
             return {
                 savedNumber: line.lineNumber + time + line.params[2],
                 stop_date_time: {
-                    base_departure_date_time: time.localeCompare(now) < 0 ? `${parseInt(time.split(':')[0]) + 24}:${time.split(':')[1]}` : time,
+                    base_departure_date_time: time.localeCompare(now) < 0 ?
+                        `${parseInt(time.split(':')[0]) + 24}:${time.split(':')[1]}` : time,
                 },
                 dataToDisplay: {
                     mode: line.lineNumber.match(/T[0-9]+/) ? 'tramway' : 'bus',
                     name: '',
                     direction: response.substring(response.indexOf('vers') + 5),
-                    number: line.lineNumber,
+                    number: line.lineNumber.match(/0+[0-9]+/) ? `${parseInt(line.lineNumber)}` : line.lineNumber,
                     time,
                     stops:[]}}})).reduce((acc, value) => acc.concat(value), []))
 
