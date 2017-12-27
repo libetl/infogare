@@ -20,9 +20,9 @@ export default class Timetable extends React.Component {
                 <View style={{zIndex:10, position: 'absolute', right: '0%', bottom: '15%', width:'20%', height:'20%'}}>
                     <RoundButton nbButtons={2} text={Platform.OS === 'ios' || Platform.OS === 'web' || Platform.Version >= 21 ? '⚙' : '¤'}
                                  color='#663399' fontColor='#FFFFFF' onClick={this.props.parent.openSettings}/>
-                    <RoundButton nbButtons={2} longPressText='🔍' longPressColor='#DB0A5B' longPressFontColor='#FFFFFF' text='↻'
-                                 color='#F9BF3B' fontColor='#FFFFFF' onClick={this.props.parent.updateLocation}
-                                 onLongClick={this.props.parent.askForALocation}/>
+                    <RoundButton nbButtons={2} text='🔍' color='#DB0A5B' fontColor='#FFFFFF' longPressText='↻'
+                                 longPressColor='#F9BF3B' longPressFontColor='#FFFFFF' onClick={this.props.parent.askForALocation}
+                                 onLongClick={this.props.parent.updateLocation}/>
                 </View>
                 <LocationPrompt displayLocationPrompt={this.props.displayLocationPrompt} suggestStations={this.props.suggestStations} done={this.props.parent.changeLocation} abortChangeLocation={this.props.parent.abortChangeLocation}/>
                 <Settings onDataSourceListChange={this.props.parent.onDataSourceListChange} token={this.props.parent.state.apiToken} dataSources={this.props.parent.state.dataSources||[]} allDataSourcesMetadata={this.props.parent.state.allDataSourcesMetadata||{}} currentMapping={this.props.parent.state.dataSourceByFeature||{}} settingsOpened={this.props.parent.state.settingsOpened} closeSettings={this.props.parent.closeSettings} validateToken={this.props.parent.validateToken}/>
