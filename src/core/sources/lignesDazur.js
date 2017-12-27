@@ -6,8 +6,10 @@ const webhost = 'https://www.lignesdazur.com'
 const stopTimetable = `${webhost}/fr/horaires-a-larret/28/StopTimeTable/`
 
 const stationSearch = ({lat, long}) => get(`${stopTimetable}searchfromlocation?latitude=${lat}&longitude=${long}`)
-    .then(html => Promise.resolve(new DomParser().parseFromString(html.data).getElementsByTagName('select')[0]
-        .childNodes.filter(node => node.nodeName === 'option')[0]))
+    .then(html => new DomParser().parseFromString(html.data).getElementsByTagName('select'))
+    .then(selects => selects[0])
+    .then(select => !select ? {attributes:[{value: -1}], childNodes: [{text: 'hors réseau'}]} :
+        select.childNodes.filter(node => node.nodeName === 'option')[0])
     .then(option => {return {coords:{lat, long}, code: option.attributes[0].value, stationName: option.childNodes[0].text}})
 
 const baseDepartures = ({code}) => get(`${stopTimetable}Search?LogicalId=${code}`)
