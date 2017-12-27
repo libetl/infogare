@@ -17,7 +17,7 @@ export default class RoundButton extends React.Component {
     startRoll(){
         if (this.props.longPressColor) {
             const timer = setInterval(() => this.state.height <= this.state.longPressHeight ?
-                clearInterval(this.state.timer) && this.setState({timer: undefined}) :
+                clearInterval(this.state.timer) && this.setState({timer: undefined})  :
                 this.setState({longPressHeight: this.state.longPressHeight + 1}), 10)
             this.setState({timer})
         }
@@ -54,7 +54,7 @@ export default class RoundButton extends React.Component {
             maxHeight: 100, maxWidth: 100, marginBottom: 5,
             width: isNaN(this.state.width) ? this.state.width : Math.max(this.state.height, this.state.width),
             height: isNaN(this.state.height) ? this.state.height : Math.max(this.state.height, this.state.width)}}>
-            <View style={{height:this.state.height - this.state.longPressHeight,
+            <View style={{height:this.state.height - this.state.longPressHeight, zIndex:11,
                 width: this.state.width, overflow: 'hidden'}}>
                 <Touchable onPressIn={this.startRoll} onPressOut={this.stopRoll}
                            onPress={!this.props.longPressColor ? this.props.onClick : undefined}

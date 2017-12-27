@@ -7,8 +7,7 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%',
-        width: '100%',
-        overflowY: 'hidden'
+        width: '100%'
     },
     scrollView: {
         flexGrow: 1,

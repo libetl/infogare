@@ -36,6 +36,7 @@
     "postinstall": "node ./tools/prepare.js && node ./tools/busLines.js && node ./tools/transportsLines.js",
     "publish": "node node_modules/exp/bin/exp.js ba",
     "storybook": "start-storybook -p 6006",
+    "storybook-native": "storybook start -p 7007",
     "build-storybook": "build-storybook"
   },
   "jest": {
@@ -57,5 +58,7 @@
     "@storybook/react": "latest",
     "@storybook/addon-actions": "latest",
     "@storybook/addon-links": "latest"
+    "@storybook/addon-links": "latest",
+    "@storybook/react-native": "latest"
   }
 }
