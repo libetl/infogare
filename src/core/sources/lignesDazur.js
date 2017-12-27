@@ -1,5 +1,6 @@
 import {get, post} from 'axios'
 import DomParser from 'dom-parser'
+import {Html5Entities} from 'html-entities'
 import moment from 'moment'
 
 const webhost = 'https://www.lignesdazur.com'
@@ -10,7 +11,8 @@ const stationSearch = ({lat, long}) => get(`${stopTimetable}searchfromlocation?l
     .then(selects => selects[0])
     .then(select => !select ? {attributes:[{value: -1}], childNodes: [{text: 'hors réseau'}]} :
         select.childNodes.filter(node => node.nodeName === 'option')[0])
-    .then(option => {return {coords:{lat, long}, code: option.attributes[0].value, stationName: option.childNodes[0].text}})
+    .then(option => {return {coords:{lat, long}, code: option.attributes[0].value,
+        stationName: Html5Entities.decode(option.childNodes[0].text)}})
 
 const baseDepartures = ({code}) => code === -1 ? Promise.resolve([]) : get(`${stopTimetable}Search?LogicalId=${code}`)
     .then(html => new DomParser().parseFromString(html.data).getElementsByClassName('partner-lines-item')
@@ -56,7 +58,7 @@ const baseDepartures = ({code}) => code === -1 ? Promise.resolve([]) : get(`${st
             dataToDisplay: {
                 mode: line.lineNumber.match(/T[0-9]+/) ? 'tramway' : 'bus',
                 name: '',
-                direction: response.substring(response.indexOf('vers') + 5),
+                direction: Html5Entities.decode(response.substring(response.indexOf('vers') + 5)),
                 number: line.lineNumber.match(/0+[0-9]+/) ? `${parseInt(line.lineNumber)}` : line.lineNumber,
                 time,
                 stops:[]}}})).reduce((acc, value) => acc.concat(value), []))
