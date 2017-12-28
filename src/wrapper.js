@@ -9,6 +9,7 @@ const LoadPicture = name => pictures[name]
 const Image=global.nativeLibrary.Image || function(props){ return (<img src={props.source} alt={props.alt}/>)}
 const ScrollView=global.nativeLibrary.ScrollView || 'div'
 const Text=global.nativeLibrary.Text || 'p'
+const Dimensions=global.nativeLibrary.Dimensions || {get: () => 0, addEventListener :()=>{}}
 const TouchableOpacity=global.nativeLibrary.TouchableOpacity || 'button'
 const TouchableHighlight=global.nativeLibrary.TouchableHighlight || 'button'
 const View=global.nativeLibrary.View || 'div'
@@ -29,6 +30,7 @@ const Animated=global.nativeLibrary.Animated || {value:()=>{return{}}}
 export {
     Animated,
     AsyncStorage,
+    Dimensions,
     Image,
     ScrollView,
     Text,
