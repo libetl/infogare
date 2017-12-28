@@ -153,7 +153,7 @@ storiesOf('Departure', module)
 storiesOf('Time', module).add('Time', () => <Time/>)
 
 storiesOf('LocationPrompt', module).add('LocationPrompt', () =>
-    <LocationPrompt displayLocationPrompt={true} suggestStations={station => core.suggestStations(station)}/>)
+    <LocationPrompt favoriteStations={[]} displayLocationPrompt={true} suggestStations={station => core.suggestStations(station)}/>)
 
 let viewButton = true
 storiesOf('RoundButton', module).add('Refresh', () =>

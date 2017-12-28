@@ -33,6 +33,7 @@ export default class App extends React.Component {
         this.closeSettings = this.closeSettings.bind(this)
         this.onDataSourceListChange = this.onDataSourceListChange.bind(this)
         this.updateHightlightedComponent = this.updateHightlightedComponent.bind(this)
+        this.toggleFavorite = this.toggleFavorite.bind(this)
     }
     componentWillUnmount() {
         KeyEvent.removeKeyDownListener()
@@ -40,10 +41,13 @@ export default class App extends React.Component {
       }
     componentDidMount() {
         AsyncStorage.getItem('@store:apiToken').then(apiToken =>
-            AsyncStorage.getItem('@store:dataSources').then(dataSources => {
+            AsyncStorage.getItem('@store:dataSources').then(dataSources =>
+                AsyncStorage.getItem('@store:favoriteStations').then(favoriteStations => {
                 let foundDataSources
                 try{foundDataSources = JSON.parse(dataSources) || undefined}catch(e){}
-                this.initNow(apiToken, foundDataSources)}))
+                let foundFavoriteStations
+                try{foundFavoriteStations = JSON.parse(favoriteStations) || undefined}catch(e){}
+                this.initNow(apiToken, foundDataSources, foundFavoriteStations)})))
 
         KeyEvent.onKeyUpListener(keyCode => {
             if (keyCode === 23 && this.state.highlightedComponent) {
@@ -52,8 +56,9 @@ export default class App extends React.Component {
             }
         })
     }
-    initNow(apiToken, dataSources = ['terSncf', 'inMemory', 'liveMap']) {
-        this.setState({firstScrollY: 3, secondScrollY: 3, apiToken, dataSources, dataSourceByFeature:core.minimalMappingFor(dataSources)})
+    initNow(apiToken, dataSources = ['terSncf', 'inMemory', 'liveMap'], favoriteStations = []) {
+        this.setState({firstScrollY: 3, secondScrollY: 3, apiToken, dataSources,
+            dataSourceByFeature:core.minimalMappingFor(dataSources), favoriteStations})
         setInterval(this.updateTimetable, 60000)
         return this.updateLocation()
     }
@@ -129,6 +134,14 @@ export default class App extends React.Component {
     }
     updateHightlightedComponent(component) {
         this.setState({highlightedComponent:component})
+    }
+    toggleFavorite(stationName) {
+        const oldList = this.state.favoriteStations || []
+        const newList = oldList.includes(stationName) ? oldList.filter(name => name !== stationName) :
+            [...oldList, stationName]
+        this.setState({favoriteStations: newList})
+
+        return AsyncStorage.setItem('@store:favoriteStations', JSON.stringify(newList))
     }
     render() {
         return (<Timetable suggestStations={core.suggestStations}
