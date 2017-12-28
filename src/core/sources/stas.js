@@ -3,7 +3,7 @@ import DomParser from 'dom-parser'
 import {Html5Entities} from 'html-entities'
 import moment from 'moment'
 
-const webhost = 'https://www.lignesdazur.com'
+const webhost = 'https://www.reseau-stas.fr'
 const stopTimetable = `${webhost}/fr/horaires-a-larret/28/StopTimeTable/`
 
 const stationSearch = ({lat, long}) => get(`${stopTimetable}searchfromlocation?latitude=${lat}&longitude=${long}`)
@@ -66,7 +66,7 @@ const baseDepartures = ({code}) => code === -1 ? Promise.resolve([]) : get(`${st
 
 export default {stationSearch, baseDepartures, feed:[],
     metadata:{
-        features:['stations', 'departures'], everywhere: false, butSpecificForRegion: 'Alpes-Maritimes',
+        features:['stations', 'departures'], everywhere: false, butSpecificForRegion: 'Loire',
         betterServedWith: [],
         ratings:{relevancy: 2, reliability: 2, sustainability: 2, efficiency: 1}
     }
