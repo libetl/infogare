@@ -114,8 +114,8 @@ const findName = ({baseDepartures}) => baseDepartures.map(departure =>
     departure.dataToDisplay.name || !codeToLine[numberToCode[departure.savedNumber]] ? {} :
     {savedNumber:departure.savedNumber, dataToDisplay:{name: codeToLine[numberToCode[departure.savedNumber]]}})
 
-const stationSearch = coords => {
-    const foundStations = closestStations(coords)
+const stationSearch = (coords, {stationsList = registeredStations}) => {
+    const foundStations = closestStations(coords, stationsList)
     const stationName = foundStations[0].intitule_gare
     const stationCoords = {long: foundStations[0].coordinates[0], lat: foundStations[0].coordinates[1]}
     return {stationName, stationCoords, stations:foundStations,
