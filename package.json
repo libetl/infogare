@@ -33,7 +33,7 @@
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
     "test": "node node_modules/jest/bin/jest.js --watch",
-    "postinstall": "node ./tools/prepare.js && node ./tools/busLines.js && node ./tools/transportsLines.js",
+    "postinstall": "node ./tools/prepare.js && node ./tools/busLines.js && node ./tools/transportsLines.js && node ./tools/airports.js",
     "publish": "node node_modules/exp/bin/exp.js ba",
     "storybook": "start-storybook -p 6006",
     "storybook-native": "storybook start -p 7007",
