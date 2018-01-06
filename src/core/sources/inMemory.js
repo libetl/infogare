@@ -9,6 +9,7 @@ import rerLinesColors from '../data/rerLinesColors.json'
 import tramLinesColors from '../data/tramLinesColors.json'
 import transilienLinesColors from '../data/transilienLinesColors.json'
 import {blackOrWhite} from '../operations/blackOrWhite'
+import removeAccents from 'remove-accents'
 
 const distance = ([long1, lat1], [long2, lat2]) => Math.sqrt(Math.pow(long2 - long1, 2) + Math.pow(lat2 - lat1, 2))
 const distanceBetween= (station1, station2) =>
@@ -25,8 +26,7 @@ const closestStations = ({long, lat}, stationsList = registeredStations) => {
         station.coordinates[1] === closestStation.coordinates[1])
 }
 
-const sanitize = text => text
-    .toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+const sanitize = text => removeAccents.remove(text).toLowerCase()
     .replace(/[^a-z\s]/g, '').replace(/[\s]+/g, '').trim()
 
 const stationsMatching = (text, stationsList = registeredStations) => text.length < 1 ? [] :
