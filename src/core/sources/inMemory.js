@@ -26,7 +26,7 @@ const closestStations = ({long, lat}, stationsList = registeredStations) => {
 }
 
 const stationsMatching = (text, stationsList = registeredStations) => text.length < 1 ? [] :
-    stationsList.filter(station => station.intitule_gare.toLowerCase().includes(text.toLowerCase()))
+    stationsList.filter(station => station.name.toLowerCase().includes(text.toLowerCase()))
 
 const findIdfMapping = ({baseDepartures}) => baseDepartures.map(departure => findOneIdfMapping(departure))
 const findOneIdfMapping = departure => {return {savedNumber:departure.savedNumber,
@@ -116,7 +116,7 @@ const findName = ({baseDepartures}) => baseDepartures.map(departure =>
 
 const stationSearch = (coords, {stationsList = registeredStations} = {stationsList: registeredStations}) => {
     const foundStations = closestStations(coords, stationsList)
-    const stationName = foundStations[0].intitule_gare
+    const stationName = foundStations[0].name
     const stationCoords = {long: foundStations[0].coordinates[0], lat: foundStations[0].coordinates[1]}
     return {stationName, stationCoords, stations:foundStations,
         iataCodes: foundStations.map(station => (station.tvs || '').split('|')[0]),

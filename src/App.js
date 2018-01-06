@@ -38,16 +38,17 @@ export default class App extends React.Component {
     componentWillUnmount() {
         KeyEvent.removeKeyDownListener()
         KeyEvent.removeKeyUpListener()
-      }
+    }
     componentDidMount() {
-        AsyncStorage.getItem('@store:apiToken').then(apiToken =>
-            AsyncStorage.getItem('@store:dataSources').then(dataSources =>
-                AsyncStorage.getItem('@store:favoriteStations').then(favoriteStations => {
-                let foundDataSources
-                try{foundDataSources = JSON.parse(dataSources) || undefined}catch(e){}
-                let foundFavoriteStations
-                try{foundFavoriteStations = JSON.parse(favoriteStations) || undefined}catch(e){}
-                this.initNow(apiToken, foundDataSources, foundFavoriteStations)})))
+        AsyncStorage.getItem('@store:navitiaToken').then(navitiaToken =>
+            AsyncStorage.getItem('@store:apiToken').then(apiToken =>
+                AsyncStorage.getItem('@store:dataSources').then(dataSources =>
+                    AsyncStorage.getItem('@store:favoriteStations').then(favoriteStations => {
+                        let foundDataSources
+                        try{foundDataSources = JSON.parse(dataSources) || undefined}catch(e){}
+                        let foundFavoriteStations
+                        try{foundFavoriteStations = JSON.parse(favoriteStations) || undefined}catch(e){}
+                        this.initNow(apiToken, navitiaToken,foundDataSources, foundFavoriteStations)}))))
 
         KeyEvent.onKeyUpListener(keyCode => {
             if (keyCode === 23 && this.state.highlightedComponent) {
@@ -56,17 +57,18 @@ export default class App extends React.Component {
             }
         })
     }
-    initNow(apiToken, dataSources = ['terSncf', 'inMemory', 'liveMap'], favoriteStations = []) {
-        this.setState({firstScrollY: 3, secondScrollY: 3, apiToken, dataSources,
+    initNow(apiToken, navitiaToken, dataSources = ['terSncf', 'inMemory', 'liveMap'], favoriteStations = []) {
+        this.setState({firstScrollY: 3, secondScrollY: 3, apiToken, navitiaToken, dataSources,
             dataSourceByFeature:core.minimalMappingFor(dataSources), favoriteStations})
         setInterval(this.updateTimetable, 60000)
         return this.updateLocation()
     }
     updateTimetable({geo, progressBar, closeLocationPrompt} = {geo: this.state.geo, progressBar: false, closeLocationPrompt: false}) {
-        this.setState({geo, currentlyUpdating:progressBar ? true : this.state.currentlyUpdating, 
+        this.setState({geo, currentlyUpdating:progressBar ? true : this.state.currentlyUpdating,
             displayLocationPrompt: closeLocationPrompt ? false : this.state.displayLocationPrompt})
         const notify = progressBar ? this.setState.bind(this) : () => {}
-        return core.nextDepartures(geo, {token: this.state.apiToken, notify, dataSourceByFeature:this.state.dataSourceByFeature})
+        return core.nextDepartures(geo, {tokens: {sncfApi: this.state.apiToken, navitiaIo: this.state.navitiaToken},
+                notify, dataSourceByFeature:this.state.dataSourceByFeature})
             .then((timetable) => this.setState({currentlyUpdating: false, timetable}))
     }
     askForALocation() {
@@ -87,10 +89,10 @@ export default class App extends React.Component {
             () => failsafe ? resolve() : this.tryGps({failsafe:true}), 
             {enableHighAccuracy: !failsafe, timeout: 2000, maximumAge: 10000}))
     }
-    validateToken(newValue) {
-        core.testToken(newValue)
-            .then(() => AsyncStorage.setItem('@store:apiToken', newValue))
-            .then(() => this.setState({apiToken: newValue}))
+    validateToken({type, newValue}) {
+        core.testToken({type, newValue})
+            .then(() => AsyncStorage.setItem(`@store:${type}`, newValue))
+            .then(() => this.setState({[type]: newValue}))
             .catch((e) => this.setState({loginError:e.message}))
     }
     viewOneDeparture(num) {
@@ -123,7 +125,7 @@ export default class App extends React.Component {
             isItAnAddOperation ?
                 [dataSource].concat(
                     this.state.dataSources.filter(oneDataSource => !newDataSourceShadows(oneDataSource))) :
-            /*in case of removal*/
+                /*in case of removal*/
                 this.state.dataSources.filter(oneDataSource => oneDataSource !== dataSource)
         const minimalMapping = core.minimalMappingFor(dataSourcesWithMaybeUselessSources)
         const reallyUsedSources = Array.from(new Set(Object.values(minimalMapping)))

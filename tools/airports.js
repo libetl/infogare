@@ -8,7 +8,7 @@ get('http://ourairports.com/data/airports.csv').then(({data}) =>
         .map(([id, ident, type, name, lat, long, elevation_ft, continent, 
             country, region, municipality, scheduledService, gpsCode, 
             iataCode, localCode, homeLink, wikipediaLink, keywords]) =>
-            {return {intitule_gare: name, tvs: iataCode, 
+            {return {name, tvs: iataCode,
                 coordinates: [parseFloat(long), parseFloat(lat)]}})
         .filter(data => data.tvs))
     .then(data => fs.writeFileSync('src/core/data/airports.json', JSON.stringify(data)))

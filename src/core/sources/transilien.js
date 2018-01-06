@@ -4,7 +4,7 @@ import capitalize from '../operations/capitalize'
 import moment from 'moment'
 
 const idfStationUrl = 'https://www.transilien.com/fr/horaires/prochains-departs'
-const fetchTransilien = s => post(idfStationUrl, `departure=${encodeURIComponent(s.intitule_gare)}&uicDestination=&destination=&uicDeparture=${s.uic.replace(/^0+/, '').slice(0, -1)}`, {headers:{'Content-Type':'application/x-www-form-urlencoded'}})
+const fetchTransilien = s => post(idfStationUrl, `departure=${encodeURIComponent(s.name)}&uicDestination=&destination=&uicDeparture=${s.uic.replace(/^0+/, '').slice(0, -1)}`, {headers:{'Content-Type':'application/x-www-form-urlencoded'}})
 
 const flatten = data => data.childNodes.filter(x=>!x.text||!x.text.match(/^\s*$/)).map(x=>x.text?x.text.trim():flatten(x)).reduce((acc, value)=>acc.concat(value),[])
 const transilien = html => new DomParser().parseFromString(html.data)

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import {Button, Constants, Modal, Platform, ScrollView, StyleSheet, Switch, Text, TextInput, View} from '../wrapper'
+import {Button, Constants, Modal, Platform, ScrollView, Switch, Text, TextInput, View} from '../wrapper'
 
 const titleInGreen = {
     color: '#009586',
@@ -35,7 +35,8 @@ const settingName = {
 }
 const freeField = {minWidth: 120}
 const ratingText = {
-    fontSize: 12
+    fontSize: 12,
+    color: '#000'
 }
 const featuresTranslations = {
     platforms: '🚉',
@@ -52,31 +53,31 @@ export default class Settings extends React.Component {
         super(props)
         this.validateToken = this.validateToken.bind(this)
     }
-    validateToken(value) {
-        if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value)) {
-            this.props.validateToken(value)
+    validateToken({type, newValue}) {
+        if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(newValue)) {
+            this.props.validateToken({type, newValue})
         }
     }
     render() {
         return (
             <Modal style={{zIndex: 2, display: this.props.settingsOpened === true ? 'block' : 'none'}} animationType='slide' isOpen={this.props.settingsOpened === true} visible={this.props.settingsOpened === true} onRequestClose={this.props.closeSettings} position={'center'} contentLabel='Settings'>
-                <View style={StyleSheet.create({statusBar: {backgroundColor: '#ddc15d',height: Platform.OS === 'ios' ? Constants.statusBarHeight : 0}}).statusBar} />
+                <View style={{statusBar: {backgroundColor: '#ddc15d',height: Platform.OS === 'ios' ? Constants.statusBarHeight : 0}}} />
                 <ScrollView style={{height:'100%', width:'100%'}}>
-                    <View style={StyleSheet.create({screen:{backgroundColor:'#f4ecf4',display:'flex',flexDirection:'column',flexWrap:'nowrap',height:'100%',width:'100%'}}).screen}>
-                        <View style={{width:'100%',backgroundColor:'#6d612d',flexDirection:'row', minHeight: 30, padding: 10}}><Button onPress={this.props.closeSettings} color='#ddc15d' title="◀"/><Text style={{color:'#FFFFFF', fontWeight: 'bold', fontSize: 15, width:'100%', padding:10}}>Paramètres</Text></View>
+                    <View style={{backgroundColor:'#f4ecf4', display:'flex',flexDirection:'column',flexWrap:'nowrap',height:'100%',width:'100%'}}>
+                        <View style={{width:'100%',backgroundColor:'#6d612d',flexDirection:'row', minHeight: 30, padding: 10}}><Button onPress={this.props.closeSettings} color='#ddc15d' title='◀'/><Text style={{color:'#FFFFFF', fontWeight: 'bold', fontSize: 15, width:'100%', padding:10}}>Paramètres</Text></View>
                         <Text style={titleInGreen}>Petite notice avant tout :</Text>
                         <View style={oneSettingNoBottomRow}><Text>Signification des notes ci-dessous : </Text></View>
                         <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>🎯 Pertinence</Text></View><Text style={settingName}>les données sont elles dignes de confiance ? Peuvent elles être érronées ou obsolètes ?</Text></View>
                         <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>🌉 Fiabilité</Text></View><Text style={settingName}>la source fonctionne t-elle tout le temps ? Peut il y avoir des coupures inopinées ?</Text></View>
                         <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>🆕 Perennité</Text></View><Text style={settingName}>le service peut il être supprimé définitivement du jour au lendemain ?</Text></View>
                         <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>🚀 Rapidité</Text></View><Text style={settingName}>le service répond il avec efficacité et en temps raisonnable ?</Text></View>
-                        <View style={oneSetting}><View><Text>Attention : la source 'sncf api' nécessite d'être enregistré sur https://www.digital.sncf.com/startup/api/token-developpeur</Text></View></View>
-                        <View style={oneSetting}><View><Text>Légende : quai=🚉, départs=⌚, gares=📖, couleurs=🎨, codes=🔗, dessertes=🛤, géolocalisation=🗺</Text></View></View>
+                        <View style={oneSetting}><View><Text>Attention : les sources 'sncfApi et navitiaIo' nécessitent d'être enregistré (https://www.digital.sncf.com/startup/api/token-developpeur, https://api.navitia.io)</Text></View></View>
+                        <View style={oneSetting}><View><Text style={{color: 'black'}}>Légende : quai=🚉, départs=⌚, gares=📖, couleurs=🎨, codes=🔗, dessertes=🛤, géolocalisation=🗺</Text></View></View>
                         <Text style={titleInGreen}>Activer la source suivante :</Text>
                         <View style={{flexDirection: 'row', width: '100%', flexWrap: 'wrap'}}>
                             {Object.entries(this.props.allDataSourcesMetadata||{}).map(([name, metadata]) =>
                                 <View key={name} style={{flexDirection: 'column', minWidth: 160, minHeight: 180, padding: 20}}>
-                                    <Text>{name}</Text>
+                                    <Text style={{color: 'black'}}>{name}</Text>
                                     <Switch id={name} label={name} value={this.props.dataSources.includes(name)} onValueChange={(value) => this.props.onDataSourceListChange(name, value)}/>
                                     <View>
                                         <View>
@@ -93,20 +94,26 @@ export default class Settings extends React.Component {
                                         </View>
                                     </View>
                                     <View style={{flexDirection: 'column'}}>
-                                        <Text>{metadata.features.map((feature) => featuresTranslations[feature])}</Text>
+                                        <Text style={{color: 'black'}}>{metadata.features.map((feature) => featuresTranslations[feature])}</Text>
                                         <Text style={{color: 'red'}}>
-                                            {metadata.everywhere ? '' : '⚠️ gares'}
+                                            {metadata.everywhere ? '' : '⚠️ certaines gares'}
                                         </Text>
-                                        <Text>
+                                        <Text style={{color: 'black'}}>
                                             {metadata.butSpecificForRegion ? `🌎 ${metadata.butSpecificForRegion}` : ''}
+                                        </Text>
+                                        <Text style={{color: 'black'}}>
+                                            {metadata.needsAuthentication ? `🔒 ${metadata.needsAuthentication}` : ''}
                                         </Text>
                                     </View>
                                 </View>
                             )}
                         </View>
                         <Text style={titleInGreen}>Autorisation pour api sncf</Text>
-                        <View style={oneSettingNoBottomRow}><Text>Si le token est valide, l'accès à la source 'sncf api' devient possible</Text></View>
-                        <View style={oneSetting}><View style={settingTitle}><Text style={settingName}>token</Text></View><TextInput style={freeField} id="token" label="token" onChangeText={value => this.validateToken(value)} defaultValue={this.props.token}/></View>
+                        <View style={oneSettingNoBottomRow}><Text>Si le token est valide, l'accès à la source 'sncfApi' devient possible</Text></View>
+                        <View style={oneSetting}><View style={settingTitle}><Text style={settingName}>token</Text></View><TextInput style={freeField} id='apiToken' label='token' onChangeText={newValue => this.validateToken({type: 'apiToken', newValue})} defaultValue={this.props.apiToken}/></View>
+                        <Text style={titleInGreen}>Autorisation pour navitiaIo</Text>
+                        <View style={oneSettingNoBottomRow}><Text>Si le token est valide, l'accès à la source 'navitiaIo' devient possible</Text></View>
+                        <View style={oneSetting}><View style={settingTitle}><Text style={settingName}>token</Text></View><TextInput style={freeField} id='navitiaToken' label='token' onChangeText={newValue => this.validateToken({type: 'navitiaToken', newValue})} defaultValue={this.props.navitiaToken}/></View>
                     </View>
                 </ScrollView>
             </Modal>
@@ -120,7 +127,8 @@ Settings.propTypes = {
     closeSettings: PropTypes.func,
     dataSources: PropTypes.array,
     currentMapping: PropTypes.object,
-    token: PropTypes.string,
+    apiToken: PropTypes.string,
+    navitiaToken: PropTypes.string,
     onDataSourceListChange:PropTypes.func,
     validateToken:PropTypes.func
 }

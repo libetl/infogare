@@ -7,8 +7,8 @@ import capitalize from '../operations/capitalize'
 const stationUrl = (uic, stationName) => `https://www.ter.sncf.com/paca/gares/${uic}/${stationName}/prochains-departs`
 const journeyUrl = (uic, stationName, dateTime, number) => `https://www.ter.sncf.com/paca/gares/${uic}/${(stationName||'').replace(/'/g, '')}/detail?trainDate=${dateTime.format('MM[%2F]DD[%2F]YYYY[%2000%3A00%3A00]')}&trainNumber=${number}&stopType=Gare&cssTheme=color-garesetservices`
 
-//const smallFetch = s => get(stationUrl(parseInt(s.uic), s.intitule_gare))
-const bigFetch = s => post(stationUrl(parseInt(s.uic), s.intitule_gare),
+//const smallFetch = s => get(stationUrl(parseInt(s.uic), s.name))
+const bigFetch = s => post(stationUrl(parseInt(s.uic), s.name),
     'Filters%5B0%5D.IsUsed=true&Filters%5B0%5D.IsUsed=false&Filters%5B0%5D.Key=TGV_IC&Filters%5B0%5D.Value=TGV&Filters%5B1%5D.IsUsed=true&Filters%5B1%5D.IsUsed=false&Filters%5B1%5D.Key=TRAIN_TER&Filters%5B1%5D.Value=TER+TRAIN&Filters%5B2%5D.IsUsed=true&Filters%5B2%5D.IsUsed=false&Filters%5B2%5D.Key=CAR_TER&Filters%5B2%5D.Value=TER+CAR&Filters%5B3%5D.IsUsed=true&Filters%5B3%5D.IsUsed=false&Filters%5B3%5D.Key=AUTRES&Filters%5B3%5D.Value=AUTRES&NbDeparturesToDisplay=5&reload=voir+%2B+de+r%C3%A9sultats')
 
 const baseDepartures = ({nestedSearchData:{stations}}) =>
@@ -89,7 +89,7 @@ const baseDepartures = ({nestedSearchData:{stations}}) =>
 const findTerJourney = ({baseDepartures, stationsAreas:{nestedSearchData:{stations}, stationName}}) => Promise.all(baseDepartures.map(departure =>
     baseDepartures.indexOf(departure) > 1 || !stations[0] ? Promise.resolve({}) :
         ['metro', 'bus', 'tramway'].includes((departure.dataToDisplay.mode || '').toLowerCase()) || departure.dataToDisplay.stops.length ? Promise.resolve(departure) :
-            get(journeyUrl(parseInt(stations[0].uic), stations[0].intitule_gare, moment(), departure.savedNumber))
+            get(journeyUrl(parseInt(stations[0].uic), stations[0].name, moment(), departure.savedNumber))
                 .then(html => {
                     if (html.data === '') return {savedNumber: departure.savedNumber, dataToDisplay: {stops:['Desserte\u00a0non\u00a0dispo']}}
                     const table = (((new DomParser().parseFromString(html.data).getElementsByClassName('train_depart_table')[0]

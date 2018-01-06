@@ -17,7 +17,7 @@ export default class LocationPrompt extends React.Component {
     }
     done(station) {
         const stationData = typeof station === 'string' ?
-            this.props.suggestStations(station).filter(x => x.intitule_gare === station)[0] : station
+            this.props.suggestStations(station).filter(x => x.name === station)[0] : station
         this.state.done({ long: stationData.coordinates[0], lat: stationData.coordinates[1] })
     }
     render() {
@@ -31,10 +31,10 @@ export default class LocationPrompt extends React.Component {
                         {(this.state.guessedStations || []).slice(0, 10).map(station =>
                             <View key={`station${station.tvs}`} style={{flexDirection: 'row'}}>
                                 <Text style={{fontSize: 20}}
-                                      onPress={() => this.props.toggleFavorite(station.intitule_gare)}>{
-                                    this.state.favoriteStations.includes(station.intitule_gare) ? '🌟' : '☆'
+                                      onPress={() => this.props.toggleFavorite(station.name)}>{
+                                    this.state.favoriteStations.includes(station.name) ? '🌟' : '☆'
                                 }</Text>
-                                <Text style={{paddingTop: 6}} onPress={() => this.done(station)}>{station.intitule_gare}</Text></View>)}
+                                <Text style={{paddingTop: 6}} onPress={() => this.done(station)}>{station.name}</Text></View>)}
                     </View>
                     <View style={{ flex: 1, flexDirection: 'column', width: '50%', height: '100%' }}>
                         <Text>Favoris :</Text>

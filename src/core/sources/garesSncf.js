@@ -4,7 +4,7 @@ import capitalize from '../operations/capitalize'
 
 const garesSncfDeparturesUrl = (tvs) => `https://www.gares-sncf.com/fr/train-times/${tvs.toUpperCase()}/departure`
 
-const fetchApi = tvsList => Promise.all(tvsList.map(tvs => get(garesSncfDeparturesUrl(tvs))))
+const fetchApi = tvsList => Promise.all((tvsList||[]).map(tvs => get(garesSncfDeparturesUrl(tvs))))
     .then(results => results.reduce((acc, value) => acc.concat(value.data.trains || []), []))
 
 const baseDepartures = ({iataCodes:tvsList}) => fetchApi(tvsList)

@@ -69,16 +69,16 @@ get(gares).then(sncf =>
     const smallStationList =
         /*ratp.data.map(station => {
             return {coordinates:station.geometry.coordinates, tvs:station.fields.stop_id,
-                intitule_gare:station.fields.stop_name, uic:station.fields.stop_id}}).concat(*/
+                name:station.fields.stop_name, uic:station.fields.stop_id}}).concat(*/
         sncf.data.filter(station => station.geometry && station.fields.tvs).map(station => {
         return {coordinates:station.geometry.coordinates, region:station.fields.agence_gare,
-            tvs:station.fields.tvs, intitule_gare:station.fields.intitule_gare, uic:station.fields.uic}})
+            tvs:station.fields.tvs, name:station.fields.intitule_gare, uic:station.fields.uic}})
         //)
     fs.writeFileSync('./src/core/data/stations.json', JSON.stringify(smallStationList))
     fs.writeFileSync('./src/core/data/places.js',
-            'export default ' + JSON.stringify(smallStationList.map(station => {return {name:station.intitule_gare
+            'export default ' + JSON.stringify(smallStationList.map(station => {return {name:station.name
                 .replace(/[àâ]/g, 'a').replace(/[éèêë]/g, 'e').replace(/î/g, 'i').replace(/ô/g, 'o').replace(/[ùûü]/g, 'u')
-                .replace(/[^a-zA-Z]/g, '').replace(/^./, station.intitule_gare[0].toLowerCase()),
+                .replace(/[^a-zA-Z]/g, '').replace(/^./, station.name[0].toLowerCase()),
                 coordinates: {lat: station.coordinates[1], long: station.coordinates[0]}}}).reduce((a, b) =>
                 ((a[b.name] = b.coordinates) && a), {})))})
 //)

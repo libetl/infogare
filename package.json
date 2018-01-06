@@ -47,6 +47,8 @@
     "dom-parser": "^0.1.5",
     "electron": "^1.7.9",
     "expo": "^23.0.0",
+    "geojson": "latest",
+    "geojson-utils": "latest",
     "html-entities": "^1.2.1",
     "moment-mini-ts": "^2.18.1",
     "proj4": "^2.4.4",
