@@ -61,7 +61,7 @@ export default class Settings extends React.Component {
     render() {
         return (
             <Modal style={{zIndex: 2, display: this.props.settingsOpened === true ? 'block' : 'none'}} animationType='slide' isOpen={this.props.settingsOpened === true} visible={this.props.settingsOpened === true} onRequestClose={this.props.closeSettings} position={'center'} contentLabel='Settings'>
-                <View style={{statusBar: {backgroundColor: '#ddc15d',height: Platform.OS === 'ios' ? Constants.statusBarHeight : 0}}} />
+                <View style={{backgroundColor: '#ddc15d',height: Platform.OS === 'ios' ? Constants.statusBarHeight : 0}} />
                 <ScrollView style={{height:'100%', width:'100%'}}>
                     <View style={{backgroundColor:'#f4ecf4', display:'flex',flexDirection:'column',flexWrap:'nowrap',height:'100%',width:'100%'}}>
                         <View style={{width:'100%',backgroundColor:'#6d612d',flexDirection:'row', minHeight: 30, padding: 10}}><Button onPress={this.props.closeSettings} color='#ddc15d' title='◀'/><Text style={{color:'#FFFFFF', fontWeight: 'bold', fontSize: 15, width:'100%', padding:10}}>Paramètres</Text></View>

@@ -4,7 +4,7 @@ import DomParser from 'dom-parser'
 import capitalize from '../operations/capitalize'
 import promiseWhile from '../operations/promiseWhile'
 
-const readCookie = (response, name) => response.headers['set-cookie'].find(x => x.includes(name)).replace(/; HttpOnly/ig, '').replace(/; path=\//ig, '').replace(/; Domain=\.sncf\.com/ig, '')
+const readCookie = (response, name) => (response.headers['set-cookie'].find(x => x.includes(name))||'').replace(/; HttpOnly/ig, '').replace(/; path=\//ig, '').replace(/; Domain=\.sncf\.com/ig, '')
 
 const headersFrom = (infoRequest, redirect) => {return {headers:{
     Cookie: [readCookie(infoRequest, 'SNCCACHE'), readCookie(infoRequest, 'SNC_city'), readCookie(redirect.response, 'JSESSIONID'), readCookie(redirect.response, 'SNCSESSION')].join('; ')}}}

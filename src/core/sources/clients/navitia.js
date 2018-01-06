@@ -35,7 +35,7 @@ export default  ({hostname, coverage, metadata}) => {
     Promise.resolve([{links: [], stop_date_time: '00:00', savedNumber: 1,dataToDisplay: {direction:'Token nécessaire'}}])
 
   const departures = (foundCoverage, stationId, page = 0, token) => fetch(stationUrl(foundCoverage, stationId, moment().subtract(-1, 'minutes'), page), defaultEntity(token))
-    .then(result => {debugger;return Promise.resolve([...result.data.departures])})
+    .then(result => Promise.resolve([...result.data.departures]))
     .then(result => result.map(departure => ({
         links: departure.links,
         stop_date_time: departure.stop_date_time,
@@ -44,14 +44,12 @@ export default  ({hostname, coverage, metadata}) => {
         dataToDisplay: {
             mode: (departure.display_informations.commercial_mode||'').replace(/é/g, 'e').replace(/è/g, 'è'),
             direction: departure.display_informations.direction.replace(/ \([^)]+\)$/, ''),
-            name: departure.display_informations.commercial_mode !== 'Bus' &&
-                departure.display_informations.commercial_mode !== 'Metro' &&
-                departure.display_informations.commercial_mode !== 'Tramway' ?
-                departure.display_informations.code : undefined,
+            name: departure.display_informations.commercial_mode !== 'Bus' ?
+                departure.display_informations.code.replace(/^T([0-9]+)/, '$1') : undefined,
             color: departure.display_informations.color,
             fontColor: departure.display_informations.color ? blackOrWhite(departure.display_informations.color) : undefined,
-            number: isNaN(departure.display_informations.headsign) ? departure.display_informations.label :
-                parseInt(departure.display_informations.headsign),
+            number: departure.display_informations.headsign.includes(':') ?
+                departure.display_informations.code.replace(/^T([0-9]+)/, '$1') : departure.display_informations.headsign,
             status: departure.display_informations.status,
             time: moment(departure.stop_date_time.departure_date_time, 'YYYYMMDDTHHmmss').format('HH:mm'),
             stops: departure.display_informations.stops || []

@@ -10,7 +10,8 @@ const theContestants = Object.keys(sources).map(source =>
     .reduce((acc, value) => {return {...acc, ...value}}, {})
 
 benchmark({theContestants,
-    forThisWork: contestant => core.nextDepartures(places.parisGaredeLyon, {token: process.env.TOKEN, contestant}),
+    forThisWork: contestant => core.nextDepartures(places.parisGaredeLyon,
+        {tokens: {sncfApi: process.env.SNCF_TOKEN, navitiaIo: process.env.NAVITIA_TOKEN}, contestant}),
     howManyTimes: 10,
     barSettings: {width: 100.0, gradient: ['\x1B[47m', '\x1B[42m', '\x1B[46m', '\x1B[45m', '\x1B[41m']},
     asText: true, logInConsole: true})
