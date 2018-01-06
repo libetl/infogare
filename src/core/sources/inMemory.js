@@ -25,8 +25,12 @@ const closestStations = ({long, lat}, stationsList = registeredStations) => {
         station.coordinates[1] === closestStation.coordinates[1])
 }
 
+const sanitize = text => text
+    .toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z\s]/g, '').replace(/[\s]+/g, '').trim()
+
 const stationsMatching = (text, stationsList = registeredStations) => text.length < 1 ? [] :
-    stationsList.filter(station => station.name.toLowerCase().includes(text.toLowerCase()))
+    stationsList.filter(station => sanitize(station.name).includes(sanitize(text)))
 
 const findIdfMapping = ({baseDepartures}) => baseDepartures.map(departure => findOneIdfMapping(departure))
 const findOneIdfMapping = departure => {return {savedNumber:departure.savedNumber,
