@@ -42,13 +42,16 @@ export default  ({hostname, coverage, metadata}) => {
         savedNumber: isNaN(departure.display_informations.headsign) ? departure.display_informations.headsign :
             parseInt(departure.display_informations.headsign),
         dataToDisplay: {
-            mode: (departure.display_informations.commercial_mode||'').replace(/é/g, 'e').replace(/è/g, 'è'),
+            mode: (departure.display_informations.physical_mode||departure.display_informations.commercial_mode||'')
+                .replace(/é/g, 'e').replace(/è/g, 'è'),
             direction: departure.display_informations.direction.replace(/ \([^)]+\)$/, ''),
-            name: departure.display_informations.commercial_mode !== 'Bus' ?
+            name: !['Tramway', 'Bus'].includes(departure.display_informations.commercial_mode) &&
+            departure.display_informations.code !== departure.display_informations.direction ?
                 departure.display_informations.code.replace(/^T([0-9]+)/, '$1') : undefined,
             color: departure.display_informations.color,
             fontColor: departure.display_informations.color ? blackOrWhite(departure.display_informations.color) : undefined,
-            number: departure.display_informations.headsign.includes(':') ?
+            number: departure.display_informations.headsign.includes(':') ||
+                ['Tramway', 'Bus'].includes(departure.display_informations.commercial_mode) ?
                 departure.display_informations.code.replace(/^T([0-9]+)/, '$1') : departure.display_informations.headsign,
             status: departure.display_informations.status,
             time: moment(departure.stop_date_time.departure_date_time, 'YYYYMMDDTHHmmss').format('HH:mm'),
