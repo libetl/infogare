@@ -7,7 +7,6 @@ const purify = obj => obj !== Object(obj) ? obj :
             (acc, [key, value]) => !value ? acc : Object.assign({}, acc, {[key]: purify(value)}), {})
 
 const merged = (existingData, newData) => existingData.map(existingRow => {
-    debugger
     const addition = purify(newData.find(a => a.savedNumber === existingRow.savedNumber) || existingRow)
     return {
         ...addition,
