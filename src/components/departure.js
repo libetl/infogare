@@ -73,8 +73,9 @@ export default class Departure extends React.Component {
             {color: departure.fontColor ? '#' + departure.fontColor : '#fff', backgroundColor: departure.color ? '#' + departure.color : 'transparent', minWidth:numberFontSize * 3, alignSelf: 'center', textAlign: 'center', fontSize: numberFontSize}
         const number = {width: this.props.mustBePadded ? '25%' : '15%'}
         const timeAndStatus = {minWidth:3 * numberFontSize + 4, flexDirection: 'column'}
+        const strikeThroughTime = {color: '#95a5a6', fontSize: descriptionSize / 3, fontWeight: 'bold', textDecorationLine: 'line-through'}
         const time = {color: '#dfc81f', fontSize: descriptionSize / 3, fontWeight: 'bold'}
-        const status = {color: '#f5a665', fontSize: numberFontSize, fontWeight: 'bold'}
+        const distance = {color: '#f5a665', fontSize: numberFontSize, fontWeight: 'bold'}
         const platform = {color: '#fff', borderStyle: 'solid', borderWidth: 1, borderColor: '#fff', minWidth: 30, minHeight: 30, borderRadius: 6, width: numberFontSize, height: numberFontSize, textAlign: 'center', flexShrink: 1}
         const androidSpecialAttributes = IsNative ? {renderToHardwareTextureAndroid: true} : {}
         return (
@@ -89,7 +90,9 @@ export default class Departure extends React.Component {
                             </View>
                             {departure.name ? <View style={lineColor}><Text style={lineColorText}>{departure.name}</Text></View> : <Text>{departure.name}</Text>}
                             {departure.number !== departure.name ? <View style={number}><Text style={numberText}>{departure.number}</Text></View> : <Text style={{width:'5%'}}/>}
-                            <View style={timeAndStatus}><Text style={time}>{departure.time}</Text>{departure.status ? (<Text style={status}>{departure.status}</Text>) : <Text style={{display:'none'}}/>}</View>
+                            <View style={timeAndStatus}><Text style={departure.status === 'supprimé' || departure.delay ? strikeThroughTime : time}>{departure.time}</Text>
+                                {departure.delay ? <Text style={time}>{departure.delay}</Text> : <Text style={{display:'none'}}/>}
+                                {departure.status ? (<Text style={distance}>{departure.distance}</Text>) : <Text style={{display:'none'}}/>}</View>
                             {this.props.detailed || !departure.boardingPoint ? <Text style={direction}>{directionName}</Text> :
                                 <View key={departure.boardingPoint} style={{overflow: 'hidden', flexGrow: 1}}>
                                     <Text style={{color:'#fff'}}>{directionName} </Text>

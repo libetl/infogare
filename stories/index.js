@@ -149,6 +149,32 @@ storiesOf('Departure', module)
                        mode:'Intercités',
                        color:'e4b4d1',
                        stops:[]}}/>)
+    .add('Train supprimé', () =>
+        <Departure height={300} num={3} detailed={false} odd={true} detailsRow={3 <= 1 ? 3 + 1 : undefined} parent={{}} rowHeight={280} rowWidth={320} mustBePadded={false}
+                   departure={{
+                       mode: 'TER',
+                       name: '',
+                       direction: 'Laroche Mig',
+                       status: 'supprimé',
+                       number: '891025',
+                       time: '19:45',
+                       stops: [],
+                       fontColor: 'FFFFFF'
+                   }}/>)
+    .add('Train retardé', () =>
+        <Departure height={300} num={3} detailed={false} odd={true} detailsRow={3 <= 1 ? 3 + 1 : undefined} parent={{}} rowHeight={280} rowWidth={320} mustBePadded={false}
+                   departure={{
+                       mode: 'TER',
+                       name: '',
+                       direction: 'Laroche Mig',
+                       status: 'retard 30 minutes',
+                       number: '891025',
+                       time: '19:45',
+                       delay: '20:15',
+                       distance: '< 40km',
+                       stops: [],
+                       fontColor: 'FFFFFF'
+                   }}/>)
 
 storiesOf('Time', module).add('Time', () => <Time/>)
 

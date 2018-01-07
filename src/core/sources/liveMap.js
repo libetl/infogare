@@ -23,7 +23,7 @@ const realTimeMap = ({stationsAreas:{nestedSearchData:{stationCoords}}}) => Prom
         return {
             savedNumber: train.number,
             dataToDisplay: {
-                status: train.names.includes('OnPlatform') && train.distance <= 0.4 ? 'à quai' :
+                distance: train.names.includes('OnPlatform') && train.distance <= 0.4 ? 'à quai' :
                     train ? `< ${Math.ceil(train.distance)} km` : 'retardé'
             }
         }

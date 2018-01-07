@@ -12,7 +12,7 @@ const getStation = stationName => get('https://www.nouveau.sncf.com/api/iv/1.0/u
 
 const extractstopAreaName = response =>
     response.data.reponseRechercherListeEmplacementsCommencantPar.reponse.listeResultats.resultat[0].donnees.listeEmplacements.emplacement[0]
-const extractDepartures = response => response.data.reponseRechercherProchainsDeparts.reponse.listeResultats.resultat.reduce((acc, resultat) => acc.concat(resultat.donnees.listeHoraires.horaire),[])
+const extractDepartures = response => response.data.reponseRechercherProchainsDeparts.reponse.listeResultats.resultat.reduce((acc, resultat) => acc.concat((resultat.donnees.listeHoraires||{horaire:[]}).horaire),[])
 const extractJourney = response => (response.data.reponseRechercherListeCirculations.reponse.listeResultats.resultat[0].donnees.listeCirculations||{circulation:[{listeArretsDesserte:{arret:[{emplacement:{libelle:'Desserte non dispo'}}]}}]}).circulation[0]
 
 const departures = stopAreaName => get(`https://www.nouveau.sncf.com/api/iv/1.0/infoVoy/rechercherProchainsDeparts?codeZoneArret=${stopAreaName}&indicateurReponseGaresSecondaires=true`)
@@ -31,7 +31,7 @@ const findJourney = ({baseDepartures, stationsAreas:{apiData:{name, stopAreaName
 const baseDepartures = ({apiData}) =>
     departures(apiData.stopAreaName)
         .then(response => extractDepartures(response))
-        .then(horaires => horaires.map(horaire => {return {
+        .then(horaires => horaires.map(horaire => ({
             savedNumber:parseInt(horaire.arret.depart.numeroCirculation),
             stop_date_time: {
                 base_departure_date_time: horaire.arret.depart.dateHeureReelle,
@@ -40,10 +40,16 @@ const baseDepartures = ({apiData}) =>
                 mode: (((horaire.circulation||{}).mode||{typeLibelle:''}).typeLibelle||'').replace(/\s*Train\s*/,'').split(' ')[0],
                 name: '',
                 direction: capitalize(horaire.circulation.destination.libelle).replace(' Transilien', ''),
+                status: (horaire.arret.depart.evenement||{}).type === 'SUPPRESSION_TOTALE' ? 'supprimé' :
+                    (horaire.arret.depart.evenement||{}).retard ?
+                        'retard ' + (horaire.arret.depart.evenement.retard.dureeInterne || horaire.arret.depart.evenement.retard.duree) + ' minutes' : undefined,
+                delay: horaire.arret.depart.evenement && horaire.arret.depart.evenement.retard &&
+                    moment(horaire.arret.depart.dateHeureReelle, 'YYYY-MM-DDTHH:mm:ssZ')
+                        .add(horaire.arret.depart.evenement.retard.dureeInterne || horaire.arret.depart.evenement.retard.duree, 'minutes').format('HH:mm'),
                 number: horaire.arret.depart.numeroCirculation,
                 time: moment(horaire.arret.depart.dateHeureReelle, 'YYYY-MM-DDTHH:mm:ssZ').format('HH:mm'),
                 platform: horaire.arret.voie && (horaire.arret.voie.numeroQuai || horaire.arret.voie.numeroPrevision),
-                stops: []}}}))
+                stops: []}})))
 
 const stationSearch = (coords, {token, nestedStationSearch}) => {
     const stationsAreas = nestedStationSearch(coords, {token})

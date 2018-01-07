@@ -25,7 +25,8 @@ const baseDepartures = ({iataCodes:tvsList}) => fetchApi(tvsList)
             status: train.infos,
             miscStatus: train.etat,
             time: train.heure,
-            delay: train.retard,
+            delay: train.retard &&
+                moment('train.heure', 'HH:mm').add(parseInt(train.retard.replace(' min', '')), 'minutes'),
             stops:[]
         }
     }}))

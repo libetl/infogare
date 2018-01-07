@@ -34,7 +34,7 @@ const normalize = (gare) => gare.departures.filter(departure => departure.termin
             name: '',
             color: '000000',
             number: isNaN(number) && number ? number.substring(0, 4) : departure.num,
-            status: radar && `< ${Math.ceil(haversine({lat: gare.lat, long: gare.lng}, {lat: trainCoords[1], long: trainCoords[0]}))}km`,
+            distance: radar && `< ${Math.ceil(haversine({lat: gare.lat, long: gare.lng}, {lat: trainCoords[1], long: trainCoords[0]}))}km`,
             time: moment(departure.time_reel, 'YYYY-MM-DD HH:mm:ssZ').format('HH:mm'),
             stops: allStops.slice(allStops.indexOf(gare.name_gare) + 1).map(stop =>
                 Html5Entities.decode(stop).replace(/ /g, '\u00a0').replace(/-/g, '\u2011').replace(/\//g, '\u00a0\u00a0\u00a0\u0338'))
