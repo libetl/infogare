@@ -1,8 +1,14 @@
 const sortByTime = (departuresData) => [].concat.apply([], departuresData).sort((d1, d2) =>
     d1.stop_date_time.base_departure_date_time.localeCompare(d2.stop_date_time.base_departure_date_time))
 
+const purify = obj => obj !== Object(obj) ? obj :
+    Array.isArray(obj) ? obj.map(purify) :
+        Object.entries(obj).reduce(
+            (acc, [key, value]) => !value ? acc : Object.assign({}, acc, {[key]: purify(value)}), {})
+
 const merged = (existingData, newData) => existingData.map(existingRow => {
-    const addition = newData.find(a => a.savedNumber === existingRow.savedNumber) || existingRow
+    debugger
+    const addition = purify(newData.find(a => a.savedNumber === existingRow.savedNumber) || existingRow)
     return {
         ...addition,
         ...existingRow,

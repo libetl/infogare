@@ -11,7 +11,7 @@ export default  ({hostname, coverage, metadata}) => {
   const vehicleJourneyUrl = (foundCoverage, vehicleJourney) => `${coveragePrefix(foundCoverage)}vehicle_journeys/${vehicleJourney}`
   const placeUrl = (foundCoverage, place) => `${coveragePrefix(foundCoverage)}places?q=${place}`
 
-  const defaultEntity = token => {return {headers: {Authorization: token || null}}}
+  const defaultEntity = token => ({headers: {Authorization: token || null}})
   const fetch = (url, entity) => entity && entity.headers && entity.headers.Authorization === null ? Promise.resolve() : get(url, entity)
 
   const places = (foundCoverage, label, token) => fetch(placeUrl(foundCoverage, label), defaultEntity(token))
@@ -35,15 +35,13 @@ export default  ({hostname, coverage, metadata}) => {
     Promise.resolve([{links: [], stop_date_time: '00:00', savedNumber: 1,dataToDisplay: {direction:'Token nécessaire'}}])
 
   const departures = (foundCoverage, stationId, page = 0, token) => fetch(stationUrl(foundCoverage, stationId, moment().subtract(-1, 'minutes'), page), defaultEntity(token))
-    .then(result => Promise.resolve([...result.data.departures]))
-    .then(result => result.map(departure => ({
+    .then(result => (result.data.departures||[]).map(departure => ({
         links: departure.links,
         stop_date_time: departure.stop_date_time,
-        savedNumber: isNaN(departure.display_informations.headsign) ? departure.display_informations.headsign :
-            parseInt(departure.display_informations.headsign),
+        savedNumber: departure.display_informations.headsign,
         dataToDisplay: {
-            mode: (departure.display_informations.physical_mode||departure.display_informations.commercial_mode||'')
-                .replace(/é/g, 'e').replace(/è/g, 'è'),
+            mode: ([departure.display_informations.physical_mode,departure.display_informations.commercial_mode]
+                    .find(mode => !mode.includes(' '))||'').replace(/é/g, 'e').replace(/è/g, 'è'),
             direction: departure.display_informations.direction.replace(/ \([^)]+\)$/, ''),
             name: !['Tramway', 'Bus'].includes(departure.display_informations.commercial_mode) &&
             departure.display_informations.code !== departure.display_informations.direction ?
@@ -64,7 +62,7 @@ export default  ({hostname, coverage, metadata}) => {
         const allStopsCoords = result.data.vehicle_journeys[0].stop_times.map(stop_time => ({
             name:stop_time.stop_point.name,
             coordinates:[parseFloat(stop_time.stop_point.coord.lon), parseFloat(stop_time.stop_point.coord.lat)]}))
-        const missionCode = result.data.vehicle_journeys[0].name &&
+        const missionCode = result.data.vehicle_journeys[0].name && !result.data.vehicle_journeys[0].name.includes(':') &&
         result.data.vehicle_journeys[0].name[0] >= 'A' &&  result.data.vehicle_journeys[0].name[0] <= 'Z'
             ? result.data.vehicle_journeys[0].name.substring(0, 4) : undefined
         const foundStationInJourney = closestStations(fromCoords, allStopsCoords)[0].name
@@ -72,7 +70,7 @@ export default  ({hostname, coverage, metadata}) => {
         const stops = allStops.slice(indexOfStop + 1)
         const number = result.data.vehicle_journeys[0].stop_times.find(stopTime => stopTime.headsign).headsign
         return Promise.resolve({
-            savedNumber: parseInt(number),
+            savedNumber: number,
             dataToDisplay: {
                 direction: stops[stops.length - 1],
                 number: missionCode,
