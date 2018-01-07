@@ -2,8 +2,14 @@ import {get} from 'axios'
 import moment from 'moment'
 import geoJsonUtils from 'geojson-utils'
 import {blackOrWhite} from '../../operations/blackOrWhite'
+import removeAccents from 'remove-accents'
 
 export default  ({hostname, coverage, metadata}) => {
+
+  const possibleModesList = ['bus', 'tramway', 'rer',
+      'transilien', 'metro', 'ter', 'train', 'intercites',
+      'tgv', 'thalys', 'ouigo', 'thello', 'ICE']
+
   const coveragePrefix = foundCoverage => `${hostname}/v1/coverage/${foundCoverage ? foundCoverage + '/' : ''}`
   const stationUrlPrefix = foundCoverage => `${coveragePrefix(foundCoverage)}stop_areas/`
   const stationUrl = (foundCoverage, stationId, dateTime, startPage) => `${stationUrlPrefix(foundCoverage)}${stationId}/departures?start_page=${startPage}&from_datetime=${dateTime.format('YYYYMMDDTHHmmss')}`
@@ -40,8 +46,10 @@ export default  ({hostname, coverage, metadata}) => {
         stop_date_time: departure.stop_date_time,
         savedNumber: departure.display_informations.headsign,
         dataToDisplay: {
-            mode: ([departure.display_informations.physical_mode,departure.display_informations.commercial_mode]
-                    .find(mode => !mode.includes(' '))||'').replace(/é/g, 'e').replace(/è/g, 'è'),
+            mode: ([departure.display_informations.network,
+                departure.display_informations.physical_mode,
+                departure.display_informations.commercial_mode]
+                    .find(mode => possibleModesList.includes(removeAccents.remove(mode.toLowerCase())))),
             direction: departure.display_informations.direction.replace(/ \([^)]+\)$/, ''),
             name: !['Tramway', 'Bus'].includes(departure.display_informations.commercial_mode) &&
             departure.display_informations.code !== departure.display_informations.direction ?
@@ -63,7 +71,7 @@ export default  ({hostname, coverage, metadata}) => {
             name:stop_time.stop_point.name,
             coordinates:[parseFloat(stop_time.stop_point.coord.lon), parseFloat(stop_time.stop_point.coord.lat)]}))
         const missionCode = result.data.vehicle_journeys[0].name && !result.data.vehicle_journeys[0].name.includes(':') &&
-        result.data.vehicle_journeys[0].name[0] >= 'A' &&  result.data.vehicle_journeys[0].name[0] <= 'Z'
+            result.data.vehicle_journeys[0].name.match(/[A-Z]{4,}[0-9]{2,}/)
             ? result.data.vehicle_journeys[0].name.substring(0, 4) : undefined
         const foundStationInJourney = closestStations(fromCoords, allStopsCoords)[0].name
         const indexOfStop = allStops.indexOf(foundStationInJourney)
