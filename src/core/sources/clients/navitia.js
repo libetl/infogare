@@ -51,7 +51,8 @@ export default  ({hostname, coverage, metadata}) => {
                 departure.display_informations.commercial_mode]
                     .find(mode => possibleModesList.includes(removeAccents.remove(mode.toLowerCase())))),
             direction: departure.display_informations.direction.replace(/ \([^)]+\)$/, ''),
-            name: !['Tramway', 'Bus'].includes(departure.display_informations.commercial_mode) &&
+            name: (!['Tramway', 'Bus'].includes(departure.display_informations.commercial_mode) ||
+                departure.display_informations.code.match(/^T([0-9]+)/)) &&
             departure.display_informations.code !== departure.display_informations.direction ?
                 departure.display_informations.code.replace(/^T([0-9]+)/, '$1') : undefined,
             color: departure.display_informations.color,
