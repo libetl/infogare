@@ -41,29 +41,31 @@ export default  ({hostname, coverage, metadata}) => {
     Promise.resolve([{links: [], stop_date_time: '00:00', savedNumber: 1,dataToDisplay: {direction:'Token nécessaire'}}])
 
   const departures = (foundCoverage, stationId, page = 0, token) => fetch(stationUrl(foundCoverage, stationId, moment().subtract(-1, 'minutes'), page), defaultEntity(token))
-    .then(result => (result.data.departures||[]).map(departure => ({
+    .then(result => (result.data.departures||[]).map(departure => {
+    const mode = removeAccents.remove([departure.display_informations.network,
+        departure.display_informations.physical_mode,
+        departure.display_informations.commercial_mode]
+        .find(mode => possibleModesList.includes(removeAccents.remove(mode.toLowerCase())))||'').toLowerCase()
+    return ({
         links: departure.links,
         stop_date_time: departure.stop_date_time,
         savedNumber: departure.display_informations.headsign,
         dataToDisplay: {
-            mode: ([departure.display_informations.network,
-                departure.display_informations.physical_mode,
-                departure.display_informations.commercial_mode]
-                    .find(mode => possibleModesList.includes(removeAccents.remove(mode.toLowerCase())))),
+            mode,
             direction: departure.display_informations.direction.replace(/ \([^)]+\)$/, ''),
-            name: (!['Tramway', 'Bus'].includes(departure.display_informations.commercial_mode) ||
-                departure.display_informations.code.match(/^T([0-9]+)/)) &&
+            name: (!['tramway', 'bus'].includes(mode) ||
+                departure.display_informations.code.match(/^[TM]([0-9]+)/)) &&
             departure.display_informations.code !== departure.display_informations.direction ?
-                departure.display_informations.code.replace(/^T([0-9]+)/, '$1') : undefined,
+                departure.display_informations.code.replace(/^[TM]([0-9]+)/, '$1') : undefined,
             color: departure.display_informations.color,
             fontColor: departure.display_informations.color ? blackOrWhite(departure.display_informations.color) : undefined,
             number: departure.display_informations.headsign.includes(':') ||
-                ['Tramway', 'Bus'].includes(departure.display_informations.commercial_mode) ?
-                departure.display_informations.code.replace(/^T([0-9]+)/, '$1') : departure.display_informations.headsign,
+                ['tramway', 'bus', 'metro'].includes(mode) ?
+                departure.display_informations.code.replace(/^[TM]([0-9]+)/, '$1') : departure.display_informations.headsign,
             status: departure.display_informations.status,
             time: moment(departure.stop_date_time.departure_date_time, 'YYYYMMDDTHHmmss').format('HH:mm'),
             stops: departure.display_informations.stops || []
-        }}))).catch(error => {console.log(`${stationUrl(foundCoverage, stationId, moment(), page)}: ${error}`);Promise.resolve([])})
+        }})})).catch(error => {console.log(`${stationUrl(foundCoverage, stationId, moment(), page)}: ${error}`);Promise.resolve([])})
 
   const vehicleJourney = (foundCoverage, closestStations, link, fromCoords, token) => fetch(vehicleJourneyUrl(foundCoverage, link), defaultEntity(token))
     .then(result => {
