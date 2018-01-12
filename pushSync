@@ -1,11 +1,24 @@
 #!/bin/sh
-git add .
+
+if [ -z "$1" ];then
+  echo "needs a comment"
+  exit 1
+fi
+
 git checkout expo
-sleep 2
-git commit -m "$1"
+sleep 1
+git add .
+sleep 1
+git commit -m "bugfix"
+sleep 1
+git push
+sleep 1
 git checkout detached
-sleep 2
-git merge expo -m "merge"
-git reset --soft expo
+sleep 1
+git merge -m "merge" expo
+sleep 1
+git reset --soft origin/expo
+sleep 1
 git commit -m "detached"
-git push --all origin -f
+sleep 1
+git push -f
