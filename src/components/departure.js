@@ -92,7 +92,8 @@ export default class Departure extends React.Component {
                             {departure.number !== departure.name ? <View style={number}><Text style={numberText}>{departure.number}</Text></View> : <Text style={{width:'5%'}}/>}
                             <View style={timeAndStatus}><Text style={departure.status === 'supprimé' || departure.delay ? strikeThroughTime : time}>{departure.time}</Text>
                                 {departure.delay ? <Text style={time}>{departure.delay}</Text> : <Text style={{display:'none'}}/>}
-                                {departure.status ? (<Text style={distance}>{departure.distance}</Text>) : <Text style={{display:'none'}}/>}</View>
+                                {departure.status ? (<Text style={distance}>{departure.status}</Text>) : <Text style={{display:'none'}}/>}
+                                {departure.distance ? (<Text style={distance}>{departure.distance}</Text>) : <Text style={{display:'none'}}/>}</View>
                             {this.props.detailed || !departure.boardingPoint ? <Text style={direction}>{directionName}</Text> :
                                 <View key={departure.boardingPoint} style={{overflow: 'hidden', flexGrow: 1}}>
                                     <Text style={{color:'#fff'}}>{directionName} </Text>

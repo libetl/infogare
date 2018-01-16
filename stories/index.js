@@ -136,6 +136,7 @@ storiesOf('Departure', module)
                        time:'10:19',
                        mode:'Transilien',
                        name:'R',
+                       distance: '< 40km',
                        number:'KUMO',
                        color:'e4b4d1',
                        stops:['Melun', 'Bois-le-Roi', 'Fontainebleau-Avon', 'Moret-Veneux les sablons', 'Saint-Mammès', 'Montereau']}}/>)
@@ -171,7 +172,6 @@ storiesOf('Departure', module)
                        number: '891025',
                        time: '19:45',
                        delay: '20:15',
-                       distance: '< 40km',
                        stops: [],
                        fontColor: 'FFFFFF'
                    }}/>)
