@@ -103,7 +103,7 @@ export default  ({hostname, coverage, metadata}) => {
   const findCoverage = ({lat, long}, token) => coverage ? Promise.resolve(coverage) :
           fetch(coveragePrefix(), defaultEntity(token))
               .then(allCoverages => allCoverages && allCoverages.data.regions.map(r => ({id: r.id, shape: {type: 'MultiPolygon',
-                              coordinates: [[r.shape.replace('MULTIPOLYGON(((', '')
+                              coordinates: [[(r.shape||'').replace('MULTIPOLYGON(((', '')
                                   .replace('(((', '').split(',').map(c => c.split(' ').map(x => parseFloat(x)))]]}
                       })).find(r => geoJsonUtils.pointInPolygon({type: 'Point', coordinates: [long, lat]}, r.shape)))
 
