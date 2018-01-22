@@ -71,7 +71,7 @@ export default class Settings extends React.Component {
                         <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>🌉 Fiabilité</Text></View><Text style={settingName}>la source fonctionne t-elle tout le temps ? Peut il y avoir des coupures inopinées ?</Text></View>
                         <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>🆕 Perennité</Text></View><Text style={settingName}>le service peut il être supprimé définitivement du jour au lendemain ?</Text></View>
                         <View style={oneSettingNoBottomRow}><View style={settingTitle}><Text style={settingName}>🚀 Rapidité</Text></View><Text style={settingName}>le service répond il avec efficacité et en temps raisonnable ?</Text></View>
-                        <View style={oneSetting}><View><Text>Attention : les sources 'sncfApi et navitiaIo' nécessitent d'être enregistré (https://www.digital.sncf.com/startup/api/token-developpeur, https://api.navitia.io)</Text></View></View>
+                        <View style={oneSetting}><View><Text>Attention : les sources 'sncfApi' et 'navitiaIo' nécessitent d'être enregistré (https://www.digital.sncf.com/startup/api/token-developpeur, https://www.navitia.io/register)</Text></View></View>
                         <View style={oneSetting}><View><Text style={{color: 'black'}}>Légende : quai=🚉, départs=⌚, gares=📖, couleurs=🎨, codes=🔗, dessertes=🛤, géolocalisation=🗺</Text></View></View>
                         <Text style={titleInGreen}>Activer la source suivante :</Text>
                         <View style={{flexDirection: 'row', width: '100%', flexWrap: 'wrap'}}>
