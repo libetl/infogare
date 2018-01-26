@@ -48,7 +48,8 @@ const baseDepartures = ({apiData}) =>
                         .add(horaire.arret.depart.evenement.retard.dureeInterne || horaire.arret.depart.evenement.retard.duree, 'minutes').format('HH:mm'),
                 number: horaire.arret.depart.numeroCirculation,
                 time: moment(horaire.arret.depart.dateHeureReelle, 'YYYY-MM-DDTHH:mm:ssZ').format('HH:mm'),
-                platform: horaire.arret.voie && (horaire.arret.voie.numeroQuai || horaire.arret.voie.numeroPrevision),
+                platform: horaire.arret.voie &&
+                (horaire.arret.voie.numero || horaire.arret.voie.numeroQuai || horaire.arret.voie.numeroPrevision),
                 stops: []}})))
 
 const stationSearch = (coords, {token, nestedStationSearch}) => {

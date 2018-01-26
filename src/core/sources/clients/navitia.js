@@ -46,10 +46,11 @@ export default  ({hostname, coverage, metadata}) => {
         departure.display_informations.physical_mode,
         departure.display_informations.commercial_mode]
         .find(mode => possibleModesList.includes(removeAccents.remove(mode.toLowerCase())))||'').toLowerCase()
+    const number = departure.display_informations.headsign
     return ({
         links: departure.links,
         stop_date_time: departure.stop_date_time,
-        savedNumber: departure.display_informations.headsign,
+        savedNumber: isNaN(number) ? number : parseInt(number),
         dataToDisplay: {
             mode,
             direction: departure.display_informations.direction.replace(/ \([^)]+\)$/, ''),
@@ -81,7 +82,7 @@ export default  ({hostname, coverage, metadata}) => {
         const stops = allStops.slice(indexOfStop + 1)
         const number = result.data.vehicle_journeys[0].stop_times.find(stopTime => stopTime.headsign).headsign
         return Promise.resolve({
-            savedNumber: number,
+            savedNumber: isNaN(number) ? number : parseInt(number),
             dataToDisplay: {
                 direction: stops[stops.length - 1],
                 number: missionCode,
