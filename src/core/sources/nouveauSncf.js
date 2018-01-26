@@ -39,7 +39,7 @@ const baseDepartures = ({apiData}) =>
             dataToDisplay: {
                 mode: (((horaire.circulation||{}).mode||{typeLibelle:''}).typeLibelle||'').replace(/\s*Train\s*/,'').split(' ')[0],
                 name: '',
-                direction: capitalize(horaire.circulation.destination.libelle).replace(' Transilien', ''),
+                direction: capitalize(horaire.circulation.destination.libelle || horaire.circulation.numero).replace(' Transilien', ''),
                 status: (horaire.arret.depart.evenement||{}).type === 'SUPPRESSION_TOTALE' ? 'supprimé' :
                     (horaire.arret.depart.evenement||{}).retard ?
                         'retard ' + (horaire.arret.depart.evenement.retard.dureeInterne || horaire.arret.depart.evenement.retard.duree) + ' minutes' : undefined,

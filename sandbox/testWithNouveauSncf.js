@@ -2,6 +2,6 @@ import core from '../src/core'
 import places from '../src/core/data/places'
 import coloredStringifiedJson from './coloredStringifiedJson'
 
-core.nextDepartures(places.clamart, {dataSourceByFeature:{colors:'inMemory', departures: 'nouveauSncf', stations: 'nouveauSncf', platforms:'nouveauSncf', journeys:'nouveauSncf', geolocation:'liveMap'}})
+core.nextDepartures(places.laDefense, {dataSourceByFeature:{colors:'inMemory', departures: 'nouveauSncf', stations: 'nouveauSncf', platforms:'nouveauSncf', journeys:'nouveauSncf', geolocation:'liveMap'}})
     .then(data => coloredStringifiedJson(data))
     .then(highlightedData => console.log(highlightedData))
