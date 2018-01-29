@@ -2,6 +2,7 @@ import fake from './fake'
 import flightRadar from './flightRadar'
 import garesSncf from './garesSncf'
 import horairesInfoTrafic from './horairesInfoTrafic'
+import herokuHomegrown from './herokuHomegrown'
 import inMemory from './inMemory'
 import lignesDazur from './lignesDazur'
 import navitiaIo from './navitiaIo'
@@ -14,4 +15,5 @@ import terSncf from './terSncf'
 import transilien from './transilien'
 import vianavigo from './vianavigo'
 
-export default { fake, flightRadar, garesSncf, horairesInfoTrafic, inMemory, lignesDazur, liveMap, navitiaIo, nouveauSncf, raildar, sncfApi, stas, terSncf, transilien, vianavigo }
+export default { fake, flightRadar, garesSncf, herokuHomegrown, horairesInfoTrafic, inMemory, lignesDazur, liveMap, navitiaIo, nouveauSncf, raildar, sncfApi, stas, terSncf, transilien, vianavigo }
+
