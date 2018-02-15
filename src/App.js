@@ -34,6 +34,8 @@ export default class App extends React.Component {
         this.onDataSourceListChange = this.onDataSourceListChange.bind(this)
         this.updateHightlightedComponent = this.updateHightlightedComponent.bind(this)
         this.toggleFavorite = this.toggleFavorite.bind(this)
+        this.handleSourcesDeletion = this.handleSourcesDeletion.bind(this)
+        this.hideDeletionAlert = this.hideDeletionAlert.bind(this)
     }
     componentWillUnmount() {
         KeyEvent.removeKeyDownListener()
@@ -42,13 +44,13 @@ export default class App extends React.Component {
     componentDidMount() {
         AsyncStorage.getItem('@store:navitiaToken').then(navitiaToken =>
             AsyncStorage.getItem('@store:apiToken').then(apiToken =>
-                AsyncStorage.getItem('@store:dataSources').then(dataSources =>
-                    AsyncStorage.getItem('@store:favoriteStations').then(favoriteStations => {
-                        let foundDataSources
-                        try{foundDataSources = JSON.parse(dataSources) || undefined}catch(e){}
-                        let foundFavoriteStations
-                        try{foundFavoriteStations = JSON.parse(favoriteStations) || undefined}catch(e){}
-                        this.initNow(apiToken, navitiaToken,foundDataSources, foundFavoriteStations)}))))
+                AsyncStorage.getItem('@store:dataSources').then(rawDataSources =>
+                    AsyncStorage.getItem('@store:favoriteStations').then(rawFavoriteStations => {
+                        let dataSources
+                        try{dataSources = JSON.parse(rawDataSources) || undefined}catch(e){}
+                        let favoriteStations
+                        try{favoriteStations = JSON.parse(rawFavoriteStations) || undefined}catch(e){}
+                        this.initNow({apiToken, navitiaToken, dataSources, favoriteStations})}))))
 
         KeyEvent.onKeyUpListener(keyCode => {
             if (keyCode === 23 && this.state.highlightedComponent) {
@@ -57,11 +59,21 @@ export default class App extends React.Component {
             }
         })
     }
-    initNow(apiToken, navitiaToken, dataSources = ['terSncf', 'inMemory', 'liveMap'], favoriteStations = []) {
-        this.setState({firstScrollY: 3, secondScrollY: 3, apiToken, navitiaToken, dataSources,
-            dataSourceByFeature:core.minimalMappingFor(dataSources), favoriteStations})
-        setInterval(this.updateTimetable, 60000)
-        return this.updateLocation()
+    initNow({apiToken, navitiaToken, dataSources = ['terSncf', 'inMemory', 'liveMap'], favoriteStations = []}) {
+        return this.handleSourcesDeletion(dataSources).then(allowedDataSources => {
+            this.setState({firstScrollY: 3, secondScrollY: 3, apiToken, navitiaToken, dataSources,
+                dataSourceByFeature: core.minimalMappingFor(allowedDataSources), favoriteStations,
+                displaySourceDeletionAlert: allowedDataSources.length < dataSources.length,
+                deletedSources: dataSources.filter(dataSource => !allowedDataSources.includes(dataSource))})
+            setInterval(this.updateTimetable, 60000)
+            return this.updateLocation()
+        })
+    }
+    handleSourcesDeletion(wantedDataSources) {
+        const allowedDataSources = core.filterAllowed(wantedDataSources)
+        return Promise.all(wantedDataSources.filter(dataSource => !allowedDataSources.includes(dataSource))
+            .map(dataSourceToDelete => this.onDataSourceListChange(dataSourceToDelete, false)))
+            .then(() => allowedDataSources)
     }
     updateTimetable({geo, progressBar, closeLocationPrompt} = {geo: this.state.geo, progressBar: false, closeLocationPrompt: false}) {
         this.setState({geo, currentlyUpdating:progressBar ? true : this.state.currentlyUpdating,
@@ -106,6 +118,9 @@ export default class App extends React.Component {
     }
     closeSettings() {
         this.setState({settingsOpened: false})
+    }
+    hideDeletionAlert(){
+        this.setState({displaySourceDeletionAlert: false})
     }
     onDataSourceListChange(dataSource, isItAnAddOperation) {
 

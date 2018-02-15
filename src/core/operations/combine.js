@@ -23,7 +23,8 @@ const feedWith = (sources, context) => Object.values(sources).map(source => sour
         .map(method => method.call(null, context))
 
 const minimalMappingFor = (wantedDataSources, listOfDataSources) => {
-    const sourcesSortedByImportance = wantedDataSources.sort((a, b) => 
+    const possibleDataSources = filterAllowed(wantedDataSources, listOfDataSources)
+    const sourcesSortedByImportance = possibleDataSources.sort((a, b) =>
         listOfDataSources[a].metadata.features.length < listOfDataSources[b].metadata.features.length)
     const firstSourceProvidingDepartures = sourcesSortedByImportance.find(source => listOfDataSources[source].metadata.features.includes('departures'))
     const sourcesWithoutImpossibleFeatureUse =
@@ -33,4 +34,7 @@ const minimalMappingFor = (wantedDataSources, listOfDataSources) => {
            .map(feature => {return {[feature]: value}}).reduce((acc1, value1) => {return {...acc1, ...value1}}, {}), ...acc}}, {})
     return {...guess, stations:(listOfDataSources[guess.departures]||{}).stationSearch ? guess.departures : guess.stations || 'inMemory'}}
 
-export {minimalMappingFor, combineAll, sortByTime, removeDuplicates, feedWith}
+const filterAllowed = (dataSources, listOfDataSources) =>
+    dataSources.filter(dataSource => Object.keys(listOfDataSources).includes(dataSource))
+
+export {filterAllowed, minimalMappingFor, combineAll, sortByTime, removeDuplicates, feedWith}

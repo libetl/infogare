@@ -76,7 +76,7 @@ get(gares).then(sncf =>
         //)
     fs.writeFileSync('./src/core/data/stations.json', JSON.stringify(smallStationList))
     fs.writeFileSync('./src/core/data/places.js',
-            'export default ' + JSON.stringify(smallStationList.map(station => {return {name:station.name
+            'module.exports = ' + JSON.stringify(smallStationList.map(station => {return {name:station.name
                 .replace(/[àâ]/g, 'a').replace(/[éèêë]/g, 'e').replace(/î/g, 'i').replace(/ô/g, 'o').replace(/[ùûü]/g, 'u')
                 .replace(/[^a-zA-Z]/g, '').replace(/^./, station.name[0].toLowerCase()),
                 coordinates: {lat: station.coordinates[1], long: station.coordinates[0]}}}).reduce((a, b) =>

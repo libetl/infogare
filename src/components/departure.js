@@ -44,7 +44,7 @@ export default class Departure extends React.Component {
         const zoom = this.props.detailed ? 1 : 2
         const departure = this.props.departure || {}
         const directionName = (!departure.stops || departure.stops.length === 0 ||
-            departure.stops[departure.stops.length - 1] === 'Desserte\u00a0non\u00a0dispo' ?
+        departure.stops[departure.stops.length - 1] === 'Desserte\u00a0non\u00a0dispo' ?
             departure.direction : departure.stops[departure.stops.length - 1]) || ' '
         const directionFontSize = Math.min(doubleBaseFontSize * zoom, this.state.width * 0.8 / directionName.length)
         const numberFontSize = Math.min(this.state.height * 0.1 * zoom, this.state.width / directionName.length)

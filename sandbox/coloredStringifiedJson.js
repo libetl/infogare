@@ -1,4 +1,4 @@
-export default (data) => JSON.stringify(data, null, 2)
+module.exports = data => JSON.stringify(data, null, 2)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')

@@ -1,5 +1,5 @@
 import {get} from 'axios'
-import {minimalMappingFor, sortByTime, combineAll, removeDuplicates, feedWith} from './operations/combine'
+import {filterAllowed, minimalMappingFor, sortByTime, combineAll, removeDuplicates, feedWith} from './operations/combine'
 import sources from './sources'
 import {format} from './operations/formatDisplay'
 
@@ -7,9 +7,10 @@ export default {
     dataSources: Object.entries(sources).reduce((acc, [name, {metadata}]) => {return {...acc, [name]: metadata}}, {}),
     testToken: ({type, newValue}) => type === 'apiToken' ? sources.sncfApi.testApi(newValue) : sources.navitiaIo.testApi(newValue),
     minimalMappingFor: wantedDataSources => minimalMappingFor(wantedDataSources, sources),
+    filterAllowed: wantedDataSources => filterAllowed(wantedDataSources, sources),
     suggestStations: text => sources.inMemory.stationsMatching(text),
     nextDepartures: async (coords, {tokens = {}, notify = () => {},
-        dataSourceByFeature = {platforms: 'terSncf', departures: 'terSncf', stations: 'inMemory', colors: 'inMemory', codes: 'inMemory', journeys: 'terSncf', geolocation: 'liveMap'}} = {}) => {
+        dataSourceByFeature = {departures: 'herokuHomegrown', stations: 'inMemory', colors: 'inMemory', codes: 'inMemory', journeys: 'herokuHomegrown', geolocation: 'herokuHomegrown'}} = {}) => {
 
         const allowedCombinedSources = Array.from(new Set(Object.values(dataSourceByFeature))).map(sourceName => sources[sourceName])
 

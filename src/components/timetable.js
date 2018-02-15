@@ -1,6 +1,7 @@
 import styles from '../css/app.css'
 import Departure from './departure'
 import Footer from './footer'
+import SourcesDeletionAlert from './sourcesDeletionAlert'
 import LocationPrompt from './locationPrompt'
 import RoundButton from './roundButton'
 import Settings from './settings'
@@ -25,6 +26,7 @@ export default class Timetable extends React.Component {
                     <RoundButton nbButtons={2} text={Platform.OS === 'ios' || Platform.OS === 'web' || Platform.Version >= 21 ? '⚙' : '¤'}
                                  marginTop='-20%' color='#663399' fontColor='#FFFFFF' onClick={this.props.parent.openSettings}/>
                 </ButtonPanel>
+                <SourcesDeletionAlert deletedSources={this.props.parent.state.deletedSources} opened={this.props.parent.state.displaySourceDeletionAlert} onClose={this.props.parent.hideDeletionAlert}/>
                 <LocationPrompt displayLocationPrompt={this.props.displayLocationPrompt} suggestStations={this.props.suggestStations} done={this.props.parent.changeLocation} abortChangeLocation={this.props.parent.abortChangeLocation} favoriteStations={this.props.parent.state.favoriteStations||[]} toggleFavorite={this.props.parent.toggleFavorite}/>
                 <Settings onDataSourceListChange={this.props.parent.onDataSourceListChange} apiToken={this.props.parent.state.apiToken} navitiaToken={this.props.parent.state.navitiaToken} dataSources={this.props.parent.state.dataSources||[]} allDataSourcesMetadata={this.props.parent.state.allDataSourcesMetadata||{}} currentMapping={this.props.parent.state.dataSourceByFeature||{}} settingsOpened={this.props.parent.state.settingsOpened} closeSettings={this.props.parent.closeSettings} validateToken={this.props.parent.validateToken}/>
                 <Details rowWidth={320} details={this.props.parent.state.departureDetails} onClose={this.props.parent.hideDetails}/>

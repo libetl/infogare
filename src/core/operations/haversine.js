@@ -1,4 +1,4 @@
-export default (coords1, coords2) => {
+module.exports = (coords1, coords2) => {
     const degreesToRadian = Math.PI / 180;
     const latDelta = (coords2.lat - coords1.lat) * degreesToRadian
     const longDelta = (coords2.long - coords1.long) * degreesToRadian
