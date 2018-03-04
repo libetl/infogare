@@ -15,6 +15,8 @@ import terSncf from './terSncf'
 import transilien from './transilien'
 import vianavigo from './vianavigo'
 
-export default process.env.PRIVILEGED ?
+import {config} from '../../wrapper'
+
+export default config.PRIVILEGED ?
     { fake, flightRadar, garesSncf, herokuHomegrown, horairesInfoTrafic, inMemory, lignesDazur, liveMap, navitiaIo, nouveauSncf, raildar, sncfApi, stas, terSncf, transilien, vianavigo } :
     { flightRadar, herokuHomegrown, inMemory, lignesDazur, navitiaIo, raildar, sncfApi, stas, vianavigo }

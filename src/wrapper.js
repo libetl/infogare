@@ -2,7 +2,9 @@ const React = require('react')
 import pictures from './images/base64pictures'
 
 try {global.nativeLibrary = global.nativeLibrary || require('react-native')}catch(e){}
-
+try{const test = global.nativeLibrary.NativeModules}catch (e){
+    global.nativeLibrary = {NativeModules:{BuildConfig:{PRIVILEGED:true}}}}
+const config = global.nativeLibrary.NativeModules && global.nativeLibrary.NativeModules.BuildConfig || {}
 const IsNative = global.nativeLibrary.Platform &&
     ['android', 'ios'].includes(global.nativeLibrary.Platform.OS)
 const LoadPicture = name => pictures[name]
@@ -30,6 +32,7 @@ const Animated=global.nativeLibrary.Animated || {value:()=>{return{}}}
 export {
     Animated,
     AsyncStorage,
+    config,
     Dimensions,
     Image,
     ScrollView,

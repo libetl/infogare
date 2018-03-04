@@ -9,9 +9,9 @@ const fetchTransilien = s => post(idfStationUrl, `departure=${encodeURIComponent
 const flatten = data => data.childNodes.filter(x=>!x.text||!x.text.match(/^\s*$/)).map(x=>x.text?x.text.trim():flatten(x)).reduce((acc, value)=>acc.concat(value),[])
 const transilien = html => new DomParser().parseFromString(html.data)
     .getElementsByClassName('next-departure-result').map(result => flatten(result).filter(x=>!['Destination', 'Voir les arrêts', 'Gares Desservies', 'FERMER'].includes(x)))
-    .map(result=>result[0].toUpperCase() === 'TRAIN' ? ['Transilien',...result.slice(1)] : result)
-    .map(result=>result[5] === 'Voie --' ? [...result.slice(0, 5), '', ...result.slice(5)] : result)
-    .map(result=>[result[0].toUpperCase(), result[1].substring(result[1].indexOf('-')+1).toUpperCase(), ...result.slice(2)])
+    .map(row => row.filter(col => !col.toUpperCase().includes('<?XML'))
+        .filter((row, index, array) => index < array.find(elem => elem.match(/^voir le d&eacute;tail/i) &&
+                                   index > array.find(elem => elem.match(/^Gares\s+Desservies/i)))))
     .map((result,i)=> {
         const now = moment().format('HH:mm')
         if (result[1].match(/^[0-9]{2}:[0-9]{2}$/)) {

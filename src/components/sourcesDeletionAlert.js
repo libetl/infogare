@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import {Button, Modal, ScrollView, Text, View} from '../wrapper'
+import {config, Button, Modal, ScrollView, Text, View} from '../wrapper'
 
 const titleInGreen = {
     color: '#009586',
@@ -13,7 +13,7 @@ export default class SourceDeletionAlert extends React.Component {
         super(props)
     }
     render() {
-        return (
+        return config.PRIVILEGED ? (<Text style={{display: 'none'}}/>) : (
             <Modal style={{zIndex: 2, display: this.props.opened ? 'block' : 'none', width: '30%', height: '30%'}}
                    isOpen={this.props.opened} visible={this.props.opened} onRequestClose={this.props.onClose}
                    position={'center'} animationType={'slide'} contentLabel='Sources Deletion'>
