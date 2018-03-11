@@ -8,7 +8,8 @@ const extractTable = (urlSuffix, filename) => get(`https://fr.wikipedia.org/wiki
     .then(linesHtml => new DomParser().parseFromString(linesHtml.data).getElementsByClassName('wikitable').map(
         tbody => tbody.getElementsByTagName('tr')).reduce(concat, []).map(
         tr => tr.getElementsByTagName('td')).filter(node => node.length).map(
-        node => {return {[node[0].childNodes[0].text]:node[1].childNodes[0].text}}).reduce(
+        node => {return {[node[0].childNodes[0].text ||
+            node[0].childNodes[0].childNodes[1].text]:node[1].childNodes[0].childNodes[0].text}}).reduce(
         (acc, value) => Object.assign(acc, value),{}))
     .then(data => fs.writeFileSync(`src/core/data/${filename}LinesColors.json`, JSON.stringify(data)))
 

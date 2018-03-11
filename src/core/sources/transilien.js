@@ -9,9 +9,6 @@ const fetchTransilien = s => post(idfStationUrl, `departure=${encodeURIComponent
 const flatten = data => data.childNodes.filter(x=>!x.text||!x.text.match(/^\s*$/)).map(x=>x.text?x.text.trim():flatten(x)).reduce((acc, value)=>acc.concat(value),[])
 const transilien = html => new DomParser().parseFromString(html.data)
     .getElementsByClassName('next-departure-result').map(result => flatten(result).filter(x=>!['Destination', 'Voir les arrêts', 'Gares Desservies', 'FERMER'].includes(x)))
-    .map(row => row.filter(col => !col.toUpperCase().includes('<?XML'))
-        .filter((row, index, array) => index < array.find(elem => elem.match(/^voir le d&eacute;tail/i) &&
-                                   index > array.find(elem => elem.match(/^Gares\s+Desservies/i)))))
     .map((result,i)=> {
         const now = moment().format('HH:mm')
         if (result[1].match(/^[0-9]{2}:[0-9]{2}$/)) {
@@ -44,7 +41,8 @@ const transilien = html => new DomParser().parseFromString(html.data)
                 missionCode: result[2],
                 time: result[3],
                 platform: result[5],
-                stops: result.slice(7).map(stop=>capitalize(stop).replace('Gare De ', '').replace('Gare D\' ', ''))
+                stops: result.slice(result.indexOf('Gares\n\t\t\t\t\t\t\tDesservies')+1)
+                    .map(stop=>capitalize(stop).replace('Gare De ', '').replace('Gare D\' ', ''))
             }}})
 
 const baseDepartures = ({nestedSearchData:{stations}}) =>
