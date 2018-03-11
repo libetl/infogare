@@ -9,7 +9,7 @@ const extractTable = (urlSuffix, filename) => get(`https://fr.wikipedia.org/wiki
         tbody => tbody.getElementsByTagName('tr')).reduce(concat, []).map(
         tr => tr.getElementsByTagName('td')).filter(node => node.length).map(
         node => {return {[node[0].childNodes[0].text ||
-            node[0].childNodes[0].childNodes[1].text]:node[1].childNodes[0].childNodes[0].text}}).reduce(
+            node[0].childNodes[0].childNodes[1].text]:node[1].childNodes[0].childNodes[0].text.substring(1)}}).reduce(
         (acc, value) => Object.assign(acc, value),{}))
     .then(data => fs.writeFileSync(`src/core/data/${filename}LinesColors.json`, JSON.stringify(data)))
 
