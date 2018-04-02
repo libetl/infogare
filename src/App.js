@@ -59,7 +59,7 @@ export default class App extends React.Component {
             }
         })
     }
-    initNow({apiToken, navitiaToken, dataSources = ['terSncf', 'inMemory', 'liveMap'], favoriteStations = []}) {
+    initNow({apiToken, navitiaToken, dataSources = ['herokuHomegrown', 'inMemory'], favoriteStations = []}) {
         return this.handleSourcesDeletion(dataSources).then(allowedDataSources => {
             this.setState({firstScrollY: 3, secondScrollY: 3, apiToken, navitiaToken, dataSources,
                 dataSourceByFeature: core.minimalMappingFor(allowedDataSources), favoriteStations,
@@ -95,11 +95,10 @@ export default class App extends React.Component {
     updateLocation() {
         return this.tryGps().then((geo = this.state.geo) => this.updateTimetable({geo, progressBar: true}))
     }
-    tryGps({failsafe} = {failsafe:false}){
+    tryGps(){
         return new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(
-            position => resolve({long: position.coords.longitude, lat: position.coords.latitude}),
-            () => failsafe ? resolve() : this.tryGps({failsafe:true}), 
-            {enableHighAccuracy: !failsafe, timeout: 2000, maximumAge: 10000}))
+            position => resolve({long: position.coords.longitude, lat: position.coords.latitude}), () => resolve()))
+            /*, overriden parameters cause timeout {enableHighAccuracy: !failsafe, timeout: 2000, maximumAge: 10000}*/
     }
     validateToken({type, newValue}) {
         core.testToken({type, newValue})
@@ -124,17 +123,20 @@ export default class App extends React.Component {
     }
     onDataSourceListChange(dataSource, isItAnAddOperation) {
 
-        const metadata = this.state.allDataSourcesMetadata
+        const metadata = this.state.allDataSourcesMetadata || {}
 
-        if (isItAnAddOperation && metadata[dataSource].betterServedWith) {
-            const dataSources = [dataSource, ...metadata[dataSource].betterServedWith]
+        if (isItAnAddOperation && (metadata[dataSource]||{}).betterServedWith) {
+            const dataSources = [dataSource,
+                ...metadata[dataSource].betterServedWith.filter(
+                    relatedSource => Object.keys(metadata).includes(relatedSource))]
             const minimalMapping = core.minimalMappingFor(dataSources)
             return AsyncStorage.setItem('@store:dataSources', JSON.stringify(dataSources)).then(() =>
                 this.setState({dataSources, dataSourceByFeature: minimalMapping}))
         }
 
         const newDataSourceShadows = otherDataSource =>
-            metadata[otherDataSource].features.every(entry => metadata[dataSource].features.includes(entry))
+            (metadata[otherDataSource]||{features:[]}).features.every(entry =>
+                (metadata[dataSource]||{features:[]}).features.includes(entry))
 
         const dataSourcesWithMaybeUselessSources =
             isItAnAddOperation ?

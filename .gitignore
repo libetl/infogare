@@ -11,3 +11,4 @@ android/
 
 yarn-error.log
 .history
+.gradle
