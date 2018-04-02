@@ -27,27 +27,27 @@ export default class SourceDeletionAlert extends React.Component {
                         <View>{(this.props.deletedSources||['Aucune']).map(deletedSource => <Text key={deletedSource}>* {deletedSource}</Text>)}</View>
                         <Text/>
                         <Text>Une source de données faite maison a été réalisée pour éviter que l'application se retrouve sans contenu.</Text>
-                        <Text>Il s'agit de 'herokuHomegrown'.</Text>
-                        <Text>Cette source est d'une mauvaise précision, car mise à jour une fois par jour et sur des données théoriques</Text>
+                        <Text>Il s'agit de 'herokuHomegrown' (url : http://train-schedules-server.herokuapp.com/)</Text>
+                        <Text>Basée sur un flux open data de la sncf, il s'agit d'un "best effort".</Text>
+                        <Text>En effet la sncf ne promet pas l'exactitude de ces données et ne s'engage pas.</Text>
+                        <Text>Elle peut informer sur certains retards (même si cette information est incomplète)</Text>
                         <Text/>
                         <Text>Elle n'est pas alimentée sur les circulations de trains grande vitesse (eurostar, inoui, ouigo, thalys, lyria)</Text>
                         <Text>Elle ne sait pas sur quels quais se trouvent les trains</Text>
-                        <Text>Elle ne sait pas (encore) si les trains accusent du retard</Text>
                         <Text/>
-                        <Text>Il se peut aussi que certains travaux et certaines coupures programmées ne soient pas signalés</Text>
-                        <Text>Et a fortiori les coupures de service imprévues ne seront jamais signalées</Text>
-                        <Text/>
-                        <Text>Vous pouvez mettre 1/5 à cette app si vous le souhaitez.</Text>
+                        <Text>Vous pouvez mettre 1/5 à cette app si vous le souhaitez. </Text>
+                        <Text>Il est d'ailleurs envisagé que cette app disparaisse.</Text>
                         <Text>Le développeur souhaite vous dire qu'il est reconnaissant pour l'intérêt que cette app a suscité chez vous depuis 2017</Text>
                         <Text/>
-                        <Text>Il assume entièrement votre déception, et vous propose ces deux autres solutions :</Text>
+                        <Text>Il assume entièrement votre déception, et vous propose ces trois autres solutions :</Text>
                         <Text>- Il vous est toujours possible, contre quelques informations personnelles de votre part, de récuperer un token d'api</Text>
                         <Text>  Le token vous permet de continuer de beneficier des données en temps réel sur cette même application</Text>
                         <Text>- L'app officielle utilise les mêmes données (sans token) et permet d'accéder aux infos temps réel en illimité</Text>
+                        <Text>- Utilisez l'application RailZ, qui est une application de signalement collaboratif des retards de trains</Text>
                         <Text/>
                     </View>
                 </ScrollView>
-                <Button onPress={this.props.onClose} color='#ddc15d' title='😂'/>
+                <Button onPress={this.props.onClose} color='#ddc15d' title='😡'/>
             </Modal>
         )
     }

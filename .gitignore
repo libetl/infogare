@@ -7,8 +7,11 @@ src/core/data/*
 jsconfig.json
 package-lock.json
 yarn.lock
-android/
 
 yarn-error.log
+android/.gradle/
+android/app/libs
+libe2.keystore
+*.rawproto
 .history
 .gradle

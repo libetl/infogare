@@ -14,10 +14,10 @@ import Timetable from '../src/components/timetable'
 import {Switch, Image, LoadPicture, Text, View} from '../src/wrapper'
 import core from '../src/core'
 
-storiesOf('Welcome', module).add('Sncf-le-panneau', () =>
+storiesOf('Welcome', module).add('Infogare', () =>
     <View>
-        <Text style={{fontSize:30, fontWeight:'bold'}}>Sncf le panneau</Text>
-        <Text>Ce storybook permet de voir et de tester les composants de l'application sncf-le-panneau</Text>
+        <Text style={{fontSize:30, fontWeight:'bold'}}>Infogare</Text>
+        <Text>Ce storybook permet de voir et de tester les composants de l'application Infogare</Text>
         <Image style={{width:300, height:250}} source={LoadPicture('logo')} />
     </View>)
 
