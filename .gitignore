@@ -1,4 +1,5 @@
 node_modules/
+sandbox/gtfsdump.json
 .expo/
 npm-debug.*
 .idea
@@ -14,4 +15,4 @@ android/app/libs
 libe2.keystore
 *.rawproto
 .history
-.gradle
+server/out/trainSchedulesServer.bin.js

@@ -19,7 +19,7 @@ android {
         applicationId 'org.toilelibre.libe.trains'
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 40
+        versionCode 39
         versionName '1.3.5'
         multiDexEnabled true
         ndk {
@@ -30,6 +30,9 @@ android {
         ]
     }
     productFlavors {
+        PRIVILEGED {
+            resValue "string", "PRIVILEGED", "true"
+        }
     }
     splits {
         abi {
@@ -67,6 +70,8 @@ android {
     }
 }
 dependencies {
+    compile project(':react-native-randombytes')
+    compile project(':react-native-fs')
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "com.facebook.react:react-native:+"  // From node_modules
     compile 'com.android.support:appcompat-v7:25.3.1'

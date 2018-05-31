@@ -123,20 +123,17 @@ export default class App extends React.Component {
     }
     onDataSourceListChange(dataSource, isItAnAddOperation) {
 
-        const metadata = this.state.allDataSourcesMetadata || {}
+        const metadata = this.state.allDataSourcesMetadata
 
-        if (isItAnAddOperation && (metadata[dataSource]||{}).betterServedWith) {
-            const dataSources = [dataSource,
-                ...metadata[dataSource].betterServedWith.filter(
-                    relatedSource => Object.keys(metadata).includes(relatedSource))]
+        if (isItAnAddOperation && metadata[dataSource].betterServedWith) {
+            const dataSources = [dataSource, ...metadata[dataSource].betterServedWith]
             const minimalMapping = core.minimalMappingFor(dataSources)
             return AsyncStorage.setItem('@store:dataSources', JSON.stringify(dataSources)).then(() =>
                 this.setState({dataSources, dataSourceByFeature: minimalMapping}))
         }
 
         const newDataSourceShadows = otherDataSource =>
-            (metadata[otherDataSource]||{features:[]}).features.every(entry =>
-                (metadata[dataSource]||{features:[]}).features.includes(entry))
+            metadata[otherDataSource].features.every(entry => metadata[dataSource].features.includes(entry))
 
         const dataSourcesWithMaybeUselessSources =
             isItAnAddOperation ?

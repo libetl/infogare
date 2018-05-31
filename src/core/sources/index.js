@@ -9,6 +9,7 @@ import navitiaIo from './navitiaIo'
 import stas from './stas'
 import liveMap from './liveMap'
 import nouveauSncf from './nouveauSncf'
+import offline from './offline'
 import raildar from './raildar'
 import sncfApi from './sncfApi'
 import terSncf from './terSncf'
@@ -18,5 +19,5 @@ import vianavigo from './vianavigo'
 import {config} from '../../wrapper'
 
 export default config.PRIVILEGED ?
-    { fake, flightRadar, garesSncf, herokuHomegrown, horairesInfoTrafic, inMemory, lignesDazur, liveMap, navitiaIo, nouveauSncf, raildar, sncfApi, stas, terSncf, transilien, vianavigo } :
-    { flightRadar, herokuHomegrown, inMemory, lignesDazur, navitiaIo, raildar, sncfApi, stas, vianavigo }
+    { fake, flightRadar, garesSncf, herokuHomegrown, horairesInfoTrafic, inMemory, lignesDazur, liveMap, navitiaIo, nouveauSncf, offline, raildar, sncfApi, stas, terSncf, transilien, vianavigo } :
+    { flightRadar, herokuHomegrown, inMemory, lignesDazur, navitiaIo, offline, raildar, sncfApi, stas, vianavigo }

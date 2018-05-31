@@ -12,6 +12,8 @@ export default {
     nextDepartures: async (coords, {tokens = {}, notify = () => {},
         dataSourceByFeature = {departures: 'herokuHomegrown', stations: 'inMemory', colors: 'inMemory', codes: 'inMemory', journeys: 'herokuHomegrown', geolocation: 'herokuHomegrown'}} = {}) => {
 
+        sources[dataSourceByFeature.departures].init && await sources[dataSourceByFeature.departures].init()
+
         const allowedCombinedSources = Array.from(new Set(Object.values(dataSourceByFeature))).map(sourceName => sources[sourceName])
 
         const stationsAreas = await sources[dataSourceByFeature.stations || 'inMemory'].stationSearch(coords, {token: tokens[dataSourceByFeature.stations], nestedStationSearch:sources.inMemory.stationSearch})
