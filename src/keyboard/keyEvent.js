@@ -1,6 +1,6 @@
 let DeviceEventEmitter
 
-try {     DeviceEventEmitter = require('react-native').DeviceEventEmitter}
+try {     DeviceEventEmitter = require('react-native').DeviceEventEmitter||{addListener:()=>{remove:()=>{}}}}
 catch(e){ DeviceEventEmitter =  {addListener:()=>{remove:()=>{}}}}
 
 class KeyEvent {

@@ -23,6 +23,11 @@ export default class Departure extends React.Component {
     }
     measureAllComponent(event) {
         this.setState({height: event.nativeEvent.layout.height, width: event.nativeEvent.layout.width})
+        if(this.journeyText && this.journeyText.measure){
+            setTimeout(() => this.journeyText.measure((a, b, width, height, px, py) =>
+                this.setState({ journeyHeight: height })
+            ), 3000)
+        }
     }
     measureJourney(event) {
         this.setState({journeyHeight: event.nativeEvent.layout.height})
@@ -114,7 +119,7 @@ export default class Departure extends React.Component {
                                     <Image style={{height: doubleBaseFontSize * zoom - (IsNative ? 0 : 6), width: doubleBaseFontSize * zoom  - (IsNative ? 0 : 6)}} source={LoadPicture('walk')} />
                                     <Text style={{lineHeight: doubleBaseFontSize * zoom  - (IsNative ? 0 : 6), color: '#fff', fontSize: baseFontSize * zoom }}>{departure.boardingPoint}</Text>
                                 </View>): <Text/>}
-                            <Text onLayout={this.measureJourney} style={{padding:0, color: '#fff'}}>{
+                            <Text ref={journeyText => this.journeyText = journeyText} onLayout={this.measureJourney} style={{padding:0, color: '#fff'}}>{
                                 !departure.stops ? <Text/> : departure.stops.map(stop => (<Text key={stop} style={{fontSize: baseFontSize, lineHeight: doubleBaseFontSize}}> {stop} <Text style={styles.yellowBullet}>•</Text></Text>))
                             }</Text></ScrollView>}
                     </View>

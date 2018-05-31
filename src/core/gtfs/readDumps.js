@@ -67,12 +67,23 @@ const reduceArrays = entry => ({[entry[0]]: entry[1].reduce((acc, value) => {
                     acc[propertyName] ? [acc[propertyName], propertyValue] :
                         propertyValue})}, {})})
 
-const asStream = data => global.window ? new Buffer(new Uint8Array(data)) : data
+const asStream = data => {
+    return global.window ? data.arrayBuffer().then(buffer => new Buffer(new Uint8Array(buffer))) :
+        Promise.resolve(data)}
 
+const refreshZipDump = (url, cacheName) => caches.open(cacheName)
+    .then(cache => fetch(url, {headers: {'X-Requested-With': 'XMLHttpRequest'}})
+    .then(response => cache.put(url, response))
+    .then(() => caches.open(cacheName))
+    .then(cache => cache.match(url, {ignoreSearch: true})))
 
 const urlToDataStructure = url => {
     let result = {}
-    return (url.startsWith('http') ? get(url, {responseType: 'arraybuffer'}).then(({data}) => asStream(data)) :
+    const cacheName = window.location.toString()
+    return (url.startsWith('http') ?
+        caches.open(cacheName).then(cache => cache.match(url, {ignoreSearch: true}))
+            .then(response => response ? setImmediate(() => refreshZipDump(url, cacheName)) && response :
+            refreshZipDump(url, cacheName)).then(response => asStream(response)) :
         new Promise(resolve => fs.readFile(url, (err, data) => resolve(data))))
         .then(buffer => new Promise(resolve => unzip.fromBuffer(buffer, {lazyEntries: true},
             (err, zipfile) => {

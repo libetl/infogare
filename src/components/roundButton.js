@@ -58,7 +58,7 @@ export default class RoundButton extends React.Component {
                 width: this.state.width, overflow: 'hidden'}}>
                 <Touchable onPressIn={this.startRoll} onPressOut={this.stopRoll}
                            onPress={!this.props.longPressColor ? this.props.onClick : undefined}
-                           activeOpacity={!this.props.longPressColor ? 0.2 : 1.0}>
+                           activeopacity={!this.props.longPressColor ? 0.2 : 1.0}>
                     <View style={{backgroundColor: this.props.color,
                         borderRadius: IsNative ? 50 : '50%',
                         boxShadow: `2px 2px 2px 1px ${this.props.shadowColor || '#80808080'}`,

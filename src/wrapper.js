@@ -1,5 +1,5 @@
 const React = require('react')
-import pictures from './images/base64pictures'
+const pictures = require('./images/base64pictures').default
 
 try {global.nativeLibrary = global.nativeLibrary || require('react-native')}catch(e){}
 try{const test = global.nativeLibrary.NativeModules}catch (e){

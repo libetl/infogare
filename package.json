@@ -57,7 +57,8 @@
     "react-native-cli": "latest",
     "react-native-web": "latest",
     "react-test-renderer": "latest",
-    "unzip2": "latest"
+    "unzip2": "latest",
+    "react-art": "latest"
   },
   "jest": {
     "preset": "react-native"
